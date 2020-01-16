@@ -16,8 +16,6 @@ public:
 
 	void render();
 
-	void key();
-	void keyUp();
 private:
 
 

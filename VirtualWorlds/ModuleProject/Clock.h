@@ -1,5 +1,5 @@
 #pragma once
-#include <GL/freeglut.h>
+#include <freeglut 3.0.0/include/GL/freeglut.h>
 
 class Clock
 {

@@ -33,7 +33,9 @@ int init(int argc, char** argv)
 	glutDisplayFunc(drawFrame);
 
 	glutMouseFunc(mouseFunction);
-	glutMotionFunc(mouseMoveFunction);
+	glutPassiveMotionFunc(mouseMove);
+	glutMotionFunc(mouseDrag);
+
 	glutKeyboardFunc(keyPress);
 	glutKeyboardFunc(keyUp);
 
@@ -69,13 +71,24 @@ void mouseFunction(int button, int state, int x, int y)
 	InputHandler::mouseEventQueue.push(evt);
 }
 
-void mouseMoveFunction(int x, int y)
+void mouseMove(int x, int y)
 {
 	MouseEvent evt = {
 	evt.button = NULL,
 	evt.state = NULL,
 	evt.x = x,
 	evt.y = y
+	};
+	InputHandler::mouseEventQueue.push(evt);
+}
+
+void mouseDrag(int x, int y)
+{
+	MouseEvent evt = {
+		evt.button = NULL,
+		evt.state = NULL,
+		evt.x = x,
+		evt.y = y
 	};
 	InputHandler::mouseEventQueue.push(evt);
 }

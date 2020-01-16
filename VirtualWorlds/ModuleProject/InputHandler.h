@@ -1,5 +1,5 @@
 #pragma once
-#include <GL/freeglut.h>
+#include <freeglut 3.0.0/include/GL/freeglut.h>
 #include <queue>
 
 #include <iostream>
@@ -19,13 +19,11 @@ struct MouseEvent {
 };
 
 
-namespace InputHandler
+class InputHandler
 {
-	class Input {
+public:
 
-	public:
-		static void handleEvents();
-	};
+	static void handleEvents();
 
 	static std::queue<KeyEvent> keyEventQueue;
 	static std::queue<MouseEvent> mouseEventQueue;
@@ -34,8 +32,8 @@ namespace InputHandler
 	static unsigned char mouseStates[5];	//Left, mid, right, scr up, scr down
 
 	//Possible states
-	static const int PRESSED = 0;
-	static const int RELEASED = 1;
+	static const int RELEASED = 0;
+	static const int PRESSED = 1;
 
 	//Mouse states for scrolling
 	static const int GLUT_SCROLL_UP = 3;

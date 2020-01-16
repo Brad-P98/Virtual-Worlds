@@ -73,6 +73,10 @@
     <IncludePath>D:\Graphics Libraries;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Graphics Libraries\freeglut 3.0.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)\Libs;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Libs\freeglut 3.0.0\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -91,6 +95,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)\freeglut 3.0.0\include;$(SolutionDir)\glfw-3.3\glfw-3.3\include;$(SolutionDir)\Libs\glm-0.9.9.6;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

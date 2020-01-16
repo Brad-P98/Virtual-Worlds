@@ -17,8 +17,7 @@ void Scene::update()
 {
 	Clock::tick();
 
-	std::cout << InputHandler::mouseEventQueue.size();
-	InputHandler::Input::handleEvents();
+	InputHandler::handleEvents();
 
 
 
