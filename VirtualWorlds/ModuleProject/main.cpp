@@ -74,8 +74,8 @@ void mouseFunction(int button, int state, int x, int y)
 void mouseMove(int x, int y)
 {
 	MouseEvent evt = {
-	evt.button = NULL,
-	evt.state = NULL,
+	evt.button = -1,
+	evt.state = -1,
 	evt.x = x,
 	evt.y = y
 	};
@@ -85,8 +85,8 @@ void mouseMove(int x, int y)
 void mouseDrag(int x, int y)
 {
 	MouseEvent evt = {
-		evt.button = NULL,
-		evt.state = NULL,
+		evt.button = -1,
+		evt.state = -1,
 		evt.x = x,
 		evt.y = y
 	};
@@ -114,4 +114,8 @@ void keyUp(unsigned char key, int x, int y)
 	evt.y = y
 	};
 	InputHandler::keyEventQueue.push(evt);
+}
+
+void cleanup()
+{
 }

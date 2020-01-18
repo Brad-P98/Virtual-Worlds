@@ -10,7 +10,8 @@ Scene::~Scene()
 
 void Scene::initScene()
 {
-
+	loader = new VAOLoader();
+	renderer = new Renderer();
 }
 
 void Scene::update()

@@ -23,3 +23,5 @@ void mouseMove(int x, int y);
 void mouseDrag(int x, int y);
 void keyPress(unsigned char key, int x, int y);
 void keyUp(unsigned char key, int x, int y);
+
+void cleanup();

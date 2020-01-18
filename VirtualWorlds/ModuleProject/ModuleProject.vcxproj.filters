@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Input">
       <UniqueIdentifier>{05d01416-077a-4dc9-a39b-189d6d1ceda9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{8d42a4d2-f581-43cd-8388-b0875273cb18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rendering">
+      <UniqueIdentifier>{7e10a33a-5e55-4fc7-8321-743811d8a8c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,6 +39,18 @@
     <ClCompile Include="InputHandler.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
+    <ClCompile Include="MainRenderer.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VAOData.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="VAOLoader.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -46,6 +64,18 @@
     </ClInclude>
     <ClInclude Include="InputHandler.h">
       <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MainRenderer.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VAOData.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="VAOLoader.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -95,7 +95,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\freeglut 3.0.0\include;$(SolutionDir)\glfw-3.3\glfw-3.3\include;$(SolutionDir)\Libs\glm-0.9.9.6;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\gl3w\include;$(SolutionDir)Libs\freeglut 3.0.0\include;$(SolutionDir)Libs\glfw-3.3\glfw-3.3\include;$(SolutionDir)\Libs\glm-0.9.9.6;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,13 +135,21 @@
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainRenderer.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="VAOData.cpp" />
+    <ClCompile Include="VAOLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Clock.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="MainRenderer.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="VAOData.h" />
+    <ClInclude Include="VAOLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

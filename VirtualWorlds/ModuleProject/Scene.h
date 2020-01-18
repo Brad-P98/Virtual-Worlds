@@ -1,6 +1,8 @@
 #pragma once
 #include "Clock.h"
 #include "InputHandler.h"
+#include "VAOLoader.h"
+#include "Renderer.h"
 
 class Scene
 {
@@ -16,8 +18,12 @@ public:
 
 	void render();
 
+	void quit();
+
 private:
 
+	VAOLoader* loader;
+	Renderer* renderer;
 
 };
 
