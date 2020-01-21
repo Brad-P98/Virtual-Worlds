@@ -2,7 +2,8 @@
 #include "Clock.h"
 #include "InputHandler.h"
 #include "VAOLoader.h"
-#include "Renderer.h"
+
+class Renderer;
 
 class Scene
 {

@@ -1,6 +1,8 @@
 #pragma once
+
 #include <GL/gl3w.h>
-#include <GL/freeglut.h>
+#include <freeglut 3.0.0/include/GL/freeglut.h>
+
 #include <vector>
 
 #include "VAOData.h"

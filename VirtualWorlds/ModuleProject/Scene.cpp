@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Renderer.h"
 
 Scene::Scene()
 {
@@ -19,8 +20,6 @@ void Scene::update()
 	Clock::tick();
 
 	InputHandler::handleEvents();
-
-
 
 }
 

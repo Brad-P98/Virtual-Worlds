@@ -1,8 +1,8 @@
 #pragma once
+
+#include <GL/gl3w.h>
 #include <freeglut 3.0.0/include/GL/freeglut.h>
-#include <glfw-3.3/glfw-3.3/include/GLFW/glfw3.h>
-#include <stdlib.h>
-#include <stdio.h>
+
 #include <iostream>
 
 #include "Scene.h"

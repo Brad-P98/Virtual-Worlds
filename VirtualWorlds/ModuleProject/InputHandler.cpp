@@ -10,7 +10,7 @@ unsigned char InputHandler::mouseStates[5];
 void InputHandler::handleEvents()
 {
 	//Handle Mouse events
-	for (size_t i = 0; i < mouseEventQueue.size(); i++) {
+	for (int i = 0; i < mouseEventQueue.size(); i++) {
 		MouseEvent currentEvent = mouseEventQueue.front();
 
 		if (currentEvent.button == -1 && currentEvent.state == -1) {

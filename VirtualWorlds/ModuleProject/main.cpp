@@ -17,6 +17,7 @@ int main(int argc, char** argv)
 
 int init(int argc, char** argv)
 {
+
 	glutInit(&argc, argv);
 	glutInitContextVersion(3, 0);
 	glutInitContextProfile(GLUT_CORE_PROFILE);
@@ -25,6 +26,8 @@ int init(int argc, char** argv)
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("Virtual World");
+
+	gl3wInit();
 
 	std::cout << "OpenGL version: " << (char*)(glGetString(GL_VERSION)) << std::endl;
 	std::cout << "GLUT version: " << glutGet(GLUT_VERSION) << std::endl;

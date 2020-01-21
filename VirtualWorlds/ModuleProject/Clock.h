@@ -1,6 +1,6 @@
 #pragma once
+#include <GL/gl3w.h>
 #include <freeglut 3.0.0/include/GL/freeglut.h>
-
 class Clock
 {
 public:
