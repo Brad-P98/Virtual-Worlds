@@ -2,7 +2,6 @@
 
 #include <GL/gl3w.h>
 #include <freeglut 3.0.0/include/GL/freeglut.h>
-
 #include <vector>
 
 #include "VAOData.h"
@@ -11,7 +10,7 @@ class VAOLoader
 {
 public:
 
-	VAOData* loadToVAO(float* positions);
+	VAOData* loadToVAO(std::vector<float> positions);
 
 private:
 
@@ -20,7 +19,7 @@ private:
 
 	int createVAO();
 
-	void storeDataInAttributeList(int attributeNumber, float* data);
+	void storeDataInAttributeList(int attributeNumber, std::vector<float> data);
 
 	void unbindVAO();
 

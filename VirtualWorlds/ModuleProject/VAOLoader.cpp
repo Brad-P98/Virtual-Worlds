@@ -1,6 +1,6 @@
 #include "VAOLoader.h"
 
-VAOData* VAOLoader::loadToVAO(float* positions)
+VAOData* VAOLoader::loadToVAO(std::vector<float> positions)
 {
 	int vaoID = createVAO();
 
@@ -21,15 +21,16 @@ int VAOLoader::createVAO()
 	return vaoID;
 }
 
-void VAOLoader::storeDataInAttributeList(int attributeNumber, float* data)
+void VAOLoader::storeDataInAttributeList(int attributeNumber, std::vector<float> data)
 {
 	GLuint vboID;
 	glGenBuffers(1, &vboID);
 	vbos.push_back(vboID);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboID);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(GLfloat), data.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(attributeNumber, 3, GL_FLOAT, false, 0, 0);
+	glEnableVertexAttribArray(attributeNumber);
 }
 
 void VAOLoader::unbindVAO()

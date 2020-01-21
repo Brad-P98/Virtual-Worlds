@@ -1,4 +1,6 @@
 #pragma once
+#include <vector>
+
 #include "Clock.h"
 #include "InputHandler.h"
 #include "VAOLoader.h"
@@ -32,10 +34,43 @@ private:
 	VAOData* d;
 
 
-	float vertices[9] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f
+	std::vector<float> vertices = {
+	-0.6f,-0.6f,-0.6f, // triangle 1 : begin
+	-0.6f,-0.6f, 0.6f,
+	-0.6f, 0.6f, 0.6f, // triangle 1 : end
+	0.6f, 0.6f,-0.6f, // triangle 2 : begin
+	-0.6f,-0.6f,-0.6f,
+	-0.6f, 0.6f,-0.6f, // triangle 2 : end
+	0.6f,-0.6f, 0.6f,
+	-0.6f,-0.6f,-0.6f,
+	0.6f,-0.6f,-0.6f,
+	0.6f, 0.6f,-0.6f,
+	0.6f,-0.6f,-0.6f,
+	-0.6f,-0.6f,-0.6f,
+	-0.6f,-0.6f,-0.6f,
+	-0.6f, 0.6f, 0.6f,
+	-0.6f, 0.6f,-0.6f,
+	0.6f,-0.6f, 0.6f,
+	-0.6f,-0.6f, 0.6f,
+	-0.6f,-0.6f,-0.6f,
+	-0.6f, 0.6f, 0.6f,
+	-0.6f,-0.6f, 0.6f,
+	0.6f,-0.6f, 0.6f,
+	0.6f, 0.6f, 0.6f,
+	0.6f,-0.6f,-0.6f,
+	0.6f, 0.6f,-0.6f,
+	0.6f,-0.6f,-0.6f,
+	0.6f, 0.6f, 0.6f,
+	0.6f,-0.6f, 0.6f,
+	0.6f, 0.6f, 0.6f,
+	0.6f, 0.6f,-0.6f,
+	-0.6f, 0.6f,-0.6f,
+	0.6f, 0.6f, 0.6f,
+	-0.6f, 0.6f,-0.6f,
+	-0.6f, 0.6f, 0.6f,
+	0.6f, 0.6f, 0.6f,
+	-0.6f, 0.6f, 0.6f,
+	0.6f,-0.6f, 0.6f
 	};
 
 };
