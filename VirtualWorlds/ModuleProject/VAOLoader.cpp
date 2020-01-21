@@ -7,7 +7,7 @@ VAOData* VAOLoader::loadToVAO(float* positions)
 	storeDataInAttributeList(0, positions);
 	unbindVAO();
 
-	return new VAOData(vaoID, (int)sizeof(positions)/3);
+	return new VAOData(vaoID, 9);
 }
 
 int VAOLoader::createVAO()
@@ -28,9 +28,8 @@ void VAOLoader::storeDataInAttributeList(int attributeNumber, float* data)
 	vbos.push_back(vboID);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(data) * sizeof(GLfloat), data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), data, GL_STATIC_DRAW);
 	glVertexAttribPointer(attributeNumber, 3, GL_FLOAT, false, 0, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void VAOLoader::unbindVAO()

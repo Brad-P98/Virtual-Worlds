@@ -2,9 +2,10 @@
 
 void Renderer::render(VAOData vaoData)
 {
+	glUseProgram(shaderProgram);
+	glCullFace(GL_NONE);
+	glDisable(GL_DEPTH_TEST);
 	glBindVertexArray(vaoData.getVaoID());
-	glEnableVertexAttribArray(0);
 	glDrawArrays(GL_TRIANGLES, 0, vaoData.getVertexCount());
-	glEnableVertexAttribArray(0);
 	glBindVertexArray(0);
 }

@@ -8,5 +8,8 @@ class Renderer
 public:
 
 	void render(VAOData vaoData);
+
+	GLuint shaderProgram;
+
 };
 

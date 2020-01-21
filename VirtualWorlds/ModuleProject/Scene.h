@@ -2,6 +2,8 @@
 #include "Clock.h"
 #include "InputHandler.h"
 #include "VAOLoader.h"
+#include "VAOData.h"
+#include "shader_setup.h"
 
 class Renderer;
 
@@ -25,6 +27,16 @@ private:
 
 	VAOLoader* loader;
 	Renderer* renderer;
+
+	GLuint shader;
+	VAOData* d;
+
+
+	float vertices[9] = {
+	-0.5f, -0.5f, 0.0f,
+	 0.5f, -0.5f, 0.0f,
+	 0.0f,  0.5f, 0.0f
+	};
 
 };
 

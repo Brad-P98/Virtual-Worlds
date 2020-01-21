@@ -140,6 +140,7 @@
     <ClCompile Include="MainRenderer.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="shader_setup.cpp" />
     <ClCompile Include="VAOData.cpp" />
     <ClCompile Include="VAOLoader.cpp" />
   </ItemGroup>
@@ -150,8 +151,13 @@
     <ClInclude Include="MainRenderer.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="shader_setup.h" />
     <ClInclude Include="VAOData.h" />
     <ClInclude Include="VAOLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.frag" />
+    <None Include="shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

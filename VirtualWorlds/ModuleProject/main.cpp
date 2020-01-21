@@ -32,7 +32,6 @@ int init(int argc, char** argv)
 	std::cout << "OpenGL version: " << (char*)(glGetString(GL_VERSION)) << std::endl;
 	std::cout << "GLUT version: " << glutGet(GLUT_VERSION) << std::endl;
 
-
 	glutDisplayFunc(drawFrame);
 
 	glutMouseFunc(mouseFunction);
