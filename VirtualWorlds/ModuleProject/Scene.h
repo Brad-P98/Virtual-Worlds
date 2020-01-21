@@ -1,5 +1,8 @@
 #pragma once
 #include <vector>
+#include <glm/glm/glm.hpp>
+#include <glm/glm/gtc/matrix_transform.hpp>
+#include <glm/glm/gtc/type_ptr.hpp>
 
 #include "Clock.h"
 #include "InputHandler.h"
@@ -32,6 +35,8 @@ private:
 
 	GLuint shader;
 	VAOData* d;
+
+	glm::mat4 projection;
 
 
 	std::vector<float> vertices = {

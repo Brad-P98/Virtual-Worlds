@@ -6,8 +6,10 @@ int main(int argc, char** argv)
 
 	init(argc, argv);
 
+	Clock::start();
 	scene = new Scene();
 	scene->initScene();
+
 
 	glutMainLoop();
 

@@ -7,7 +7,7 @@ VAOData* VAOLoader::loadToVAO(std::vector<float> positions)
 	storeDataInAttributeList(0, positions);
 	unbindVAO();
 
-	return new VAOData(vaoID, 9);
+	return new VAOData(vaoID, positions.size());
 }
 
 int VAOLoader::createVAO()
