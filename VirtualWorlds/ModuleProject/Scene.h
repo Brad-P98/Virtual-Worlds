@@ -5,6 +5,7 @@
 #include <glm/glm/gtc/type_ptr.hpp>
 
 #include "Clock.h"
+#include "Camera.h"
 #include "InputHandler.h"
 #include "VAOLoader.h"
 #include "VAOData.h"
@@ -30,8 +31,11 @@ public:
 
 private:
 
+	Camera* mainCamera;
+
 	VAOLoader* loader;
 	Renderer* renderer;
+
 
 	GLuint shader;
 	VAOData* d;

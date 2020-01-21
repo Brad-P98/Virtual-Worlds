@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="gl3w.c" />
     <ClCompile Include="InputHandler.cpp" />
@@ -145,6 +146,7 @@
     <ClCompile Include="VAOLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Clock.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="main.h" />

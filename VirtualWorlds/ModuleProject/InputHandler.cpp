@@ -55,3 +55,10 @@ void InputHandler::handleEvents()
 		keyEventQueue.pop();
 	}
 }
+
+bool InputHandler::checkKeyPressed(char key)
+{
+	if (keyStates[(int)key] = PRESSED) return true;
+
+	return false;
+}
