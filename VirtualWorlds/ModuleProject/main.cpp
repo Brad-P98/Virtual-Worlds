@@ -37,11 +37,11 @@ int init(int argc, char** argv)
 	glutDisplayFunc(drawFrame);
 
 	glutMouseFunc(mouseFunction);
-	glutPassiveMotionFunc(mouseMove);
+	//glutPassiveMotionFunc(mouseMove);
 	glutMotionFunc(mouseDrag);
 
 	glutKeyboardFunc(keyPress);
-	glutKeyboardFunc(keyUp);
+	glutKeyboardUpFunc(keyUp);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -69,8 +69,7 @@ void mouseFunction(int button, int state, int x, int y)
 	MouseEvent evt = {
 		evt.button = button,
 		evt.state = state,
-		evt.x = x,
-		evt.y = y
+		evt.pos = glm::vec2(x,y)
 	};
 	InputHandler::mouseEventQueue.push(evt);
 }
@@ -80,8 +79,7 @@ void mouseMove(int x, int y)
 	MouseEvent evt = {
 	evt.button = -1,
 	evt.state = -1,
-	evt.x = x,
-	evt.y = y
+	evt.pos = glm::vec2(x,y)
 	};
 	InputHandler::mouseEventQueue.push(evt);
 }
@@ -91,8 +89,7 @@ void mouseDrag(int x, int y)
 	MouseEvent evt = {
 		evt.button = -1,
 		evt.state = -1,
-		evt.x = x,
-		evt.y = y
+		evt.pos = glm::vec2(x,y)
 	};
 	InputHandler::mouseEventQueue.push(evt);
 }
@@ -101,9 +98,8 @@ void keyPress(unsigned char key, int x, int y)
 {
 	KeyEvent evt = {
 		evt.key = key,
-		evt.state = false,
-		evt.x = x,
-		evt.y = y
+		evt.state = true,
+		evt.pos = glm::vec2(x,y)
 	};
 	InputHandler::keyEventQueue.push(evt);
 
@@ -113,9 +109,8 @@ void keyUp(unsigned char key, int x, int y)
 {
 	KeyEvent evt = {
 	evt.key = key,
-	evt.state = true,
-	evt.x = x,
-	evt.y = y
+	evt.state = false,
+	evt.pos = glm::vec2(x,y)
 	};
 	InputHandler::keyEventQueue.push(evt);
 }

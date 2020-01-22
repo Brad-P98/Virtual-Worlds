@@ -33,6 +33,9 @@ void Scene::update()
 	Clock::tick();
 	InputHandler::handleEvents();
 
+
+	mainCamera->update();
+
 	glm::mat4 modelTrans = glm::mat4(1.0f);
 	modelTrans = glm::translate(modelTrans, glm::vec3(0.0, 0.0, -5));
 	modelTrans = glm::rotate(modelTrans, (float)glm::radians(3 * Clock::currTime/10), glm::vec3(1.0, 1.0, 1.0));

@@ -19,9 +19,16 @@ Camera::~Camera()
 
 
 void Camera::update() {
-
+	//Handle movement
 	if (InputHandler::checkKeyPressed('s') || InputHandler::checkKeyPressed('S')) {
 		//backward
-		position.z -= position.z * maxSpeed * Clock::deltaTime;
+		position.z -= maxSpeed * Clock::deltaTime;
+		std::cout << position.z << std::endl;
+	}
+
+	//Handle looking
+	//If right mouse btn clicked
+	if (InputHandler::checkMousePressed(2)) {
+
 	}
 }

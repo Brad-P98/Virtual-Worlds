@@ -4,8 +4,11 @@
 std::queue<KeyEvent> InputHandler::keyEventQueue;
 std::queue<MouseEvent> InputHandler::mouseEventQueue;
 
-unsigned char InputHandler::keyStates[255];
-unsigned char InputHandler::mouseStates[5];
+unsigned int InputHandler::keyStates[255];
+unsigned int InputHandler::mouseStates[5];
+
+glm::vec2 InputHandler::mousePos;
+glm::vec2 InputHandler::mouseDelta;
 
 void InputHandler::handleEvents()
 {
@@ -13,29 +16,21 @@ void InputHandler::handleEvents()
 	for (int i = 0; i < mouseEventQueue.size(); i++) {
 		MouseEvent currentEvent = mouseEventQueue.front();
 
-		if (currentEvent.button == -1 && currentEvent.state == -1) {
-			//Mouse is moving, either freely or dragged.
-			//Identify which button(s) are held down, if any
-			if (mouseStates[0] == PRESSED) {
-				//Left click drag
-			}
-			if (mouseStates[1] == PRESSED) {
-			}
-			if (mouseStates[2] == PRESSED) {
-			}
-
+		//A button was pressed or released
+		if (!currentEvent.state) {
+			//Mouse down event
+			mouseStates[currentEvent.button] = PRESSED;
+			mousePos = currentEvent.pos;
 		}
 		else {
-			//A button was pressed or released
-			if (!currentEvent.state) {
-				//Mouse down event
-				mouseStates[currentEvent.button] = PRESSED;
-			}
-			else {
-				//Mouse up event
-				mouseStates[currentEvent.button] = RELEASED;
-			}
+			//Mouse up event
+			mouseStates[currentEvent.button] = RELEASED;
 		}
+
+		//Calculate any changes to mouse since last event.
+		mouseDelta = mousePos - currentEvent.pos;
+		mousePos = currentEvent.pos;
+
 
 		mouseEventQueue.pop();
 	}
@@ -44,13 +39,12 @@ void InputHandler::handleEvents()
 	for (int i = 0; i < keyEventQueue.size(); i++) {
 		KeyEvent currentEvent = keyEventQueue.front();
 
-		if (!currentEvent.state) {
+		if (currentEvent.state) {
 			keyStates[currentEvent.key] = PRESSED;
 		}
 		else {
 			keyStates[currentEvent.key] = RELEASED;
 		}
-		std::cout << currentEvent.key << keyStates[currentEvent.key] << std::endl;
 
 		keyEventQueue.pop();
 	}
@@ -58,7 +52,14 @@ void InputHandler::handleEvents()
 
 bool InputHandler::checkKeyPressed(char key)
 {
-	if (keyStates[(int)key] = PRESSED) return true;
+	if (keyStates[(int)key] == PRESSED) return true;
+
+	return false;
+}
+
+bool InputHandler::checkMousePressed(int button)
+{
+	if (mouseStates[button] == PRESSED) return true;
 
 	return false;
 }

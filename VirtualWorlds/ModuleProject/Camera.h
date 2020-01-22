@@ -21,8 +21,12 @@ public:
 
 private:
 
-	float maxSpeed = 2.0f;
+	float maxSpeed = 0.002f;
 	float currentSpeed = 0.0f;
+
+	float xSens = 0.1f;
+	float ySens = 0.1f;
+
 
 };
 
