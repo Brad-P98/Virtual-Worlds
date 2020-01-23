@@ -19,6 +19,9 @@ public:
 	glm::vec3 right;
 	glm::vec3 up;
 
+	float xDelta;	//rotation amount on x axis (pitch)
+	float yDelta;	//yaw
+
 private:
 
 	float maxSpeed = 0.002f;
@@ -26,6 +29,9 @@ private:
 
 	float xSens = 0.1f;
 	float ySens = 0.1f;
+
+	float rotSpeed = 1.0f;
+
 
 
 };

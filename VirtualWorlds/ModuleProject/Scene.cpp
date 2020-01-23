@@ -24,12 +24,12 @@ void Scene::initScene()
 	glUseProgram(shader);
 
 	projection = glm::perspective(glm::radians(60.0f), 800.0f/640.0f, 0.1f, 100.0f);
-
+	view = glm::mat4(1.0);
 }
 
 void Scene::update()
 {
-
+	view;
 	Clock::tick();
 	InputHandler::handleEvents();
 
@@ -37,12 +37,16 @@ void Scene::update()
 	mainCamera->update();
 
 	glm::mat4 modelTrans = glm::mat4(1.0f);
-	modelTrans = glm::translate(modelTrans, glm::vec3(0.0, 0.0, -5));
+
 	modelTrans = glm::rotate(modelTrans, (float)glm::radians(3 * Clock::currTime/10), glm::vec3(1.0, 1.0, 1.0));
+	modelTrans = glm::translate(modelTrans, glm::vec3(0.0, 0.0, -5));
 
-	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::translate(view, mainCamera->position);
+	view = glm::rotate(view, mainCamera->xDelta, glm::vec3(0,1,0)); //yaw
+	view = glm::rotate(view, mainCamera->yDelta, glm::vec3(1,0,0)); //pitch
+	//view = glm::translate(view, mainCamera->position);
 
+	//modelMat = transMat * rotMat * scaleMat;
+	
 	unsigned int transformLoc = glGetUniformLocation(shader, "modelTrans");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(modelTrans));
 

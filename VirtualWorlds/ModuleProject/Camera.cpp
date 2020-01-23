@@ -19,6 +19,10 @@ Camera::~Camera()
 
 
 void Camera::update() {
+
+	xDelta = 0;
+	yDelta = 0;
+
 	//Handle movement
 	if (InputHandler::checkKeyPressed('s') || InputHandler::checkKeyPressed('S')) {
 		//backward
@@ -29,6 +33,7 @@ void Camera::update() {
 	//Handle looking
 	//If right mouse btn clicked
 	if (InputHandler::checkMousePressed(2)) {
-
+		xDelta = InputHandler::mouseDelta.y * xSens * Clock::deltaTime;
+		yDelta = InputHandler::mouseDelta.x * ySens * Clock::deltaTime;
 	}
 }
