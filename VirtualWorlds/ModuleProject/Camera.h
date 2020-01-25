@@ -27,8 +27,8 @@ private:
 	float maxSpeed = 0.002f;
 	float currentSpeed = 0.0f;
 
-	float xSens = 0.1f;
-	float ySens = 0.1f;
+	float xSens = 0.01f;
+	float ySens = 0.01f;
 
 	float rotSpeed = 1.0f;
 

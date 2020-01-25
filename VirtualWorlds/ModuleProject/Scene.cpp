@@ -29,7 +29,6 @@ void Scene::initScene()
 
 void Scene::update()
 {
-	view;
 	Clock::tick();
 	InputHandler::handleEvents();
 
