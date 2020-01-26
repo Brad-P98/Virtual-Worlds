@@ -11,7 +11,7 @@ Scene::~Scene()
 
 void Scene::initScene()
 {
-	mainCamera = new Camera(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, -1.0));
+	mainCamera = new Camera(glm::vec3(0.0, 0.0, 0.0), glm::vec3(1.0, 0.0, -1.0));
 
 	loader = new VAOLoader();
 	renderer = new Renderer();
@@ -29,7 +29,7 @@ void Scene::initScene()
 void Scene::update()
 {
 	Clock::tick();
-	InputHandler::handleEvents();
+	InputHandler::update();
 
 
 	mainCamera->update();

@@ -9,29 +9,42 @@ unsigned int InputHandler::mouseStates[5];
 
 glm::vec2 InputHandler::mousePos;
 glm::vec2 InputHandler::mouseDelta;
+glm::vec2 InputHandler::prevMousePos;
+
+void InputHandler::update()
+{
+	//Reset delta per frame
+	mouseDelta.x = 0.0f;
+	mouseDelta.y = 0.0f;
+
+	//Now check for any movement events
+	handleEvents();
+}
 
 void InputHandler::handleEvents()
 {
 	//Handle Mouse events
 	for (int i = 0; i < mouseEventQueue.size(); i++) {
-		MouseEvent currentEvent = mouseEventQueue.front();
 
+		MouseEvent currentEvent = mouseEventQueue.front();
+		mousePos = currentEvent.pos;
 		//A button was pressed or released
 		if (!currentEvent.state) {
 			//Mouse down event
 			mouseStates[currentEvent.button] = PRESSED;
 			mousePos = currentEvent.pos;
+			prevMousePos = currentEvent.pos;
+		}
+		else if(currentEvent.state == -1){
+			//mouse moved whilst clicked down
+			mouseDelta = mousePos - prevMousePos;
 		}
 		else {
 			//Mouse up event
 			mouseStates[currentEvent.button] = RELEASED;
 		}
 
-		//Calculate any changes to mouse since last event.
-		mouseDelta = mousePos - currentEvent.pos;
-		mousePos = currentEvent.pos;
-
-
+		prevMousePos = mousePos;
 		mouseEventQueue.pop();
 	}
 

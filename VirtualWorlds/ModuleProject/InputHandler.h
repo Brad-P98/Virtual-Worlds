@@ -22,7 +22,8 @@ class InputHandler
 {
 public:
 
-	static void handleEvents();
+	static void update();
+
 
 	static bool checkKeyPressed(char key);
 	static bool checkMousePressed(int button);
@@ -40,7 +41,10 @@ public:
 	//Change in mouse position
 	static glm::vec2 mouseDelta;
 	static glm::vec2 mousePos;
+	static glm::vec2 prevMousePos;
 private:
+
+	static void handleEvents();
 
 	//Mouse states for scrolling
 	static const int GLUT_SCROLL_UP = 3;
