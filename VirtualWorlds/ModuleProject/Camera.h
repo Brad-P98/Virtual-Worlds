@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm/gtc/matrix_transform.hpp>
+#include <glm/glm/gtc/type_ptr.hpp>
 
 #include "Clock.h"
 #include "InputHandler.h"
@@ -10,12 +11,25 @@ public:
 	Camera(glm::vec3 startPosition, glm::vec3 startDirection);
 	~Camera();
 
+	void initUBOs(GLuint shader);
+
 	void update();
 
+	glm::mat4 getProjMatrix() { return projectionMat; }
 	glm::mat4 getViewMatrix() { return viewMat; }
 
+private:
 
+	void checkMove();
+	void checkRotate();
+
+	void updateUBOCamera();
+
+private:
+
+	glm::mat4 projectionMat;
 	glm::mat4 viewMat;
+	unsigned int uboCamera;
 
 	glm::vec3 position;
 	glm::vec3 prevPosition;
@@ -25,12 +39,6 @@ public:
 	glm::vec3 right;
 	glm::vec3 up;
 
-	float xDelta = 0.0f;	//rotation amount on x axis (pitch)
-	float yDelta = 0.0f;	//yaw
-
-	float pitch = 0.0f;	//Total pitch
-	float yaw = -90.0f;		//Total yaw
-
 private:
 
 	float maxSpeed = 0.004f;
@@ -39,15 +47,10 @@ private:
 	float xSens = 0.03f;
 	float ySens = 0.03f;
 
-	float rotSpeed = 1.0f;
+	float xDelta = 0.0f;	//rotation amount on x axis (pitch)
+	float yDelta = 0.0f;	//yaw
 
-	void checkMove();
-	void checkRotate();
-
-	void outVec3(glm::vec3 vec)
-	{
-		std::cout << "x:" << vec.x << ", y:" << vec.y << ", z:" << vec.z << std::endl;
-	}
-
+	float pitch = 0.0f;	//Total pitch
+	float yaw = -90.0f;		//Total yaw
 };
 

@@ -8,8 +8,8 @@
 #include "Camera.h"
 #include "InputHandler.h"
 #include "VAOLoader.h"
-#include "VAOData.h"
 #include "shader_setup.h"
+#include "Cube.h"
 
 class Renderer;
 
@@ -34,16 +34,13 @@ private:
 	Camera* mainCamera;
 
 	VAOLoader* loader;
-	Renderer* renderer;
-
 
 	GLuint shader;
-	VAOData* d;
 
-	glm::mat4 projection;
-	glm::mat4 view;
+	Cube* newCube;
 
 
+	//temp
 	std::vector<float> vertices = {
 	-0.6f,-0.6f,-0.6f, // triangle 1 : begin
 	-0.6f,-0.6f, 0.6f,

@@ -1,21 +1,16 @@
 #pragma once
 #include <GL/gl3w.h>
+#include <vector>
+
+#include "GameObject.h"
 
 class MainRenderer
 {
 public:
 
+	std::vector<GameObject> gameObjects;
 
 private:
-	GLuint VBO;
-
-
-	float vertices[9] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f
-	};
 
 
 };
-
