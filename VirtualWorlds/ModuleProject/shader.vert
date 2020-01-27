@@ -6,11 +6,14 @@ out vec4 vertexColour;
 
 layout (std140) uniform Camera
 {
-	mat4 view;
 	mat4 projection;
+	mat4 view;
 };
 
-uniform mat4 model;
+layout (std140) uniform Model
+{
+	mat4 model;
+};
 
 void main() {
 	gl_Position = projection * view * model * vec4(pos, 1.0f);

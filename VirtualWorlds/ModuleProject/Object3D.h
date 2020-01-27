@@ -1,4 +1,7 @@
 #pragma once
+#include <iostream>
+#include <glm/glm/gtc/type_ptr.hpp>
+
 #include "GameObject.h"
 
 
@@ -11,23 +14,35 @@ public:
 	~Object3D();
 
 
-	//Default Initialization and update
-	virtual void onInit();
 	virtual void update() override;
 	virtual void draw() override;
 
+	GLuint getShaderProgram() { return m_Renderer->shaderProgram; }
 
+protected:
+
+	//Only derived classes can override these methods
+	void init(VAOData* vaoData, GLuint shader);
 	void setShaderProgram(GLuint shader);
 
-protected:
+	//Default Initialization and update. Only called from within object3d.
+	virtual void onInit();
+	virtual void onUpdate();
 
-	void init(VAOData* vaoData);
+private:
+
+	void initTransformUBO();
+	void updateTransformUBO();
 
 protected:
+	glm::mat4 transform;
+
+private:
 
 	Renderer* m_Renderer;
 	VAOData* m_VaoData;
 
-	glm::mat4 transform;
+
+	unsigned int transformUBO;
 };
 

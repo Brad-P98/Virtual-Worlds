@@ -29,14 +29,14 @@ void Camera::initUBOs(GLuint shader)
 	unsigned int uniformBlockIndex = glGetUniformBlockIndex(shader, "Camera");
 	glUniformBlockBinding(shader, uniformBlockIndex, 0);
 
-	glGenBuffers(1, &uboCamera);
-	glBindBuffer(GL_UNIFORM_BUFFER, uboCamera);
+	glGenBuffers(1, &cameraUBO);
+	glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
 	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboCamera, 0, 2 * sizeof(glm::mat4));
+	glBindBufferRange(GL_UNIFORM_BUFFER, 0, cameraUBO, 0, 2 * sizeof(glm::mat4));
 	
 	//Setup the projection matrix part of the ubo
-	glBindBuffer(GL_UNIFORM_BUFFER, uboCamera);
+	glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projectionMat));
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -53,10 +53,16 @@ void Camera::update() {
 	checkRotate();
 
 	//Now update the view matrix part of the ubo with the new view matrix
+	updateUBOCamera();
 }
 
 void Camera::checkMove()
 {
+	if (InputHandler::checkKeyPressed('\\')) {
+		maxSpeed = 0.012f;
+	}
+	else maxSpeed = 0.004f;
+
 	if (InputHandler::checkKeyPressed('w')) {
 		position += maxSpeed * front * (float)Clock::deltaTime;
 	}
@@ -68,6 +74,13 @@ void Camera::checkMove()
 	}
 	if (InputHandler::checkKeyPressed('d')) {
 		position += glm::normalize(glm::cross(front, up)) * maxSpeed * (float)Clock::deltaTime;
+	}
+
+	if (InputHandler::checkKeyPressed('r')) {
+		position += maxSpeed * up * (float)Clock::deltaTime;
+	}
+	if (InputHandler::checkKeyPressed('f')) {
+		position -= maxSpeed * up * (float)Clock::deltaTime;
 	}
 	viewMat = glm::translate(viewMat, position - prevPosition);
 }
@@ -100,7 +113,7 @@ void Camera::checkRotate()
 void Camera::updateUBOCamera()
 {
 
-	glBindBuffer(GL_UNIFORM_BUFFER, uboCamera);
+	glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
 	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(viewMat));
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }

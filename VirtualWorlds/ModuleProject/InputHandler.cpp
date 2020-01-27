@@ -70,6 +70,13 @@ bool InputHandler::checkKeyPressed(char key)
 	return false;
 }
 
+bool InputHandler::checkKeyPressed(int key)
+{
+	if (keyStates[key] == PRESSED) return true;
+
+	return false;
+}
+
 bool InputHandler::checkMousePressed(int button)
 {
 	if (mouseStates[button] == PRESSED) return true;

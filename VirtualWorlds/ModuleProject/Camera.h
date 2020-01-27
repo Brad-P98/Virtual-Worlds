@@ -29,7 +29,7 @@ private:
 
 	glm::mat4 projectionMat;
 	glm::mat4 viewMat;
-	unsigned int uboCamera;
+	unsigned int cameraUBO;
 
 	glm::vec3 position;
 	glm::vec3 prevPosition;
@@ -40,7 +40,7 @@ private:
 	glm::vec3 up;
 
 private:
-
+	
 	float maxSpeed = 0.004f;
 	float currentSpeed = 0.0f;
 

@@ -26,6 +26,7 @@ public:
 
 
 	static bool checkKeyPressed(char key);
+	static bool checkKeyPressed(int key);
 	static bool checkMousePressed(int button);
 
 	static std::queue<KeyEvent> keyEventQueue;
