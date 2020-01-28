@@ -10,7 +10,7 @@ class VAOLoader
 {
 public:
 
-	VAOData* loadToVAO(std::vector<float> positions);
+	VAOData* loadToVAO(std::vector<float> positions, std::vector<float> indices);
 
 private:
 

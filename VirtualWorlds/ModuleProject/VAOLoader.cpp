@@ -1,6 +1,6 @@
 #include "VAOLoader.h"
 
-VAOData* VAOLoader::loadToVAO(std::vector<float> positions)
+VAOData* VAOLoader::loadToVAO(std::vector<float> positions, std::vector<float> indices)
 {
 	int vaoID = createVAO();
 

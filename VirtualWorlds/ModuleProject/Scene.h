@@ -29,6 +29,11 @@ public:
 
 	void quit();
 
+public:
+
+	void addObject(Object3D* object);
+
+
 private:
 
 	Camera* mainCamera;

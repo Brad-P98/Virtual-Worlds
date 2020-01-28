@@ -11,18 +11,10 @@ Scene::~Scene()
 void Scene::initScene()
 {
 
-	loader = new VAOLoader();
-
-	shader = setupShaders("shader.vert", "shader.frag");
-
 	mainCamera = new Camera(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 0.0, -1.0));
 	//pass in whatever shader we want to setup the UBO for
 	//TODO: be able to setup this same UBO for multiple different shader programs
 	mainCamera->initUBOs(shader);
-	
-	newCube = new Cube(loader->loadToVAO(vertices), shader);
-
-	gameObjects.push_back(newCube);
 
 }
 
@@ -30,7 +22,6 @@ void Scene::update()
 {
 	Clock::tick();
 	InputHandler::update();
-
 
 	mainCamera->update();
 
@@ -52,4 +43,9 @@ void Scene::render()
 void Scene::quit()
 {
 	glutLeaveMainLoop();
+}
+
+void Scene::addObject(Object3D* object)
+{
+	gameObjects.push_back(object);
 }
