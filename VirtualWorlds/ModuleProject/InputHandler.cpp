@@ -83,3 +83,55 @@ bool InputHandler::checkMousePressed(int button)
 
 	return false;
 }
+
+
+void InputHandler::mouseFunction(int button, int state, int x, int y)
+{
+	MouseEvent evt = {
+		evt.button = button,
+		evt.state = state,
+		evt.pos = glm::vec2(x,y)
+	};
+	InputHandler::mouseEventQueue.push(evt);
+}
+
+void InputHandler::mouseMove(int x, int y)
+{
+	MouseEvent evt = {
+	evt.button = -1,
+	evt.state = -1,
+	evt.pos = glm::vec2(x,y)
+	};
+	InputHandler::mouseEventQueue.push(evt);
+}
+
+void InputHandler::mouseDrag(int x, int y)
+{
+	MouseEvent evt = {
+		evt.button = -1,
+		evt.state = -1,
+		evt.pos = glm::vec2(x,y)
+	};
+	InputHandler::mouseEventQueue.push(evt);
+}
+
+void InputHandler::keyPress(unsigned char key, int x, int y)
+{
+	KeyEvent evt = {
+		evt.key = key,
+		evt.state = true,
+		evt.pos = glm::vec2(x,y)
+	};
+	InputHandler::keyEventQueue.push(evt);
+
+}
+
+void InputHandler::keyUp(unsigned char key, int x, int y)
+{
+	KeyEvent evt = {
+	evt.key = key,
+	evt.state = false,
+	evt.pos = glm::vec2(x,y)
+	};
+	InputHandler::keyEventQueue.push(evt);
+}

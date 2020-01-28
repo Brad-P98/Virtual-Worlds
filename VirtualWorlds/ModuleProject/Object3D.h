@@ -11,7 +11,7 @@ class Object3D : public GameObject
 public:
 
 	Object3D();
-	~Object3D();
+	virtual ~Object3D();
 
 
 	virtual void update() override;

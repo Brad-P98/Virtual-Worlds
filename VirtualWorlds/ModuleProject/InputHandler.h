@@ -24,6 +24,13 @@ public:
 
 	static void update();
 
+	//Callbacks
+	static void mouseFunction(int button, int state, int x, int y);
+	static void mouseMove(int x, int y);
+	static void mouseDrag(int x, int y);
+	static void keyPress(unsigned char key, int x, int y);
+	static void keyUp(unsigned char key, int x, int y);
+
 
 	static bool checkKeyPressed(char key);
 	static bool checkKeyPressed(int key);

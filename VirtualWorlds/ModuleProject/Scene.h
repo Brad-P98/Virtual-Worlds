@@ -39,6 +39,8 @@ private:
 
 	Cube* newCube;
 
+	std::vector<GameObject*> gameObjects;
+
 
 	//temp
 	std::vector<float> vertices = {

@@ -22,6 +22,8 @@ void Scene::initScene()
 	
 	newCube = new Cube(loader->loadToVAO(vertices), shader);
 
+	gameObjects.push_back(newCube);
+
 }
 
 void Scene::update()
@@ -33,14 +35,18 @@ void Scene::update()
 	mainCamera->update();
 
 	//update all objects
-	newCube->update();
-
+	for (size_t i = 0; i < gameObjects.size(); i++) {
+		gameObjects[i]->update();
+	}
 
 }
 
 void Scene::render()
 {
-	newCube->draw();
+	//update all objects
+	for (size_t i = 0; i < gameObjects.size(); i++) {
+		gameObjects[i]->draw();
+	}
 }
 
 void Scene::quit()
