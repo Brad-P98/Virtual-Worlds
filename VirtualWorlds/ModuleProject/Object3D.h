@@ -17,7 +17,7 @@ public:
 	virtual void update() override;
 	virtual void draw() override;
 
-	GLuint getShaderProgram() { return m_Renderer->shaderProgram; }
+	GLuint getShaderProgram() { return m_Renderer.shaderProgram; }
 
 protected:
 
@@ -34,12 +34,13 @@ private:
 	void initTransformUBO();
 	void updateTransformUBO();
 
-protected:
+public:
+
 	glm::mat4 transform;
 
 private:
 
-	Renderer* m_Renderer;
+	Renderer m_Renderer;
 	VAOData* m_VaoData;
 
 

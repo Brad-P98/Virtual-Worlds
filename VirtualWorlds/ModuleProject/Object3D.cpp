@@ -4,12 +4,10 @@
 void Object3D::init(VAOData* vaoData, GLuint shader)
 {
 	m_VaoData = vaoData;
-	m_Renderer = new Renderer();
 
 	setShaderProgram(shader);
 	//initialize with identity matrix
 	transform = glm::mat4(1.0f);
-
 	initTransformUBO();
 
 	onInit();
@@ -69,13 +67,13 @@ void Object3D::updateTransformUBO()
 
 void Object3D::draw()
 {
-	glUseProgram(m_Renderer->shaderProgram);
-	m_Renderer->render(*m_VaoData);
+	glUseProgram(m_Renderer.shaderProgram);
+	m_Renderer.render(*m_VaoData);
 }
 
 void Object3D::setShaderProgram(GLuint shader)
 {
-	m_Renderer->shaderProgram = shader;
+	m_Renderer.shaderProgram = shader;
 }
 
 

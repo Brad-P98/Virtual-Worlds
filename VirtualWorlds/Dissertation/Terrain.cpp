@@ -1,53 +1,57 @@
 #include "Terrain.h"
 
 
+#pragma region TerrainChunks
 
-Terrain::Terrain(int width, int length, GLuint shader)
+TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 {
-	
-	//generateTerrain(width, length);
-	generateVertices(width, length);
-	VAOLoader* loader =  new VAOLoader();
-	init(loader->loadToVAO(positions), shader);
+
+	x = gridX * SIZE;
+	z = gridZ * SIZE;
+
+	generateVertices();
+	generateIndices();
+
+	VAOLoader loader;
+	init(loader.loadToVAO(positions, indices), shader);
 }
 
 
-Terrain::~Terrain()
+TerrainChunk::~TerrainChunk()
 {
 }
 
-void Terrain::generateTerrain(int width, int length)
+void TerrainChunk::generateVertices()
 {
+	int vertexPointer = 0;
+	for (int i = 0; i < VERTEX_COUNT; i++) {
+		for (int j = 0; j < VERTEX_COUNT; j++) {
 
-	generateVertices(width, length);
-	generateIndices(width, length);
-
-}
-
-void Terrain::generateVertices(int width, int length)
-{
-	//length first
-	for (int z = 0; z < width; z++) {
-
-		for (int x = 0; x < length; x++) {
-
-			positions.push_back(x);
+			positions.push_back( -(float)j / ((float)VERTEX_COUNT - 1) * SIZE);
 			positions.push_back(0.0f);
-			positions.push_back(z);
+			positions.push_back(-(float)i / ((float)VERTEX_COUNT - 1) * SIZE);
 		}
 	}
 }
 
-void Terrain::generateIndices(int width, int length) 
+void TerrainChunk::generateIndices() 
 {
-	for (int i = 0; i < positions.size(); i++) {
 
-		//2 triangles indexed per loop
-		indices.push_back(i);
-		indices.push_back(i + width);
-		indices.push_back(i + 1);
-		indices.push_back(i + 1);
-		indices.push_back(i + width);
-		indices.push_back(i + width + 1);
+	for (int i = 0; i < VERTEX_COUNT - 1; i++) {
+		for (int j = 0; j < VERTEX_COUNT - 1; j++) {
+
+			int topLeft = (i*VERTEX_COUNT) + j;
+			int topRight = topLeft + 1;
+			int bottomLeft = ((i + 1) * VERTEX_COUNT) + j;
+			int bottomRight = bottomLeft + 1;
+
+			indices.push_back(topLeft);
+			indices.push_back(bottomLeft);
+			indices.push_back(topRight);
+			indices.push_back(topRight);
+			indices.push_back(bottomLeft);
+			indices.push_back(bottomRight);
+		}
 	}
 }
+#pragma endregion

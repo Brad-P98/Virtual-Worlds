@@ -10,7 +10,8 @@ class VAOLoader
 {
 public:
 
-	VAOData* loadToVAO(std::vector<float> positions, std::vector<float> indices);
+	VAOLoader();
+	VAOData* loadToVAO(std::vector<float> positions, std::vector<GLuint> indices);
 
 private:
 
@@ -19,7 +20,8 @@ private:
 
 	int createVAO();
 
-	void storeDataInAttributeList(int attributeNumber, std::vector<float> data);
+	void storeVertexDataInAttributeList(int attributeNumber, std::vector<float> data);
+	void storeIndicesDataInAttributeList(int attributeNumber, std::vector<GLuint> data);
 
 	void unbindVAO();
 

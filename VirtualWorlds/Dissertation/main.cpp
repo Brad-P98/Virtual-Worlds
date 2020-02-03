@@ -7,7 +7,6 @@
 
 Wrapper* instance;
 Scene* scene;
-VAOLoader* loader;
 
 GLuint mainShader;
 
@@ -51,11 +50,12 @@ std::vector<float> vertices = {
 0.6f,-0.6f, 0.6f
 };
 
+const int TERRAIN_CHUNK_RESOLUTION = 10;
+
 int main(int argc, char** argv) {
 
 
 	scene = new Scene();
-	loader = new VAOLoader();
 
 	instance = new Wrapper();
 	instance->init(argc, argv, 800, 600, "window", scene);
@@ -70,9 +70,11 @@ int main(int argc, char** argv) {
 	//Box* box = new Box(loader->loadToVAO(vertices), mainShader);
 	//scene->addObject(box);
 
-	Terrain* terrain = new Terrain(10, 10, mainShader);
-	scene->addObject(terrain);
+	TerrainChunk terrainChunk1(0,0, mainShader);
+	scene->addObject(&terrainChunk1);
 
+	//TerrainChunk terrainChunk2(glm::vec3(TERRAIN_CHUNK_RESOLUTION, 0, 0), TERRAIN_CHUNK_RESOLUTION, mainShader);
+	//scene->addObject(&terrainChunk2);
 
 	glutMainLoop();
 

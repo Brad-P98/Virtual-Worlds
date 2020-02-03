@@ -5,28 +5,30 @@
 #include <Object3D.h>
 #include <VAOLoader.h>
 
-class Terrain : public Object3D
+
+class TerrainChunk : public Object3D
 {
 public:
 
-	Terrain(int width, int length, GLuint shader);
-	~Terrain();
-
-	void generateTerrain(int width, int length);
-
+	TerrainChunk(int gridX, int gridZ, GLuint shader);
+	~TerrainChunk();
 
 
 private:
-	void generateVertices(int width, int length);
-	void generateIndices(int width, int length);
+	void generateVertices();
+	void generateIndices();
 
 private:
 
-	std::vector<float> indices;
+	std::vector<GLuint> indices;
 	std::vector<float> positions;
 
 private:
 
-	VAOData* m_vaoData;
+	float x;						//World position
+	float z;						//"
+	const float SIZE = 100;			//Size in world coords
+	const int VERTEX_COUNT = 64;	//Number of vertices per side of terrain chunk
+
 };
 

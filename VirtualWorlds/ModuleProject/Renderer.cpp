@@ -3,6 +3,6 @@
 void Renderer::render(VAOData vaoData)
 {
 	glBindVertexArray(vaoData.getVaoID());
-	glDrawArrays(GL_TRIANGLES, 0, vaoData.getVertexCount());
+	glDrawElements(GL_TRIANGLES, vaoData.getIndexCount(), GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(0);
 }

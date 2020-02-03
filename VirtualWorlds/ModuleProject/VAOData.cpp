@@ -1,9 +1,10 @@
 #include "VAOData.h"
 
-VAOData::VAOData(int vaoID, int vertexCount)
+VAOData::VAOData(int vaoID, int vertexCount, int indexCount)
 {
 	m_vaoID = vaoID;
 	m_vertexCount = vertexCount;
+	m_indexCount = indexCount;
 }
 
 VAOData::~VAOData()
