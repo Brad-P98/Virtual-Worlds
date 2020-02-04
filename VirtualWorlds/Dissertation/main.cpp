@@ -3,6 +3,7 @@
 #include <Camera.h>
 
 #include "Terrain.h"
+#include "TerrainBehaviour.h"
 
 
 Instance* instance;
@@ -11,6 +12,7 @@ Scene* scene;
 Camera* mainCamera;
 
 GLuint mainShader;
+GLuint wireframeShader;
 
 const int TERRAIN_CHUNK_RESOLUTION = 10;
 
@@ -25,6 +27,7 @@ int main(int argc, char** argv) {
 	Clock::start();
 	
 	mainShader = setupShaders("shader.vert", "shader.frag");
+	wireframeShader = setupShaders("terrain_wireframe.vert", "terrain_wireframe.geom", "terrain_wireframe.frag");
 
 	//Initialises a completely empty scene and 1st person camera
 	scene->initScene();
@@ -32,7 +35,9 @@ int main(int argc, char** argv) {
 	mainCamera = scene->getMainCamera();
 
 	Terrain terrain;
-
+	TerrainBehaviour terrainBehaviour;
+	terrainBehaviour.setActiveTerrain(&terrain);
+	scene->addBehaviour(&terrainBehaviour);
 
 	TerrainChunk terrainChunk1(0,0, mainShader);
 	scene->addObject(&terrainChunk1);

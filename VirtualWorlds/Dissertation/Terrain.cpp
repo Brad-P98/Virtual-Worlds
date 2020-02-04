@@ -1,9 +1,11 @@
 #include "Terrain.h"
 
+const float TerrainChunk::SIZE = 100;
+const int TerrainChunk::VERTEX_COUNT = 64;
+
 #pragma region Terrain
 Terrain::Terrain()
 {
-	Instance::m_scene->addBehaviour(&m_TerrainBehaviour);
 }
 
 Terrain::~Terrain()
@@ -56,9 +58,9 @@ void TerrainChunk::generateVertices()
 	for (int i = 0; i < VERTEX_COUNT; i++) {
 		for (int j = 0; j < VERTEX_COUNT; j++) {
 
-			positions.push_back( -(float)j / ((float)VERTEX_COUNT - 1) * SIZE);
+			positions.push_back((float)j / ((float)VERTEX_COUNT - 1) * SIZE);
 			positions.push_back(0.0f);
-			positions.push_back(-(float)i / ((float)VERTEX_COUNT - 1) * SIZE);
+			positions.push_back((float)i / ((float)VERTEX_COUNT - 1) * SIZE);
 		}
 	}
 }

@@ -123,12 +123,4 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="shader.vert">
-      <Filter>Header Files\Shaders</Filter>
-    </None>
-    <None Include="shader.frag">
-      <Filter>Header Files\Shaders</Filter>
-    </None>
-  </ItemGroup>
 </Project>

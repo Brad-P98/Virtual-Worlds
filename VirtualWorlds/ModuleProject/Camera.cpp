@@ -2,10 +2,14 @@
 
 
 
-Camera::Camera(glm::vec3 startPosition, glm::vec3 targetPos)
+Camera::Camera(glm::vec3 startPosition, glm::vec3 startDirection)
 {
 	position = startPosition;
-	front = glm::normalize(targetPos);
+
+	yaw = glm::degrees(atan2(startDirection.x, startDirection.z));
+	pitch = 0;
+
+	front = glm::normalize(startDirection);
 
 	right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), front));
 	up = glm::cross(front, right);
@@ -13,7 +17,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 targetPos)
 	projectionMat = glm::perspective(glm::radians(60.0f), 800.0f / 640.0f, 0.1f, 1000.0f);
 
 	viewMat = glm::mat4(1.0);
-	viewMat = glm::lookAt(position, front, up);
+	viewMat = glm::lookAt(position, position + front, up);
 
 }
 
@@ -63,7 +67,7 @@ void Camera::checkMove()
 	}
 	else maxSpeed = 0.004f;
 
-	if (InputHandler::checkKeyPressed('w')) {
+	if (InputHandler::checkKeyPressed('w') || InputHandler::checkKeyPressed('W')) {
 		position += maxSpeed * front * (float)Clock::deltaTime;
 	}
 	if (InputHandler::checkKeyPressed('s')) {
@@ -99,6 +103,7 @@ void Camera::checkRotate()
 		if (pitch > 89.0f) pitch = 89.0f;
 		if (pitch < -89.0f) pitch = -89.0f;
 
+		//front = glm::rotate(front, yaw, glm::vec3(0, 1, 0));
 	}
 
 	glm::vec3 direction;

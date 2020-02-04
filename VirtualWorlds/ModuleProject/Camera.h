@@ -1,4 +1,7 @@
 #pragma once
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include <glm/glm/gtx/rotate_vector.hpp>
 #include <glm/glm/gtc/matrix_transform.hpp>
 #include <glm/glm/gtc/type_ptr.hpp>
 
@@ -15,12 +18,16 @@ public:
 
 	void update();
 
-	glm::mat4 getProjMatrix() { return projectionMat; }
-	glm::mat4 getViewMatrix() { return viewMat; }
+	glm::mat4 getProjMatrix() const { return projectionMat; }
+	glm::mat4 getViewMatrix() const { return viewMat; }
 
 	glm::vec3 getWorldPos() const
 	{
 		return position;
+	}
+
+	void setWorldPos(glm::vec3 pos) {
+		position = pos;
 	}
 
 private:

@@ -11,7 +11,7 @@ Scene::~Scene()
 void Scene::initScene()
 {
 
-	mainCamera = new Camera(glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, -1.0));
+	mainCamera = new Camera(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	//pass in whatever shader we want to setup the UBO for
 	//TODO: be able to setup this same UBO for multiple different shader programs
 	mainCamera->initUBOs(shader);

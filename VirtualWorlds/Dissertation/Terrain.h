@@ -6,11 +6,11 @@
 #include <Object3D.h>
 #include <VAOLoader.h>
 
-#include "TerrainBehaviour.h"
 
 class TerrainChunk;
 
 class Terrain {
+
 
 public:
 
@@ -19,20 +19,18 @@ public:
 
 public:
 
-	TerrainBehaviour m_TerrainBehaviour;
-
-private:
-
-	//10 chunks generated in each direction from camera
-	const float RENDER_DISTANCE_CHUNKS = 10;
-	std::vector<std::vector<TerrainChunk*>> activeTerrainChunks;
-
 	//Takes in true for +, false for -
 	void generateRow(bool sign);
 	void generateCol(bool sign);
 
 	void removeRow(bool sign);
 	void removeCol(bool sign);
+
+private:
+
+	//10 chunks generated in each direction from camera
+	const float RENDER_DISTANCE_CHUNKS = 10;
+	std::vector<std::vector<TerrainChunk*>> activeTerrainChunks;
 
 };
 
@@ -50,7 +48,10 @@ private:
 
 public:
 
-	glm::vec3 chunkCentre; //in world coords
+	glm::vec3 chunkCentre;			//in world coords
+
+	const static float SIZE;		//Size in world coords
+	const static int VERTEX_COUNT;	//Number of vertices per side of terrain chunk
 
 private:
 
@@ -61,8 +62,7 @@ private:
 
 	float x;						//World position
 	float z;						//"
-	const float SIZE = 100;			//Size in world coords
-	const int VERTEX_COUNT = 64;	//Number of vertices per side of terrain chunk
+
 
 };
 

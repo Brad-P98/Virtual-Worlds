@@ -39,3 +39,5 @@ typedef enum GLSL_ERROR_CODES {
 
 // Basic shader object creation function takes a path to a vertex shader file and fragment shader file and returns a bound and linked shader program object
 GLuint setupShaders(const std::string& vsPath, const std::string& fsPath, GLSL_ERROR *error_result=NULL);
+
+GLuint setupShaders(const std::string& vsPath, const std::string& gsPath, const std::string& fsPath, GLSL_ERROR *error_result = NULL);

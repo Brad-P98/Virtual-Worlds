@@ -65,7 +65,9 @@ void InputHandler::handleEvents()
 
 bool InputHandler::checkKeyPressed(char key)
 {
-	if (keyStates[(int)key] == PRESSED) return true;
+	if (keyStates[(int)key] == PRESSED) {
+		return true;
+	}
 
 	return false;
 }
