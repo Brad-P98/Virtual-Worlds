@@ -18,6 +18,11 @@ public:
 	glm::mat4 getProjMatrix() { return projectionMat; }
 	glm::mat4 getViewMatrix() { return viewMat; }
 
+	glm::vec3 getWorldPos() const
+	{
+		return position;
+	}
+
 private:
 
 	void checkMove();

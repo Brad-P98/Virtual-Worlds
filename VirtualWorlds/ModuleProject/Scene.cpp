@@ -42,6 +42,7 @@ void Scene::render()
 
 void Scene::quit()
 {
+	delete mainCamera;
 	glutLeaveMainLoop();
 }
 

@@ -1,54 +1,16 @@
 #include <Wrapper.h>
 #include <Scene.h>
-
-#include "Box.h"
+#include <Camera.h>
 
 #include "Terrain.h"
+
 
 Wrapper* instance;
 Scene* scene;
 
-GLuint mainShader;
+Camera* mainCamera;
 
-//temp box vertices
-std::vector<float> vertices = {
--0.6f,-0.6f,-0.6f, // triangle 1 : begin
--0.6f,-0.6f, 0.6f,
--0.6f, 0.6f, 0.6f, // triangle 1 : end
-0.6f, 0.6f,-0.6f, // triangle 2 : begin
--0.6f,-0.6f,-0.6f,
--0.6f, 0.6f,-0.6f, // triangle 2 : end
-0.6f,-0.6f, 0.6f,
--0.6f,-0.6f,-0.6f,
-0.6f,-0.6f,-0.6f,
-0.6f, 0.6f,-0.6f,
-0.6f,-0.6f,-0.6f,
--0.6f,-0.6f,-0.6f,
--0.6f,-0.6f,-0.6f,
--0.6f, 0.6f, 0.6f,
--0.6f, 0.6f,-0.6f,
-0.6f,-0.6f, 0.6f,
--0.6f,-0.6f, 0.6f,
--0.6f,-0.6f,-0.6f,
--0.6f, 0.6f, 0.6f,
--0.6f,-0.6f, 0.6f,
-0.6f,-0.6f, 0.6f,
-0.6f, 0.6f, 0.6f,
-0.6f,-0.6f,-0.6f,
-0.6f, 0.6f,-0.6f,
-0.6f,-0.6f,-0.6f,
-0.6f, 0.6f, 0.6f,
-0.6f,-0.6f, 0.6f,
-0.6f, 0.6f, 0.6f,
-0.6f, 0.6f,-0.6f,
--0.6f, 0.6f,-0.6f,
-0.6f, 0.6f, 0.6f,
--0.6f, 0.6f,-0.6f,
--0.6f, 0.6f, 0.6f,
-0.6f, 0.6f, 0.6f,
--0.6f, 0.6f, 0.6f,
-0.6f,-0.6f, 0.6f
-};
+GLuint mainShader;
 
 const int TERRAIN_CHUNK_RESOLUTION = 10;
 
@@ -67,8 +29,7 @@ int main(int argc, char** argv) {
 	//Initialises a completely empty scene and 1st person camera
 	scene->initScene();
 
-	//Box* box = new Box(loader->loadToVAO(vertices), mainShader);
-	//scene->addObject(box);
+	mainCamera = scene->getMainCamera();
 
 	TerrainChunk terrainChunk1(0,0, mainShader);
 	scene->addObject(&terrainChunk1);
@@ -77,6 +38,9 @@ int main(int argc, char** argv) {
 	//scene->addObject(&terrainChunk2);
 
 	glutMainLoop();
+
+	delete instance;
+	delete scene;
 
 	return 0;
 }

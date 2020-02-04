@@ -63,9 +63,6 @@
     <ClCompile Include="gl3w.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Object3D.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>

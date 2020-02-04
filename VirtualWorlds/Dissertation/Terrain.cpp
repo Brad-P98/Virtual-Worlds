@@ -1,6 +1,7 @@
 #include "Terrain.h"
 
 
+
 #pragma region TerrainChunks
 
 TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
@@ -9,10 +10,13 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 	x = gridX * SIZE;
 	z = gridZ * SIZE;
 
+	chunkCentre = glm::vec3(x - (SIZE / 2), 0, z - (SIZE / 2));
+
 	generateVertices();
 	generateIndices();
 
 	VAOLoader loader;
+
 	init(loader.loadToVAO(positions, indices), shader);
 }
 

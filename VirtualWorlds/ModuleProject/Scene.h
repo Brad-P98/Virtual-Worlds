@@ -9,9 +9,7 @@
 #include "InputHandler.h"
 #include "VAOLoader.h"
 #include "shader_setup.h"
-#include "Cube.h"
-
-class Renderer;
+#include "Object3D.h"
 
 class Scene
 {
@@ -33,6 +31,10 @@ public:
 
 	void addObject(Object3D* object);
 
+	Camera* getMainCamera() const
+	{
+		return mainCamera;
+	}
 
 private:
 
@@ -42,50 +44,6 @@ private:
 
 	GLuint shader;
 
-	Cube* newCube;
-
 	std::vector<GameObject*> gameObjects;
-
-
-	//temp
-	std::vector<float> vertices = {
-	-0.6f,-0.6f,-0.6f, // triangle 1 : begin
-	-0.6f,-0.6f, 0.6f,
-	-0.6f, 0.6f, 0.6f, // triangle 1 : end
-	0.6f, 0.6f,-0.6f, // triangle 2 : begin
-	-0.6f,-0.6f,-0.6f,
-	-0.6f, 0.6f,-0.6f, // triangle 2 : end
-	0.6f,-0.6f, 0.6f,
-	-0.6f,-0.6f,-0.6f,
-	0.6f,-0.6f,-0.6f,
-	0.6f, 0.6f,-0.6f,
-	0.6f,-0.6f,-0.6f,
-	-0.6f,-0.6f,-0.6f,
-	-0.6f,-0.6f,-0.6f,
-	-0.6f, 0.6f, 0.6f,
-	-0.6f, 0.6f,-0.6f,
-	0.6f,-0.6f, 0.6f,
-	-0.6f,-0.6f, 0.6f,
-	-0.6f,-0.6f,-0.6f,
-	-0.6f, 0.6f, 0.6f,
-	-0.6f,-0.6f, 0.6f,
-	0.6f,-0.6f, 0.6f,
-	0.6f, 0.6f, 0.6f,
-	0.6f,-0.6f,-0.6f,
-	0.6f, 0.6f,-0.6f,
-	0.6f,-0.6f,-0.6f,
-	0.6f, 0.6f, 0.6f,
-	0.6f,-0.6f, 0.6f,
-	0.6f, 0.6f, 0.6f,
-	0.6f, 0.6f,-0.6f,
-	-0.6f, 0.6f,-0.6f,
-	0.6f, 0.6f, 0.6f,
-	-0.6f, 0.6f,-0.6f,
-	-0.6f, 0.6f, 0.6f,
-	0.6f, 0.6f, 0.6f,
-	-0.6f, 0.6f, 0.6f,
-	0.6f,-0.6f, 0.6f
-	};
-
 };
 
