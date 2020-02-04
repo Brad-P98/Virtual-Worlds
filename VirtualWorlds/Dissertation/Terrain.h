@@ -2,14 +2,24 @@
 #include <GL/gl3w.h>
 #include <vector>
 
+#include <Instance.h>
 #include <Object3D.h>
 #include <VAOLoader.h>
 
+#include "TerrainBehaviour.h"
+
 class TerrainChunk;
 
-class Terrain{
+class Terrain {
 
 public:
+
+	Terrain();
+	~Terrain();
+
+public:
+
+	TerrainBehaviour m_TerrainBehaviour;
 
 private:
 
@@ -17,12 +27,12 @@ private:
 	const float RENDER_DISTANCE_CHUNKS = 10;
 	std::vector<std::vector<TerrainChunk*>> activeTerrainChunks;
 
+	//Takes in true for +, false for -
+	void generateRow(bool sign);
+	void generateCol(bool sign);
 
-	//void generateRow();
-	//void generateCol();
-
-	//void removeRow();
-	//void removeCol();
+	void removeRow(bool sign);
+	void removeCol(bool sign);
 
 };
 

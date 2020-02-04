@@ -75,11 +75,11 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Wrapper.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="shader_setup.cpp">
       <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Instance.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,9 +104,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Object3D.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
@@ -119,7 +116,10 @@
     <ClInclude Include="Clock.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Wrapper.h">
+    <ClInclude Include="Behaviour.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Instance.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>

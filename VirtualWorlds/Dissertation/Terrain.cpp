@@ -1,6 +1,32 @@
 #include "Terrain.h"
 
+#pragma region Terrain
+Terrain::Terrain()
+{
+	Instance::m_scene->addBehaviour(&m_TerrainBehaviour);
+}
 
+Terrain::~Terrain()
+{
+}
+
+void Terrain::generateRow(bool sign) 
+{
+}
+
+void Terrain::generateCol(bool sign)
+{
+}
+
+void Terrain::removeRow(bool sign)
+{
+}
+
+void Terrain::removeCol(bool sign)
+{
+}
+
+#pragma endregion
 
 #pragma region TerrainChunks
 
@@ -19,7 +45,6 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 
 	init(loader.loadToVAO(positions, indices), shader);
 }
-
 
 TerrainChunk::~TerrainChunk()
 {
@@ -59,3 +84,5 @@ void TerrainChunk::generateIndices()
 	}
 }
 #pragma endregion
+
+

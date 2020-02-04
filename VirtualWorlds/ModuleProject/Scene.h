@@ -6,10 +6,14 @@
 
 #include "Clock.h"
 #include "Camera.h"
+
 #include "InputHandler.h"
 #include "VAOLoader.h"
 #include "shader_setup.h"
+
 #include "Object3D.h"
+#include "Behaviour.h"
+
 
 class Scene
 {
@@ -31,6 +35,11 @@ public:
 
 	void addObject(Object3D* object);
 
+	void addBehaviour(Behaviour* behaviour);
+
+	void removeObject(Object3D* object);
+	void removeBehaviour(Behaviour* behaviour);
+
 	Camera* getMainCamera() const
 	{
 		return mainCamera;
@@ -45,5 +54,6 @@ private:
 	GLuint shader;
 
 	std::vector<GameObject*> gameObjects;
+	std::vector<Behaviour*> behaviours;
 };
 

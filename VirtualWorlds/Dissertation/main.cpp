@@ -1,11 +1,11 @@
-#include <Wrapper.h>
+#include <Instance.h>
 #include <Scene.h>
 #include <Camera.h>
 
 #include "Terrain.h"
 
 
-Wrapper* instance;
+Instance* instance;
 Scene* scene;
 
 Camera* mainCamera;
@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
 
 	scene = new Scene();
 
-	instance = new Wrapper();
+	instance = new Instance();
 	instance->init(argc, argv, 800, 600, "window", scene);
 
 	Clock::start();
@@ -30,6 +30,9 @@ int main(int argc, char** argv) {
 	scene->initScene();
 
 	mainCamera = scene->getMainCamera();
+
+	Terrain terrain;
+
 
 	TerrainChunk terrainChunk1(0,0, mainShader);
 	scene->addObject(&terrainChunk1);

@@ -1,19 +1,19 @@
-#include "Wrapper.h"
+#include "Instance.h"
 
+Scene* Instance::m_scene = nullptr;
 
-
-Wrapper::Wrapper()
+Instance::Instance()
 {
 	assert(wrapperInstance == nullptr);
 	wrapperInstance = this;
 }
 
 
-Wrapper::~Wrapper()
+Instance::~Instance()
 {
 }
 
-int Wrapper::init(int argc, char** argv, int winWidth, int winHeight, const char* winName, Scene* scene)
+int Instance::init(int argc, char** argv, int winWidth, int winHeight, const char* winName, Scene* scene)
 {
 	m_scene = scene;
 	glutInit(&argc, argv);

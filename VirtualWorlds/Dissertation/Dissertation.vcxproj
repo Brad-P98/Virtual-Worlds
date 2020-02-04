@@ -85,6 +85,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>Base.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -124,13 +125,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Box.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="TerrainBehaviour.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Box.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="TerrainBehaviour.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -147,12 +147,12 @@
     <ClCompile Include="shader_setup.cpp" />
     <ClCompile Include="VAOData.cpp" />
     <ClCompile Include="VAOLoader.cpp" />
-    <ClCompile Include="Wrapper.cpp" />
+    <ClCompile Include="Instance.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Clock.h" />
-    <ClInclude Include="Cube.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="MainRenderer.h" />
@@ -162,7 +162,7 @@
     <ClInclude Include="shader_setup.h" />
     <ClInclude Include="VAOData.h" />
     <ClInclude Include="VAOLoader.h" />
-    <ClInclude Include="Wrapper.h" />
+    <ClInclude Include="Instance.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />

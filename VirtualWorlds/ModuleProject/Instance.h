@@ -8,16 +8,16 @@
 #include "InputHandler.h"
 
 void drawFrame();
-class Wrapper;
-static Wrapper * wrapperInstance = nullptr;
+class Instance;
+static Instance * wrapperInstance = nullptr;
 	
-class Wrapper
+class Instance
 {
 public:
-	Wrapper();
-	~Wrapper();
+	Instance();
+	~Instance();
 
-	Scene* m_scene;
+	static Scene* m_scene;
 
 	int init(int argc, char** argv, int winWidth, int winHeight, const char* winName, Scene* scene);
 
