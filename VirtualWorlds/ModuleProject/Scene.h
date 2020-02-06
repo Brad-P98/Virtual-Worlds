@@ -52,6 +52,7 @@ private:
 	VAOLoader* loader;
 
 	GLuint shader;
+	std::vector<GLuint> shaderPrograms;
 
 	std::vector<GameObject*> gameObjects;
 	std::vector<Behaviour*> behaviours;

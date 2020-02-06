@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{485a4e34-2646-4c29-bfc0-bf1f64e47d74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Helpers">
+      <UniqueIdentifier>{4ff202c7-9ae8-4bd0-96b9-60e0497b839b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Helpers">
+      <UniqueIdentifier>{d235d802-4da5-4efa-b73c-6ac7e4590ee3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputHandler.cpp">
@@ -80,6 +86,12 @@
     </ClCompile>
     <ClCompile Include="Instance.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="PerlinNoise.cpp">
+      <Filter>Source Files\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,6 +133,15 @@
     </ClInclude>
     <ClInclude Include="Instance.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="NoiseInterface.hpp">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="PerlinNoise.hpp">
+      <Filter>Header Files\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

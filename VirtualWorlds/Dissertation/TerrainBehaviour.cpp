@@ -7,9 +7,16 @@ TerrainBehaviour::TerrainBehaviour()
 {
 	worldPos = Instance::m_scene->getMainCamera()->getWorldPos();
 
-	chunkPos = glm::vec3(worldPos.x / TerrainChunk::SIZE, 0, worldPos.z / TerrainChunk::SIZE);
+	chunkPos = glm::vec3(round(worldPos.x / TerrainChunk::SIZE + 0.499f) - 1, 0, round(worldPos.z / TerrainChunk::SIZE + 0.499f) - 1);
+
+
 }
 
+//Called after the active terrain has been set
+void TerrainBehaviour::init()
+{
+	m_Terrain->GenerateInitChunks(chunkPos);
+}
 
 TerrainBehaviour::~TerrainBehaviour()
 {
@@ -18,13 +25,25 @@ TerrainBehaviour::~TerrainBehaviour()
 void TerrainBehaviour::update()
 {
 	worldPos = Instance::m_scene->getMainCamera()->getWorldPos();
-	chunkPos = glm::vec3();
+	chunkPos = glm::vec3(round(worldPos.x / TerrainChunk::SIZE + 0.499f) - 1, 0, round(worldPos.z / TerrainChunk::SIZE + 0.499f) - 1);
 
-	std::cout << worldPos.x << " " << worldPos.y << " " << worldPos.z << std::endl;
+	if (chunkPos != prevChunkPos) {
+		std::cout << "moved";
+		//moved to a new chunk.
+		//delete the row of chunks that is now outside the render distance,
+		//and add a new row within the render distance
+		if (chunkPos.x > prevChunkPos.x) {
+			//moved +x, so delete row of chunks with lowest x, and add row after highest x
+			
+		}
+		if (chunkPos.x < prevChunkPos.x) {
+			//moved -x, so delete row of chunks with highest x, and add row before lowest x
 
-	//Check if any terrain must be removed
+		}
+	}
 
-	//Check if terrain must be added
 
-
+	prevChunkPos = chunkPos;
 }
+
+

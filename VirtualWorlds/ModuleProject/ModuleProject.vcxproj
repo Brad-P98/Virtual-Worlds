@@ -142,8 +142,10 @@
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="MainRenderer.cpp" />
     <ClCompile Include="Object3D.cpp" />
+    <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="shader_setup.cpp" />
     <ClCompile Include="VAOData.cpp" />
     <ClCompile Include="VAOLoader.cpp" />
@@ -156,9 +158,12 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="MainRenderer.h" />
+    <ClInclude Include="NoiseInterface.hpp" />
     <ClInclude Include="Object3D.h" />
+    <ClInclude Include="PerlinNoise.hpp" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="shader_setup.h" />
     <ClInclude Include="VAOData.h" />
     <ClInclude Include="VAOLoader.h" />

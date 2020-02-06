@@ -1,5 +1,6 @@
 #include <Instance.h>
 #include <Scene.h>
+#include <ShaderManager.h>
 #include <Camera.h>
 
 #include "Terrain.h"
@@ -11,42 +12,41 @@ Scene* scene;
 
 Camera* mainCamera;
 
-GLuint mainShader;
-GLuint wireframeShader;
 
 const int TERRAIN_CHUNK_RESOLUTION = 10;
 
 int main(int argc, char** argv) {
 
-
 	scene = new Scene();
 
 	instance = new Instance();
-	instance->init(argc, argv, 800, 600, "window", scene);
+	instance->init(argc, argv, 1200, 900, "window", scene);
 
 	Clock::start();
 	
-	mainShader = setupShaders("shader.vert", "shader.frag");
-	wireframeShader = setupShaders("terrain_wireframe.vert", "terrain_wireframe.geom", "terrain_wireframe.frag");
+	GLuint mainShader = setupShaders("shader.vert", "shader.frag");
+	GLuint terrain_wireframeShader = setupShaders("terrain_wireframe.vert", "terrain_wireframe.geom", "terrain_wireframe.frag");
+
+	ShaderManager::addShader("basic", mainShader);
+	ShaderManager::addShader("terrain_wireframe", terrain_wireframeShader);
 
 	//Initialises a completely empty scene and 1st person camera
 	scene->initScene();
 
 	mainCamera = scene->getMainCamera();
+	mainCamera->setWorldPos(glm::vec3(50, 1, 50));
 
-	Terrain terrain;
+	//Create a new terrain
+	Terrain* terrain = new Terrain();
+	terrain->shader = terrain_wireframeShader;
+
 	TerrainBehaviour terrainBehaviour;
-	terrainBehaviour.setActiveTerrain(&terrain);
+	terrainBehaviour.setActiveTerrain(terrain);
 	scene->addBehaviour(&terrainBehaviour);
-
-	TerrainChunk terrainChunk1(0,0, mainShader);
-	scene->addObject(&terrainChunk1);
-
-	//TerrainChunk terrainChunk2(glm::vec3(TERRAIN_CHUNK_RESOLUTION, 0, 0), TERRAIN_CHUNK_RESOLUTION, mainShader);
-	//scene->addObject(&terrainChunk2);
 
 	glutMainLoop();
 
+	delete terrain;
 	delete instance;
 	delete scene;
 

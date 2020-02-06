@@ -27,22 +27,31 @@ Camera::~Camera()
 }
 
 //Initialize UBOs for the camera view and projection matrices
-void Camera::initUBOs(GLuint shader)
+void Camera::initUBOs()
 {
+	//iterate through all shader programs
+	std::map<std::string, GLuint>::iterator i;
+	for (i = ShaderManager::shaderPrograms.begin(); i != ShaderManager::shaderPrograms.end(); ++i) {
 
-	unsigned int uniformBlockIndex = glGetUniformBlockIndex(shader, "Camera");
-	glUniformBlockBinding(shader, uniformBlockIndex, 0);
+		//If shader requires camera view and proj, set up ubo
+		if (glGetUniformBlockIndex(ShaderManager::getShader(i->first), "Camera") != GL_INVALID_INDEX) {
+			GLuint shader = ShaderManager::getShader(i->first);
+			unsigned int uniformBlockIndex = glGetUniformBlockIndex(shader, "Camera");
+			glUniformBlockBinding(shader, uniformBlockIndex, 0);
 
-	glGenBuffers(1, &cameraUBO);
-	glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
-	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 0, cameraUBO, 0, 2 * sizeof(glm::mat4));
+			glGenBuffers(1, &cameraUBO);
+			glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
+			glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			glBindBufferRange(GL_UNIFORM_BUFFER, 0, cameraUBO, 0, 2 * sizeof(glm::mat4));
 	
-	//Setup the projection matrix part of the ubo
-	glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projectionMat));
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			//Setup the projection matrix part of the ubo
+			glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
+			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projectionMat));
+			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		}
+
+	}
 
 }
 

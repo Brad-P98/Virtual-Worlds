@@ -5,6 +5,7 @@
 #include <Instance.h>
 #include <Object3D.h>
 #include <VAOLoader.h>
+#include <PerlinNoise.hpp>
 
 
 class TerrainChunk;
@@ -17,19 +18,28 @@ public:
 	Terrain();
 	~Terrain();
 
-public:
-
-	//Takes in true for +, false for -
-	void generateRow(bool sign);
-	void generateCol(bool sign);
-
-	void removeRow(bool sign);
-	void removeCol(bool sign);
+	void GenerateInitChunks(glm::vec3 startChunkGridPos);
 
 private:
 
-	//10 chunks generated in each direction from camera
-	const float RENDER_DISTANCE_CHUNKS = 10;
+	void init();
+
+	void GenerateDefaultVertexPositions();
+	void GenerateDefaultVertexIndices();
+
+public:
+	//chunks generated in each direction from current chunk (excludes current chunk)
+	const int RENDER_DISTANCE_CHUNKS = 6;
+
+	static PerlinNoise* noiseGenerator;
+
+	GLuint shader;
+
+	static std::vector<float> defaultVertexPositions;
+	static std::vector<GLuint> defaultVertexIndices;
+
+private:
+
 	std::vector<std::vector<TerrainChunk*>> activeTerrainChunks;
 
 };
@@ -43,8 +53,8 @@ public:
 
 
 private:
-	void generateVertices();
-	void generateIndices();
+
+	void generateUniqueVertexPositions();
 
 public:
 
@@ -61,8 +71,8 @@ private:
 private:
 
 	float x;						//World position
+	float y;						//"
 	float z;						//"
-
 
 };
 

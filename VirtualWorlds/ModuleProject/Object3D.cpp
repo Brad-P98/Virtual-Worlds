@@ -15,6 +15,12 @@ void Object3D::init(VAOData* vaoData, GLuint shader)
 
 void Object3D::initTransformUBO()
 {
+	//Escape function if a shader has been set that does not have a model ubo
+	if (glGetUniformBlockIndex(getShaderProgram(), "Model") == GL_INVALID_INDEX) {
+		std::cout << "Object's active shader program has no UBO named 'Model'" << std::endl;
+		return;
+	}
+
 	unsigned int uniformBlockIndex = glGetUniformBlockIndex(getShaderProgram(), "Model");
 	glUniformBlockBinding(getShaderProgram(), uniformBlockIndex, 1);
 

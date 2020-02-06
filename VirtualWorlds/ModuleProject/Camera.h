@@ -7,6 +7,7 @@
 
 #include "Clock.h"
 #include "InputHandler.h"
+#include "ShaderManager.h"
 
 class Camera
 {
@@ -14,7 +15,7 @@ public:
 	Camera(glm::vec3 startPosition, glm::vec3 startDirection);
 	~Camera();
 
-	void initUBOs(GLuint shader);
+	void initUBOs();
 
 	void update();
 

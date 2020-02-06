@@ -266,8 +266,8 @@ GLuint setupShaders(const string& vsPath, const string& fsPath, GLSL_ERROR *erro
 GLuint setupShaders(const string& vsPath, const string& 
 	gsPath, const string& fsPath, GLSL_ERROR *error_result) {
 
-	GLuint					vertexShader = 0, geometryShader = 0, fragmentShader = 0, glslProgram = 0;
-	const string			*vertexShaderSource = NULL, *geometryShaderSource = NULL, *fragmentShaderSource = NULL;
+	GLuint	vertexShader = 0, geometryShader = 0, fragmentShader = 0, glslProgram = 0;
+	const string *vertexShaderSource = NULL, *geometryShaderSource = NULL, *fragmentShaderSource = NULL;
 
 	// create vertex shader object
 	GLSL_ERROR err = createShaderFromFile(GL_VERTEX_SHADER, vsPath, &vertexShader, &vertexShaderSource);
@@ -354,10 +354,10 @@ GLuint setupShaders(const string& vsPath, const string&
 
 			// dispose of existing shader objects
 
-			glDeleteShader(vertexShader);
+			glDeleteShader(fragmentShader);
 
-			if (vertexShaderSource)
-				delete vertexShaderSource;
+			if (fragmentShaderSource)
+				delete fragmentShaderSource;
 
 			if (error_result)
 				*error_result = GLSL_FRAGMENT_SHADER_SOURCE_NOT_FOUND;
@@ -371,10 +371,10 @@ GLuint setupShaders(const string& vsPath, const string&
 
 			// dispose of existing shader objects
 
-			glDeleteShader(vertexShader);
+			glDeleteShader(fragmentShader);
 
-			if (vertexShaderSource)
-				delete vertexShaderSource;
+			if (fragmentShaderSource)
+				delete fragmentShaderSource;
 
 			if (error_result)
 				*error_result = GLSL_FRAGMENT_SHADER_OBJECT_CREATION_ERROR;
@@ -445,50 +445,51 @@ GLuint setupShaders(const string& vsPath, const string&
 
 			// dispose of existing shader objects
 
-			glDeleteShader(vertexShader);
+			glDeleteShader(geometryShader);
 
-			if (vertexShaderSource)
-				delete vertexShaderSource;
+			if (geometryShaderSource)
+				delete geometryShaderSource;
 
 			if (error_result)
-				*error_result = GLSL_FRAGMENT_SHADER_SOURCE_NOT_FOUND;
+				*error_result = GLSL_GEOMETRY_SHADER_SOURCE_NOT_FOUND;
 
 			return 0;
 
 
 		case GLSL_SHADER_OBJECT_CREATION_ERROR:
 
-			printf("OpenGL could not create the fragment shader program object.  Try using fewer resources before creating the program object.\n");
+			printf("OpenGL could not create the geometry shader program object.  Try using fewer resources before creating the program object.\n");
 
 			// dispose of existing shader objects
 
-			glDeleteShader(vertexShader);
+			glDeleteShader(geometryShader);
 
-			if (vertexShaderSource)
-				delete vertexShaderSource;
+			if (geometryShaderSource)
+				delete geometryShaderSource;
 
 			if (error_result)
-				*error_result = GLSL_FRAGMENT_SHADER_OBJECT_CREATION_ERROR;
+				*error_result = GLSL_GEOMETRY_SHADER_OBJECT_CREATION_ERROR;
 
 			return 0;
 
 
 		case GLSL_SHADER_COMPILE_ERROR:
 
-			printf("The fragment shader could not be compiled successfully...\n");
-			printf("Fragment shader source code...\n\n");
+			printf("The geometry shader could not be compiled successfully...\n");
+			printf("geometry shader source code...\n\n");
 
-			printSourceListing(*fragmentShaderSource);
+			printSourceListing(*geometryShaderSource);
 
 			// report compilation error log
 
-			printf("\n<fragment shader compiler errors--------------------->\n\n");
-			reportShaderInfoLog(fragmentShader);
-			printf("<-----------------end fragment shader compiler errors>\n\n");
+			printf("\n<geometry shader compiler errors--------------------->\n\n");
+			reportShaderInfoLog(geometryShader);
+			printf("<-----------------end geometry shader compiler errors>\n\n");
 
 			// dispose of existing shader objects
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
+			glDeleteShader(geometryShader);
 
 			if (vertexShaderSource)
 				delete vertexShaderSource;
@@ -496,25 +497,32 @@ GLuint setupShaders(const string& vsPath, const string&
 			if (fragmentShaderSource)
 				delete fragmentShaderSource;
 
+			if (geometryShaderSource)
+				delete geometryShaderSource;
+
 			if (error_result)
-				*error_result = GLSL_FRAGMENT_SHADER_COMPILE_ERROR;
+				*error_result = GLSL_GEOMETRY_SHADER_COMPILE_ERROR;
 
 			return 0;
 
 
 		default:
 
-			printf("The fragment shader object could not be created successfully.\n");
+			printf("The geometry shader object could not be created successfully.\n");
 
 			// dispose of existing shader objects
 			glDeleteShader(vertexShader);
 			glDeleteShader(fragmentShader);
+			glDeleteShader(geometryShader);
 
 			if (vertexShaderSource)
 				delete vertexShaderSource;
 
 			if (fragmentShaderSource)
 				delete fragmentShaderSource;
+
+			if (geometryShaderSource)
+				delete geometryShaderSource;
 
 			if (error_result)
 				*error_result = err;

@@ -3,6 +3,7 @@
 #include <glm/glm/gtc/type_ptr.hpp>
 
 #include "GameObject.h"
+#include "ShaderManager.h"
 
 
 class Object3D : public GameObject
