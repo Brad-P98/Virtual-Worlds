@@ -54,7 +54,7 @@ private:
 
 private:
 	
-	float maxSpeed = 0.01f;
+	float maxSpeed = 2009.0f;
 	float currentSpeed = 0.0f;
 
 	float xSens = 0.03f;

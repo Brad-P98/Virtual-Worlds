@@ -9,4 +9,6 @@ VAOData::VAOData(int vaoID, int vertexCount, int indexCount)
 
 VAOData::~VAOData()
 {
+	//GLuint temp = m_vaoID;
+	//glDeleteBuffers(1, &m_vaoID);
 }

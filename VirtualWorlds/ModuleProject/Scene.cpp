@@ -65,6 +65,9 @@ void Scene::removeObject(Object3D* object)
 	for (int i = 0; i < gameObjects.size(); i++) {
 		if (gameObjects[i] == object) {
 			gameObjects.erase(gameObjects.begin() + i);
+
+			delete object;
+
 			break;
 		}
 	}
@@ -76,6 +79,9 @@ void Scene::removeBehaviour(Behaviour* behaviour)
 	{
 		if (behaviours[i] == behaviour) {
 			behaviours.erase(behaviours.begin() + i);
+
+			delete behaviour;
+
 			break;
 		}
 	}

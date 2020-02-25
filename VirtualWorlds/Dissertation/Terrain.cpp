@@ -80,17 +80,36 @@ void Terrain::generateInitChunks(glm::vec3 startChunkGridPos)
 void Terrain::adjustXRow(bool direction)
 {
 	//new row's x position in grid
-	int xPos = activeTerrainChunks[0][2 * RENDER_DISTANCE_CHUNKS + 1]->m_gridX;
+	int xPos;
+	if (!direction) {
 
-	//new row'z starting z position in grid
-	int zStart = activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS + 1][2 * RENDER_DISTANCE_CHUNKS + 1]->m_gridZ;
+		xPos = activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][0]->m_gridX + 1;
+	}
+	else {
+
+		xPos = activeTerrainChunks[0][0]->m_gridX - 1;
+	}
+
+
+	//new row's starting z position in grid
+	int zStart = activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][0]->m_gridZ;
 
 	//Erase the correct row of chunks from the vector
 	if (!direction) {
+		//Remove from scene
+		for (int i = 0; i < activeTerrainChunks[0].size(); i++) {
+
+			Instance::m_scene->removeObject(activeTerrainChunks[0][i]);
+		}
+		//remove from vector
 		activeTerrainChunks.erase(activeTerrainChunks.begin());
 	}
 	else {
-		activeTerrainChunks.erase(activeTerrainChunks.begin() + 2 * RENDER_DISTANCE_CHUNKS + 1);
+		for (int i = 0; i < activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS].size(); i++) {
+
+			Instance::m_scene->removeObject(activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][i]);
+		}
+		activeTerrainChunks.erase(activeTerrainChunks.begin() + 2 * RENDER_DISTANCE_CHUNKS);
 	}
 
 	//Create the new row of chunks
@@ -101,11 +120,7 @@ void Terrain::adjustXRow(bool direction)
 		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, shader);
 
 		tempChunkRow.push_back(newChunk);
-
-
-		if (!direction) {
-			activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS + 1].push_back(newChunk);
-		}
+		Instance::m_scene->addObject(newChunk);
 	}
 	//Add the row of chunks to the correct end of the vector
 	if (!direction) {
@@ -118,6 +133,49 @@ void Terrain::adjustXRow(bool direction)
 
 void Terrain::adjustZRow(bool direction)
 {
+	int zPos;
+	if (!direction) {
+		zPos = activeTerrainChunks[0][2 * RENDER_DISTANCE_CHUNKS]->m_gridZ + 1;
+	}
+	else {
+		zPos = activeTerrainChunks[0][0]->m_gridZ - 1;
+
+	}
+
+	int xStart = activeTerrainChunks[0][0]->m_gridX;
+
+	if (!direction) {
+		//Remove from scene
+		for (int i = 0; i < activeTerrainChunks.size(); i++) {
+
+			Instance::m_scene->removeObject(activeTerrainChunks[i][0]);
+			activeTerrainChunks[i].erase(activeTerrainChunks[i].begin());
+		}
+	}
+	else {
+		for (int i = 0; i < activeTerrainChunks.size(); i++) {
+
+			Instance::m_scene->removeObject(activeTerrainChunks[i][2*RENDER_DISTANCE_CHUNKS]);
+			activeTerrainChunks[i].erase(activeTerrainChunks[i].begin() + 2*RENDER_DISTANCE_CHUNKS);
+		}
+	}
+	activeTerrainChunks;
+
+	//Create all new chunks and push into vector
+	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
+	
+		TerrainChunk* newChunk = new TerrainChunk(xStart + i, zPos, shader);
+		Instance::m_scene->addObject(newChunk);
+
+		if (!direction) {
+			activeTerrainChunks[i].push_back(newChunk);
+		}
+		else {
+			activeTerrainChunks[i].insert(activeTerrainChunks[i].begin(), newChunk);
+		}
+
+	}
+
 }
 
 
@@ -152,6 +210,7 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 TerrainChunk::~TerrainChunk()
 {
 }
+
 void TerrainChunk::generateUniqueVertexPositions()
 {
 	for (int i = 0, j = 1, k = 2; i < positions.size(); i+=3, j+=3, k+=3) {

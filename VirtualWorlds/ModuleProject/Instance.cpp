@@ -2,6 +2,8 @@
 
 Scene* Instance::m_scene = nullptr;
 
+
+
 Instance::Instance()
 {
 	assert(wrapperInstance == nullptr);

@@ -43,6 +43,14 @@ void TerrainBehaviour::update()
 			m_Terrain->adjustXRow(true);
 
 		}
+
+		if (chunkPos.z > prevChunkPos.z) {
+			m_Terrain->adjustZRow(false);
+		}
+		if (chunkPos.z < prevChunkPos.z) {
+			m_Terrain->adjustZRow(true);
+
+		}
 	}
 
 
