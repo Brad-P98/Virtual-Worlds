@@ -120,7 +120,7 @@ float PerlinNoise::noise(float x, float y, float scale, glm::vec2* dn_dxy) const
 
 	x *= scale;
 	y *= scale;
-	
+
 	float x0_ = floor(x);
 	float y0_ = floor(y);
 
@@ -162,7 +162,7 @@ float PerlinNoise::noise(float x, float y, float scale, glm::vec2* dn_dxy) const
 
 	u = smoothstep(u);
 	v = smoothstep(v);
-	
+
 	// refactor bi-linear interpolation
 	//float i0 = a * (1.0f - u) + b * u;
 	//float i1 = c * (1.0f - u) + d * u;
@@ -179,5 +179,5 @@ float PerlinNoise::noise(float x, float y, float scale, glm::vec2* dn_dxy) const
 		dn_dxy->y = g00.y * k0 + g10.y * k1 + g01.y * k2 + g11.y * k3 + dv_dy * (c - a + (a - b - c + d) * u);
 	}
 
-	return noise;
+	return pow((noise+1), 5.5f) * 2.0f;
 }

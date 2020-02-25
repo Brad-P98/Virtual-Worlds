@@ -64,8 +64,7 @@ void VAOLoader::storeIndicesDataInAttributeList(int attributeNumber, std::vector
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(GLuint), data.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(attributeNumber, 1, GL_UNSIGNED_INT, false, 0, 0);
-	glEnableVertexAttribArray(attributeNumber);
+
 }
 
 void VAOLoader::unbindVAO()

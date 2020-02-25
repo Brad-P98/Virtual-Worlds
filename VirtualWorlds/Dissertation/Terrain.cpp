@@ -2,7 +2,7 @@
 
 
 const float TerrainChunk::SIZE = 100;
-const int TerrainChunk::VERTEX_COUNT = 64;
+const int TerrainChunk::VERTEX_COUNT = 32;
 
 std::vector<float> Terrain::defaultVertexPositions;
 std::vector<GLuint> Terrain::defaultVertexIndices;
@@ -28,7 +28,6 @@ void Terrain::init()
 
 void Terrain::generateDefaultVertexPositions()
 {
-	int vertexPointer = 0;
 	for (int i = 0; i < TerrainChunk::VERTEX_COUNT; i++) {
 		for (int j = 0; j < TerrainChunk::VERTEX_COUNT; j++) {
 			//x
@@ -39,6 +38,21 @@ void Terrain::generateDefaultVertexPositions()
 			defaultVertexPositions.push_back((float)i / ((float)TerrainChunk::VERTEX_COUNT - 1) * TerrainChunk::SIZE);
 		}
 	}
+}
+
+void Terrain::generateDefaultVertexNormals()
+{
+	for (int i = 0; i < TerrainChunk::VERTEX_COUNT; i++) {
+		for (int j = 0; j < TerrainChunk::VERTEX_COUNT; j++) {
+			//x
+			defaultVertexPositions.push_back(0.0f);
+			//y
+			defaultVertexPositions.push_back(1.0f);
+			//z
+			defaultVertexPositions.push_back(0.0f);
+		}
+	}
+
 }
 
 void Terrain::generateDefaultVertexIndices()
@@ -219,7 +233,17 @@ void TerrainChunk::generateUniqueVertexPositions()
 		positions[k] += z;
 
 		//y last
-		positions[j] += Terrain::noiseGenerator->noise(positions[i], positions[k], 0.1f, NULL);
+		positions[j] += Terrain::noiseGenerator->noise(positions[i], positions[k], 0.01f, NULL);
+
+		//Calculate normal for this point
+		int p0 = positions[j];	//Height at this point
+
+		//Height of surrounding points
+		int p1 = Terrain::noiseGenerator->noise(positions[i + 1], positions[k], 0.01f, NULL);
+		int p2 = Terrain::noiseGenerator->noise(positions[i - 1], positions[k], 0.01f, NULL);
+		int p3 = Terrain::noiseGenerator->noise(positions[i], positions[k + 1], 0.01f, NULL);
+		int p4 = Terrain::noiseGenerator->noise(positions[i], positions[k - 1], 0.01f, NULL);
+
 
 	}
 }

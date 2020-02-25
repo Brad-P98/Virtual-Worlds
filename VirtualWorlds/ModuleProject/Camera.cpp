@@ -74,7 +74,7 @@ void Camera::checkMove()
 	if (InputHandler::checkKeyPressed('\\')) {
 		maxSpeed = 0.012f;
 	}
-	else maxSpeed = 0.004f;
+	else maxSpeed = 0.04f;
 
 	if (InputHandler::checkKeyPressed('w') || InputHandler::checkKeyPressed('W')) {
 		position += maxSpeed * front * (float)Clock::deltaTime;

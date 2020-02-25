@@ -29,7 +29,6 @@ void TerrainBehaviour::update()
 	chunkPos = glm::vec3(round(worldPos.x / TerrainChunk::SIZE + 0.499f) - 1, 0, round(worldPos.z / TerrainChunk::SIZE + 0.499f) - 1);
 
 	if (chunkPos != prevChunkPos) {
-		std::cout << "moved";
 
 		//moved to a new chunk.
 		//delete the row of chunks that is now outside the render distance,
