@@ -2,6 +2,7 @@
 #include <iostream>
 #include <glm/glm/gtc/type_ptr.hpp>
 
+#include "Clock.h"
 #include "GameObject.h"
 #include "ShaderManager.h"
 

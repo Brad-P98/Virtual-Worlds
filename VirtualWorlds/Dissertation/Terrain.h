@@ -18,18 +18,21 @@ public:
 	Terrain();
 	~Terrain();
 
-	void GenerateInitChunks(glm::vec3 startChunkGridPos);
+	void generateInitChunks(glm::vec3 startChunkGridPos);
+
+	void adjustXRow(bool direction);
+	void adjustZRow(bool direction);
 
 private:
 
 	void init();
 
-	void GenerateDefaultVertexPositions();
-	void GenerateDefaultVertexIndices();
+	void generateDefaultVertexPositions();
+	void generateDefaultVertexIndices();
 
 public:
 	//chunks generated in each direction from current chunk (excludes current chunk)
-	const int RENDER_DISTANCE_CHUNKS = 6;
+	const int RENDER_DISTANCE_CHUNKS = 3;
 
 	static PerlinNoise* noiseGenerator;
 
@@ -58,7 +61,9 @@ private:
 
 public:
 
-	glm::vec3 chunkCentre;			//in world coords
+	glm::vec3 chunkMinXZ;			//in world coords
+	int m_gridX;
+	int m_gridZ;
 
 	const static float SIZE;		//Size in world coords
 	const static int VERTEX_COUNT;	//Number of vertices per side of terrain chunk

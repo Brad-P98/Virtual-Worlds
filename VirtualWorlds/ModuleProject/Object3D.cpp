@@ -15,6 +15,7 @@ void Object3D::init(VAOData* vaoData, GLuint shader)
 
 void Object3D::initTransformUBO()
 {
+
 	//Escape function if a shader has been set that does not have a model ubo
 	if (glGetUniformBlockIndex(getShaderProgram(), "Model") == GL_INVALID_INDEX) {
 		std::cout << "Object's active shader program has no UBO named 'Model'" << std::endl;
@@ -66,6 +67,9 @@ void Object3D::onUpdate()
 
 void Object3D::updateTransformUBO()
 {
+	//GLuint loc = glGetUniformLocation(getShaderProgram(), "yOffset");
+	//glUniform1f(loc, sin((float)Clock::currTime * 0.001f));
+
 	glBindBuffer(GL_UNIFORM_BUFFER, transformUBO);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(transform));
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
