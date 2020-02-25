@@ -48,7 +48,7 @@ Object3D::Object3D()
 
 Object3D::~Object3D()
 {
-	//delete m_VaoData;
+	delete m_VaoData;
 }
 
 void Object3D::update()
@@ -79,7 +79,7 @@ void Object3D::updateTransformUBO()
 void Object3D::draw()
 {
 	glUseProgram(m_Renderer.shaderProgram);
-	m_Renderer.render(*m_VaoData);
+	m_Renderer.render(m_VaoData);
 }
 
 void Object3D::setShaderProgram(GLuint shader)

@@ -1,8 +1,9 @@
 #include "Renderer.h"
 
-void Renderer::render(VAOData vaoData)
+void Renderer::render(VAOData* vaoData)
 {
-	glBindVertexArray(vaoData.getVaoID());
-	glDrawElements(GL_TRIANGLES, vaoData.getIndexCount(), GL_UNSIGNED_INT, (void*)0);
+	GLuint vaoID = vaoData->getVaoID();
+	glBindVertexArray(vaoData->getVaoID());
+	glDrawElements(GL_TRIANGLES, vaoData->getIndexCount(), GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(0);
 }

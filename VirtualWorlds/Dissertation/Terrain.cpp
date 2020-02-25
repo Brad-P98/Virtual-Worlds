@@ -201,9 +201,9 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 	//Fill out positions
 	generateUniqueVertexPositions();
 
-	VAOLoader loader;
+	VAOLoader* loader = VAOLoader::getInstance();
 
-	init(loader.loadToVAO(positions, indices), shader);
+	init(loader->loadToVAO(positions, indices), shader);
 
 }
 

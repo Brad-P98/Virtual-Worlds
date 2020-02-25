@@ -1,5 +1,18 @@
 #include "VAOLoader.h"
 
+VAOLoader * VAOLoader::thisPointer = nullptr;
+std::vector<GLuint> VAOLoader::vaos;
+std::vector<GLuint> VAOLoader::vbos;
+
+VAOLoader * VAOLoader::getInstance()
+{
+	if (thisPointer == nullptr)
+	{
+		thisPointer = new VAOLoader();
+	}
+	return thisPointer;
+}
+
 VAOLoader::VAOLoader()
 {
 }
