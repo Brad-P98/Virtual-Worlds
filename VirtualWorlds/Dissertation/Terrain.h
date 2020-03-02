@@ -74,6 +74,7 @@ private:
 
 	std::vector<GLuint> indices;
 	std::vector<float> positions;
+	std::vector<float> normals;
 
 private:
 

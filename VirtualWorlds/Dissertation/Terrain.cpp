@@ -212,12 +212,12 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 	positions = Terrain::defaultVertexPositions;
 	indices = Terrain::defaultVertexIndices;
 
-	//Fill out positions
+	//Fill out positions and normals
 	generateUniqueVertexPositions();
 
 	VAOLoader* loader = VAOLoader::getInstance();
 
-	init(loader->loadToVAO(positions, indices), shader);
+	init(loader->loadToVAO(positions, normals, indices), shader);
 
 }
 
@@ -235,15 +235,50 @@ void TerrainChunk::generateUniqueVertexPositions()
 		//y last
 		positions[j] += Terrain::noiseGenerator->noise(positions[i], positions[k], 0.01f, NULL);
 
+		//VERTEX NORMAL CALCULATION
 		//Calculate normal for this point
-		int p0 = positions[j];	//Height at this point
+		int h0 = positions[j];	//Height at this point
 
-		//Height of surrounding points
-		int p1 = Terrain::noiseGenerator->noise(positions[i + 1], positions[k], 0.01f, NULL);
-		int p2 = Terrain::noiseGenerator->noise(positions[i - 1], positions[k], 0.01f, NULL);
-		int p3 = Terrain::noiseGenerator->noise(positions[i], positions[k + 1], 0.01f, NULL);
-		int p4 = Terrain::noiseGenerator->noise(positions[i], positions[k - 1], 0.01f, NULL);
+		glm::vec3 p0 = glm::vec3(positions[i], h0, positions[k]);
 
+		//Info about surrounding points
+		float vertexSeperationDist = TerrainChunk::SIZE / TerrainChunk::VERTEX_COUNT;
+		float nextXPos = positions[i] + vertexSeperationDist;
+		float nextZPos = positions[k] + vertexSeperationDist;
+		float prevXPos = positions[i] - vertexSeperationDist;
+		float prevZPos = positions[k] - vertexSeperationDist;
+
+		//Height of surrounding points, clockwise
+		float h1 = Terrain::noiseGenerator->noise(nextXPos, positions[k], 0.01f, NULL);
+		float h2 = Terrain::noiseGenerator->noise(positions[i], nextZPos, 0.01f, NULL);
+		float h3 = Terrain::noiseGenerator->noise(prevXPos, nextZPos, 0.01f, NULL);
+
+		float h4 = Terrain::noiseGenerator->noise(prevXPos, positions[k], 0.01f, NULL);
+		float h5 = Terrain::noiseGenerator->noise(positions[i], prevZPos, 0.01f, NULL);
+		float h6 = Terrain::noiseGenerator->noise(nextXPos, prevZPos, 0.01f, NULL);
+
+		//vector for each point
+		glm::vec3 p1 = glm::vec3(nextXPos,		h1, positions[k]);
+		glm::vec3 p2 = glm::vec3(positions[i],	h2, nextZPos);
+		glm::vec3 p3 = glm::vec3(prevXPos,		h3, nextZPos);
+		glm::vec3 p4 = glm::vec3(prevXPos,		h4, positions[k]);
+		glm::vec3 p5 = glm::vec3(positions[i],	h5, prevZPos);
+		glm::vec3 p6 = glm::vec3(nextXPos,		h6, prevZPos);
+		
+
+		//calculate surface normal direction of the 6 surrounding triangles
+		glm::vec3 n1 = glm::normalize(glm::cross(p1 - p0, p2 - p0));
+		glm::vec3 n2 = glm::normalize(glm::cross(p2 - p0, p3 - p0));
+		glm::vec3 n3 = glm::normalize(glm::cross(p3 - p0, p4 - p0));
+		glm::vec3 n4 = glm::normalize(glm::cross(p4 - p0, p5 - p0));
+		glm::vec3 n5 = glm::normalize(glm::cross(p5 - p0, p6 - p0));
+		glm::vec3 n6 = glm::normalize(glm::cross(p6 - p0, p1 - p0));
+
+		glm::vec3 vertexNormal = glm::normalize(n1 + n2 + n3 + n4 + n5 + n6);
+
+		normals.push_back(vertexNormal.x);
+		normals.push_back(vertexNormal.y);
+		normals.push_back(vertexNormal.z);
 
 	}
 }

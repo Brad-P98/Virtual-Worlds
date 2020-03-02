@@ -17,13 +17,16 @@ VAOLoader::VAOLoader()
 {
 }
 
-VAOData* VAOLoader::loadToVAO(std::vector<float> positions, std::vector<GLuint> indices)
+VAOData* VAOLoader::loadToVAO(std::vector<float> positions, std::vector<float> normals, std::vector<GLuint> indices)
 {
 	//Create and bind vao
 	int vaoID = createVAO();
 
 	//fill buffer for vertex positions
 	storeVertexDataInAttributeList(0, positions);
+	//fill buffer for vertex normals
+	//Same layout, different attribute number
+	storeVertexDataInAttributeList(2, normals);
 	//fill buffer for indices
 	storeIndicesDataInAttributeList(3, indices);
 
@@ -55,6 +58,7 @@ void VAOLoader::storeVertexDataInAttributeList(int attributeNumber, std::vector<
 	glEnableVertexAttribArray(attributeNumber);
 
 }
+
 
 void VAOLoader::storeIndicesDataInAttributeList(int attributeNumber, std::vector<GLuint> data)
 {

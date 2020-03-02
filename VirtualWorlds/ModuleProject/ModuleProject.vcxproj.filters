@@ -49,6 +49,12 @@
     <Filter Include="Source Files\Helpers">
       <UniqueIdentifier>{d235d802-4da5-4efa-b73c-6ac7e4590ee3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering\Lighting">
+      <UniqueIdentifier>{a33045a6-c3a4-4599-8f8f-de32ed12d4c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering\Lighting">
+      <UniqueIdentifier>{b02a269a-f7cf-4f28-8a28-eda90128089c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputHandler.cpp">
@@ -95,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="StringUtility.cpp">
       <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>Source Files\Rendering\Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +166,12 @@
     </ClInclude>
     <ClInclude Include="GLShaderStage.hpp">
       <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>Header Files\Rendering\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

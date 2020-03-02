@@ -68,8 +68,6 @@ void Object3D::onUpdate()
 
 void Object3D::updateTransformUBO()
 {
-	//GLuint loc = glGetUniformLocation(getShaderProgram(), "yOffset");
-	//glUniform1f(loc, sin((float)Clock::currTime * 0.001f));
 
 	glBindBuffer(GL_UNIFORM_BUFFER, transformUBO);
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(transform));

@@ -2,6 +2,7 @@
 #include <Scene.h>
 #include <ShaderManager.h>
 #include <Camera.h>
+#include <LightManager.h>
 
 #include "Terrain.h"
 #include "TerrainBehaviour.h"
@@ -35,6 +36,13 @@ int main(int argc, char** argv) {
 
 	mainCamera = scene->getMainCamera();
 	mainCamera->setWorldPos(glm::vec3(50, 1, 50));
+
+	//Create an ambient light for the scene
+	DirectionalLight* mainLight = new DirectionalLight();
+	mainLight->direction = glm::vec3(-0.1f, -1.0f, 0.0f);
+	mainLight->ambient = 0.06f;
+	mainLight->colourIntensities = glm::vec3(0.7f, 0.7f, 0.7f);
+	LightManager::addLight(mainLight);
 
 	//Create a new terrain
 	Terrain* terrain = new Terrain();
