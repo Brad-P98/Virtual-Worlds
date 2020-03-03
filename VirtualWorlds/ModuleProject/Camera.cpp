@@ -27,32 +27,22 @@ Camera::~Camera()
 }
 
 //Initialize UBOs for the camera view and projection matrices
-void Camera::initUBOs()
+void Camera::initCameraUBOs()
 {
 	//iterate through all shader programs
-	std::map<std::string, GLuint>::iterator i;
-	for (i = ShaderManager::shaderPrograms.begin(); i != ShaderManager::shaderPrograms.end(); ++i) {
+	for (auto shader : ShaderManager::shaderPrograms) {
 
 		//If shader requires camera view and proj, set up ubo
-		if (glGetUniformBlockIndex(ShaderManager::getShader(i->first), "Camera") != GL_INVALID_INDEX) {
-			GLuint shader = ShaderManager::getShader(i->first);
-			unsigned int uniformBlockIndex = glGetUniformBlockIndex(shader, "Camera");
-			glUniformBlockBinding(shader, uniformBlockIndex, 0);
+		if (glGetUniformBlockIndex(shader.second, "Camera") != GL_INVALID_INDEX) {
+			unsigned int uniformBlockIndex = glGetUniformBlockIndex(shader.second, "Camera");
+			glUniformBlockBinding(shader.second, uniformBlockIndex, 0);
 
 			glGenBuffers(1, &cameraUBO);
 			glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
-			glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
-			glBindBuffer(GL_UNIFORM_BUFFER, 0);
-			glBindBufferRange(GL_UNIFORM_BUFFER, 0, cameraUBO, 0, 2 * sizeof(glm::mat4));
-	
-			//Setup the projection matrix part of the ubo
-			glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
-			glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projectionMat));
-			glBindBuffer(GL_UNIFORM_BUFFER, 0);
+			glBindBufferRange(GL_UNIFORM_BUFFER, 0, cameraUBO, 0, sizeof(cameraBuffer));
 		}
-
 	}
-
+	updateCameraUBOs();
 }
 
 
@@ -65,8 +55,8 @@ void Camera::update() {
 	checkMove();
 	checkRotate();
 
-	//Now update the view matrix part of the ubo with the new view matrix
-	updateUBOCamera();
+	//Now update the UBO view matrix and camera position
+	updateCameraUBOs();
 }
 
 void Camera::checkMove()
@@ -124,10 +114,13 @@ void Camera::checkRotate()
 	viewMat = glm::lookAt(position, position + front, up);
 }
 
-void Camera::updateUBOCamera()
+void Camera::updateCameraUBOs()
 {
+	cameraBuffer.projMat = projectionMat;
+	cameraBuffer.viewMat = viewMat;
+	cameraBuffer.camPos = glm::vec4(getWorldPos(), 1.0f);
 
 	glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
-	glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(viewMat));
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(cameraBuffer), &cameraBuffer, GL_STATIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }

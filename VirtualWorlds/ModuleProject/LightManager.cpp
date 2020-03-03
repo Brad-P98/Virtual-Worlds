@@ -17,7 +17,6 @@ void LightManager::initLightsUBOs()
 
 			glGenBuffers(1, &lightsUBO);
 			glBindBuffer(GL_UNIFORM_BUFFER, lightsUBO);
-			glBufferData(GL_UNIFORM_BUFFER, sizeof(LightingBuffer), NULL, GL_STATIC_DRAW);
 			glBindBufferRange(GL_UNIFORM_BUFFER, 2, lightsUBO, 0, sizeof(lightingBuffer));
 		}
 	}
@@ -27,7 +26,7 @@ void LightManager::initLightsUBOs()
 
 void LightManager::updateLightsUBOs()
 {
-	//Fill lights buffer with lights from vector
+	//First update lights buffer with lights from vector
 	for (int i = 0; i < lights.size(); i++)
 	{
 		lightingBuffer.lights[i] = *lights[i];

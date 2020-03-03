@@ -18,11 +18,12 @@ private:
 	static void updateLightsUBOs();
 
 private:
+
 	static struct LightingBuffer
 	{
 		DirectionalLight lights[20];
 		int numLights;
-	}lightingBuffer;
+	} lightingBuffer;
 
 
 	static std::vector<DirectionalLight*> lights;

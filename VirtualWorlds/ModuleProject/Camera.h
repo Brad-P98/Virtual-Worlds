@@ -15,7 +15,7 @@ public:
 	Camera(glm::vec3 startPosition, glm::vec3 startDirection);
 	~Camera();
 
-	void initUBOs();
+	void initCameraUBOs();
 
 	void update();
 
@@ -36,9 +36,15 @@ private:
 	void checkMove();
 	void checkRotate();
 
-	void updateUBOCamera();
+	void updateCameraUBOs();
 
 private:
+
+	struct CameraBuffer {
+		glm::mat4 projMat;
+		glm::mat4 viewMat;
+		glm::vec4 camPos;
+	} cameraBuffer;
 
 	glm::mat4 projectionMat;
 	glm::mat4 viewMat;
