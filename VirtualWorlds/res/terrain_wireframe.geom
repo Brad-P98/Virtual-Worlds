@@ -42,7 +42,7 @@ void main(void) {
     gl_Position = mvpMatrix * gl_in[0].gl_Position;
     EmitVertex();
 
-    vec4 normalPoint = gl_in[0].gl_Position - vec4(normal[0] ,0);
+    vec4 normalPoint = gl_in[0].gl_Position + vec4(normal[0] ,0);
     gl_Position = mvpMatrix * normalPoint;
     EmitVertex();
 

@@ -93,6 +93,9 @@ void Terrain::generateInitChunks(glm::vec3 startChunkGridPos)
 //false = remove lowest x chunk, add higher x chunk
 void Terrain::adjustXRow(bool direction)
 {
+
+	if (!idleX) return;
+	idleX = false;
 	//new row's x position in grid
 	int xPos;
 	if (!direction) {
@@ -113,7 +116,8 @@ void Terrain::adjustXRow(bool direction)
 		//Remove from scene
 		for (int i = 0; i < activeTerrainChunks[0].size(); i++) {
 
-			Instance::m_scene->removeObject(activeTerrainChunks[0][i]);
+			//Instance::m_scene->removeObject(activeTerrainChunks[0][i]);
+			chunksToRemoveX.push_back(activeTerrainChunks[0][i]);
 		}
 		//remove from vector
 		activeTerrainChunks.erase(activeTerrainChunks.begin());
@@ -121,7 +125,8 @@ void Terrain::adjustXRow(bool direction)
 	else {
 		for (int i = 0; i < activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS].size(); i++) {
 
-			Instance::m_scene->removeObject(activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][i]);
+			//Instance::m_scene->removeObject(activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][i]);
+			chunksToRemoveX.push_back(activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][i]);
 		}
 		activeTerrainChunks.erase(activeTerrainChunks.begin() + 2 * RENDER_DISTANCE_CHUNKS);
 	}
@@ -134,7 +139,8 @@ void Terrain::adjustXRow(bool direction)
 		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, shader);
 
 		tempChunkRow.push_back(newChunk);
-		Instance::m_scene->addObject(newChunk);
+		//Instance::m_scene->addObject(newChunk);
+		chunksToAddX.push_back(newChunk);
 	}
 	//Add the row of chunks to the correct end of the vector
 	if (!direction) {
@@ -143,10 +149,14 @@ void Terrain::adjustXRow(bool direction)
 	else {
 		activeTerrainChunks.insert(activeTerrainChunks.begin(), tempChunkRow);
 	}
+	idleX = true;
+	doneGeneratingX = true;
 }
 
 void Terrain::adjustZRow(bool direction)
 {
+	if (!idleZ) return;
+	idleZ = false;
 	int zPos;
 	if (!direction) {
 		zPos = activeTerrainChunks[0][2 * RENDER_DISTANCE_CHUNKS]->m_gridZ + 1;
@@ -162,14 +172,18 @@ void Terrain::adjustZRow(bool direction)
 		//Remove from scene
 		for (int i = 0; i < activeTerrainChunks.size(); i++) {
 
-			Instance::m_scene->removeObject(activeTerrainChunks[i][0]);
+			//Instance::m_scene->removeObject(activeTerrainChunks[i][0]);
+			chunksToRemoveZ.push_back(activeTerrainChunks[i][0]);
+
 			activeTerrainChunks[i].erase(activeTerrainChunks[i].begin());
 		}
 	}
 	else {
 		for (int i = 0; i < activeTerrainChunks.size(); i++) {
 
-			Instance::m_scene->removeObject(activeTerrainChunks[i][2*RENDER_DISTANCE_CHUNKS]);
+			//Instance::m_scene->removeObject(activeTerrainChunks[i][2*RENDER_DISTANCE_CHUNKS]);
+			chunksToRemoveZ.push_back(activeTerrainChunks[i][2 * RENDER_DISTANCE_CHUNKS]);
+
 			activeTerrainChunks[i].erase(activeTerrainChunks[i].begin() + 2*RENDER_DISTANCE_CHUNKS);
 		}
 	}
@@ -179,7 +193,9 @@ void Terrain::adjustZRow(bool direction)
 	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
 	
 		TerrainChunk* newChunk = new TerrainChunk(xStart + i, zPos, shader);
-		Instance::m_scene->addObject(newChunk);
+		//Instance::m_scene->addObject(newChunk);
+
+		chunksToAddZ.push_back(newChunk);
 
 		if (!direction) {
 			activeTerrainChunks[i].push_back(newChunk);
@@ -189,7 +205,38 @@ void Terrain::adjustZRow(bool direction)
 		}
 
 	}
+	idleZ = true;
+	doneGeneratingZ = true;
+}
 
+void Terrain::finalizeGeneration()
+{
+
+	for (int i = 0; i < chunksToAddX.size(); i++) {
+
+		Instance::m_scene->addObject(chunksToAddX[i]);
+	}
+
+	for (int i = 0; i < chunksToAddZ.size(); i++) {
+
+		Instance::m_scene->addObject(chunksToAddZ[i]);
+	}
+
+	for (int i = 0; i < chunksToRemoveX.size(); i++) {
+
+		Instance::m_scene->removeObject(chunksToRemoveX[i]);
+	}
+
+	for (int i = 0; i < chunksToRemoveZ.size(); i++) {
+
+		Instance::m_scene->removeObject(chunksToRemoveZ[i]);
+
+	}
+	
+	chunksToAddX.clear();
+	chunksToAddZ.clear();
+	chunksToRemoveX.clear();
+	chunksToRemoveZ.clear();
 }
 
 
@@ -274,7 +321,7 @@ void TerrainChunk::generateUniqueVertexPositions()
 		glm::vec3 n5 = glm::normalize(glm::cross(p5 - p0, p6 - p0));
 		glm::vec3 n6 = glm::normalize(glm::cross(p6 - p0, p1 - p0));
 
-		glm::vec3 vertexNormal = glm::normalize(n1 + n2 + n3 + n4 + n5 + n6);
+		glm::vec3 vertexNormal = -glm::normalize(n1 + n2 + n3 + n4 + n5 + n6);
 
 		normals.push_back(vertexNormal.x);
 		normals.push_back(vertexNormal.y);

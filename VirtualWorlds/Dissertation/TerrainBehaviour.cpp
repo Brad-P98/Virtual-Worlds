@@ -54,6 +54,12 @@ void TerrainBehaviour::update()
 
 
 	prevChunkPos = chunkPos;
+
+	if (m_Terrain->doneGeneratingX || m_Terrain->doneGeneratingZ) {
+		m_Terrain->doneGeneratingX = false;
+		m_Terrain->doneGeneratingZ = false;
+		m_Terrain->finalizeGeneration();
+	}
 }
 
 

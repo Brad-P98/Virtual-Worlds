@@ -23,6 +23,8 @@ public:
 	void adjustXRow(bool direction);
 	void adjustZRow(bool direction);
 
+	void finalizeGeneration();
+
 private:
 
 	void init();
@@ -43,10 +45,22 @@ public:
 	static std::vector<float> defaultVertexNormals;
 	static std::vector<GLuint> defaultVertexIndices;
 
+public:
+
+	bool doneGeneratingX = false;
+	bool doneGeneratingZ = false;
+
 private:
 
 	std::vector<std::vector<TerrainChunk*>> activeTerrainChunks;
 
+	bool idleX = true;
+	bool idleZ = true;
+
+	std::vector<TerrainChunk*> chunksToAddX;
+	std::vector<TerrainChunk*> chunksToAddZ;
+	std::vector<TerrainChunk*> chunksToRemoveX;
+	std::vector<TerrainChunk*> chunksToRemoveZ;
 };
 
 class TerrainChunk : public Object3D

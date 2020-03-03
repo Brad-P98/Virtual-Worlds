@@ -39,9 +39,9 @@ int main(int argc, char** argv) {
 
 	//Create an ambient light for the scene
 	DirectionalLight* mainLight = new DirectionalLight();
-	mainLight->direction = glm::vec4(-0.1f, -1.0f, 0.0f, 0.0f);
-	mainLight->ambient = 0.2f;
-	mainLight->colourIntensities = glm::vec4(0.8f, 0.8f, 0.8f, 0.0f);
+	mainLight->direction = glm::vec4(0.6f, 1.0f, 0.3f, 0.0f);
+	mainLight->ambient = 0.02f;
+	mainLight->colourIntensities = glm::vec4(0.6f, 0.6f, 0.6f, 0.0f);
 	LightManager::addLight(mainLight);
 
 	//Create a new terrain
