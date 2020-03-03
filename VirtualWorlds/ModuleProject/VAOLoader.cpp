@@ -32,7 +32,7 @@ VAOData* VAOLoader::loadToVAO(std::vector<float> positions, std::vector<float> n
 
 	unbindVAO();
 
-	return new VAOData(vaoID, positions.size(), indices.size());
+	return new VAOData(vaoID, positions.size(), normals.size(), indices.size());
 }
 
 int VAOLoader::createVAO()

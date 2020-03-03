@@ -40,13 +40,13 @@ int main(int argc, char** argv) {
 	//Create an ambient light for the scene
 	DirectionalLight* mainLight = new DirectionalLight();
 	mainLight->direction = glm::vec3(-0.1f, -1.0f, 0.0f);
-	mainLight->ambient = 0.06f;
-	mainLight->colourIntensities = glm::vec3(0.7f, 0.7f, 0.7f);
+	mainLight->ambient = 0.2f;
+	mainLight->colourIntensities = glm::vec3(0.8f, 0.8f, 0.8f);
 	LightManager::addLight(mainLight);
 
 	//Create a new terrain
 	Terrain* terrain = new Terrain();
-	terrain->shader = terrain_wireframeShader;
+	terrain->shader = mainShader;
 
 	TerrainBehaviour terrainBehaviour;
 	terrainBehaviour.setActiveTerrain(terrain);

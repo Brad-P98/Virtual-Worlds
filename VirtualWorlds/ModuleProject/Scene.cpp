@@ -15,6 +15,7 @@ void Scene::initScene()
 
 	mainCamera->initUBOs();
 
+	LightManager::initLightsUBOs();
 }
 
 void Scene::update()

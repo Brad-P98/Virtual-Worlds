@@ -14,6 +14,8 @@
 #include "Object3D.h"
 #include "Behaviour.h"
 
+#include "LightManager.h"
+
 
 class Scene
 {
