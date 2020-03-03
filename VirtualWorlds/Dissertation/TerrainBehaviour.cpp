@@ -1,5 +1,6 @@
 #include "TerrainBehaviour.h"
 #include <iostream>
+#include <thread>
 
 
 
@@ -52,9 +53,9 @@ void TerrainBehaviour::update()
 		}
 	}
 
-
 	prevChunkPos = chunkPos;
 
+	//Check if generation is finished in order to add the chunks to the scene
 	if (m_Terrain->doneGeneratingX || m_Terrain->doneGeneratingZ) {
 		m_Terrain->doneGeneratingX = false;
 		m_Terrain->doneGeneratingZ = false;

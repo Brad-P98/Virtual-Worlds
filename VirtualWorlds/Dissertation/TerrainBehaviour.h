@@ -1,4 +1,6 @@
 #pragma once
+#include <thread>
+
 #include <Behaviour.h>
 #include <Instance.h>
 
