@@ -173,5 +173,8 @@
     <ClInclude Include="LightManager.h">
       <Filter>Header Files\Rendering\Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

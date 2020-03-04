@@ -19,17 +19,18 @@ private:
 
 private:
 
-	static struct LightingBuffer
+	static struct DirLightingBuffer
 	{
 		DirectionalLight lights[20];
 		int numLights;
-	} lightingBuffer;
+	} dirLightingBuffer;
 
+	static unsigned int dirLightsUBO;
 
-	static std::vector<DirectionalLight*> lights;
+	static std::vector<DirectionalLight*> dirLights;
 
 	static const int MAX_LIGHTS;
 
-	static unsigned int lightsUBO;
+
 };
 

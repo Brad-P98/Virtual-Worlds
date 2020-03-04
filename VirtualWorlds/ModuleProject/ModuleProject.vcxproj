@@ -172,6 +172,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="shader_setup.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="StringUtility.hpp" />
     <ClInclude Include="VAOData.h" />
     <ClInclude Include="VAOLoader.h" />

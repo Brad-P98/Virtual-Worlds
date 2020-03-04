@@ -39,8 +39,8 @@ vec3 applyLight(Light currLight, vec3 vertexPos, vec3 vertexColour, vec3 surface
 		//0.06 number is shininess
 		specularCoefficient = pow(max(0.0f, dot(surfaceToCamera.xyz, reflect(-currLight.direction.xyz, normal.xyz))), 10.0f);
 	}
-	//coeff * colour * intensity
-	vec3 specular = 0.04f * specularCoefficient * vec3(1,1,1) * currLight.intensities.xyz;
+	//shininess * coeff * colour * intensity
+	vec3 specular = 0.03f * specularCoefficient * vec3(1,1,1) * currLight.intensities.xyz;
 
 	return ambient + attenuation * (diffuse + specular);
 }

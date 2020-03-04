@@ -179,5 +179,5 @@ float PerlinNoise::noise(float x, float y, float scale, glm::vec2* dn_dxy) const
 		dn_dxy->y = g00.y * k0 + g10.y * k1 + g01.y * k2 + g11.y * k3 + dv_dy * (c - a + (a - b - c + d) * u);
 	}
 
-	return pow((noise+1), 5.5f) * 2.0f;
+	return noise;
 }

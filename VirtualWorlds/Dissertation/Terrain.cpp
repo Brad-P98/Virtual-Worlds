@@ -243,6 +243,7 @@ void Terrain::finalizeGeneration()
 
 #pragma endregion
 
+
 #pragma region TerrainChunks
 
 TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
@@ -274,13 +275,15 @@ TerrainChunk::~TerrainChunk()
 
 void TerrainChunk::generateUniqueVertexPositions()
 {
+	float factor = 0.002f;
+	float factor2 = 0.02f;
 	for (int i = 0, j = 1, k = 2; i < positions.size(); i+=3, j+=3, k+=3) {
 		positions[i] += x;
 
 		positions[k] += z;
 
 		//y last
-		positions[j] += Terrain::noiseGenerator->noise(positions[i], positions[k], 0.01f, NULL);
+		positions[j] += generateTotalNoise(positions[i], positions[k]);
 
 		//VERTEX NORMAL CALCULATION
 		//Calculate normal for this point
@@ -296,13 +299,12 @@ void TerrainChunk::generateUniqueVertexPositions()
 		float prevZPos = positions[k] - vertexSeperationDist;
 
 		//Height of surrounding points, clockwise
-		float h1 = Terrain::noiseGenerator->noise(nextXPos, positions[k], 0.01f, NULL);
-		float h2 = Terrain::noiseGenerator->noise(positions[i], nextZPos, 0.01f, NULL);
-		float h3 = Terrain::noiseGenerator->noise(prevXPos, nextZPos, 0.01f, NULL);
-
-		float h4 = Terrain::noiseGenerator->noise(prevXPos, positions[k], 0.01f, NULL);
-		float h5 = Terrain::noiseGenerator->noise(positions[i], prevZPos, 0.01f, NULL);
-		float h6 = Terrain::noiseGenerator->noise(nextXPos, prevZPos, 0.01f, NULL);
+		float h1 = generateTotalNoise(nextXPos, positions[k]);
+		float h2 = generateTotalNoise(positions[i], nextZPos);
+		float h3 = generateTotalNoise(prevXPos, nextZPos);
+		float h4 = generateTotalNoise(prevXPos, positions[k]);
+		float h5 = generateTotalNoise(positions[i], prevZPos);
+		float h6 = generateTotalNoise(nextXPos, prevZPos);
 
 		//vector for each point
 		glm::vec3 p1 = glm::vec3(nextXPos,		h1, positions[k]);
@@ -321,13 +323,25 @@ void TerrainChunk::generateUniqueVertexPositions()
 		glm::vec3 n5 = glm::normalize(glm::cross(p5 - p0, p6 - p0));
 		glm::vec3 n6 = glm::normalize(glm::cross(p6 - p0, p1 - p0));
 
+		//calculate the average direction of the surface normals
 		glm::vec3 vertexNormal = -glm::normalize(n1 + n2 + n3 + n4 + n5 + n6);
 
+		//push the normal data into the vector
 		normals.push_back(vertexNormal.x);
 		normals.push_back(vertexNormal.y);
 		normals.push_back(vertexNormal.z);
-
 	}
+}
+float TerrainChunk::generateTotalNoise(float xPos, float zPos)
+{
+	float totalNoise = 0.0f;
+
+	totalNoise += 100 * Terrain::noiseGenerator->noise(xPos, zPos, 0.001f, NULL);
+	totalNoise += 70 * Terrain::noiseGenerator->noise(xPos, zPos, 0.003f, NULL);
+	totalNoise += 10 * Terrain::noiseGenerator->noise(xPos, zPos, 0.01f, NULL);
+	totalNoise += 3 * Terrain::noiseGenerator->noise(xPos, zPos, 0.02f, NULL);
+
+	return totalNoise;
 }
 #pragma endregion
 

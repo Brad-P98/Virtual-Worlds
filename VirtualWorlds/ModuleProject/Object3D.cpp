@@ -1,5 +1,6 @@
 #include "Object3D.h"
 
+Object3D::ModelBuffer Object3D::modelBuffer;
 
 void Object3D::init(VAOData* vaoData, GLuint shader)
 {
@@ -8,12 +9,12 @@ void Object3D::init(VAOData* vaoData, GLuint shader)
 	setShaderProgram(shader);
 	//initialize with identity matrix
 	transform = glm::mat4(1.0f);
-	initTransformUBO();
+	initModelUBO();
 
 	onInit();
 }
 
-void Object3D::initTransformUBO()
+void Object3D::initModelUBO()
 {
 
 	//Escape function if a shader has been set that does not have a model ubo
@@ -26,16 +27,11 @@ void Object3D::initTransformUBO()
 	glUniformBlockBinding(getShaderProgram(), uniformBlockIndex, 1);
 
 	//Setup UBO
-	glGenBuffers(1, &transformUBO);
-	glBindBuffer(GL_UNIFORM_BUFFER, transformUBO);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), NULL, GL_STATIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 1, transformUBO, 0, sizeof(glm::mat4));
+	glGenBuffers(1, &modelUBO);
+	glBindBuffer(GL_UNIFORM_BUFFER, modelUBO);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 1, modelUBO, 0, sizeof(modelBuffer));
 
-	//Fill UBO with transform matrix (default as identity)
-	glBindBuffer(GL_UNIFORM_BUFFER, transformUBO);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(transform));
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	updateModelUBO();
 }
 
 void Object3D::onInit()
@@ -58,7 +54,7 @@ void Object3D::update()
 
 	//Perform required updates for any object3d
 	//update UBOs etc..
-	updateTransformUBO();
+	updateModelUBO();
 
 }
 
@@ -66,11 +62,14 @@ void Object3D::onUpdate()
 {
 }
 
-void Object3D::updateTransformUBO()
+void Object3D::updateModelUBO()
 {
+	//Fill struct with updated data
+	modelBuffer.transform = transform;
 
-	glBindBuffer(GL_UNIFORM_BUFFER, transformUBO);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(transform));
+	//Fill UBO with struct data
+	glBindBuffer(GL_UNIFORM_BUFFER, modelUBO);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(modelBuffer), &modelBuffer, GL_STATIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 

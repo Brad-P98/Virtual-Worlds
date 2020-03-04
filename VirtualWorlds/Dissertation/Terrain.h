@@ -23,12 +23,14 @@ public:
 	void adjustXRow(bool direction);
 	void adjustZRow(bool direction);
 
+	//Add chunks to scene from the temp vectors
 	void finalizeGeneration();
 
 private:
 
 	void init();
 
+	//Generate the details for a plain terrain chunk
 	void generateDefaultVertexPositions();
 	void generateDefaultVertexNormals();
 	void generateDefaultVertexIndices();
@@ -54,15 +56,18 @@ private:
 
 	std::vector<std::vector<TerrainChunk*>> activeTerrainChunks;
 
+	//idle when not working on generating terrain
 	bool idleX = true;
 	bool idleZ = true;
-
+	//temp vectors storing the chunks that need to be added to the scene once finished generating
 	std::vector<TerrainChunk*> chunksToAddX;
 	std::vector<TerrainChunk*> chunksToAddZ;
 	std::vector<TerrainChunk*> chunksToRemoveX;
 	std::vector<TerrainChunk*> chunksToRemoveZ;
 };
 
+
+#pragma region Terrain Chunk
 class TerrainChunk : public Object3D
 {
 public:
@@ -74,6 +79,7 @@ public:
 private:
 
 	void generateUniqueVertexPositions();
+	float generateTotalNoise(float xPos, float zPos);
 
 public:
 
@@ -97,4 +103,6 @@ private:
 	float z;						//"
 
 };
+
+#pragma endregion
 

@@ -1,9 +1,9 @@
 #include "LightManager.h"
 
-std::vector<DirectionalLight*> LightManager::lights;
+std::vector<DirectionalLight*> LightManager::dirLights;
 const int LightManager::MAX_LIGHTS = 20;
-unsigned int LightManager::lightsUBO;
-LightManager::LightingBuffer LightManager::lightingBuffer;
+unsigned int LightManager::dirLightsUBO;
+LightManager::DirLightingBuffer LightManager::dirLightingBuffer;
 
 
 void LightManager::initLightsUBOs()
@@ -15,9 +15,9 @@ void LightManager::initLightsUBOs()
 			unsigned int uniformBlockIndex = glGetUniformBlockIndex(shader.second, "Lights");
 			glUniformBlockBinding(shader.second, uniformBlockIndex, 2);
 
-			glGenBuffers(1, &lightsUBO);
-			glBindBuffer(GL_UNIFORM_BUFFER, lightsUBO);
-			glBindBufferRange(GL_UNIFORM_BUFFER, 2, lightsUBO, 0, sizeof(lightingBuffer));
+			glGenBuffers(1, &dirLightsUBO);
+			glBindBuffer(GL_UNIFORM_BUFFER, dirLightsUBO);
+			glBindBufferRange(GL_UNIFORM_BUFFER, 2, dirLightsUBO, 0, sizeof(dirLightingBuffer));
 		}
 	}
 	updateLightsUBOs();
@@ -27,23 +27,23 @@ void LightManager::initLightsUBOs()
 void LightManager::updateLightsUBOs()
 {
 	//First update lights buffer with lights from vector
-	for (int i = 0; i < lights.size(); i++)
+	for (int i = 0; i < dirLights.size(); i++)
 	{
-		lightingBuffer.lights[i] = *lights[i];
+		dirLightingBuffer.lights[i] = *dirLights[i];
 	}
-	lightingBuffer.numLights = lights.size();
+	dirLightingBuffer.numLights = dirLights.size();
 
 	//Fill ubo with lighting buffer data
-	glBindBuffer(GL_UNIFORM_BUFFER, lightsUBO);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(lightingBuffer), &lightingBuffer, GL_STATIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, dirLightsUBO);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(dirLightingBuffer), &dirLightingBuffer, GL_STATIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 
 void LightManager::addLight(DirectionalLight * light)
 {
-	if (lights.size() < 20) {
-		lights.push_back(light);
+	if (dirLights.size() < 20) {
+		dirLights.push_back(light);
 		updateLightsUBOs();
 	}
 	else std::cout << "Max lights already instantiated" << std::endl;
@@ -52,9 +52,9 @@ void LightManager::addLight(DirectionalLight * light)
 
 void LightManager::removeLight(DirectionalLight * light)
 {
-	for (int i = 0; i < lights.size(); i++) {
-		if (lights[i] = light) {
-			lights.erase(lights.begin() + i);
+	for (int i = 0; i < dirLights.size(); i++) {
+		if (dirLights[i] = light) {
+			dirLights.erase(dirLights.begin() + i);
 			delete light;
 			updateLightsUBOs();
 

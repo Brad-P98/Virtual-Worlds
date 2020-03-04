@@ -33,8 +33,8 @@ protected:
 
 private:
 
-	void initTransformUBO();
-	void updateTransformUBO();
+	void initModelUBO();
+	void updateModelUBO();
 
 public:
 
@@ -45,7 +45,11 @@ private:
 	Renderer m_Renderer;
 	VAOData* m_VaoData;
 
+	static struct ModelBuffer {
+		glm::mat4 transform;
 
-	unsigned int transformUBO;
+	} modelBuffer;
+
+	unsigned int modelUBO;
 };
 

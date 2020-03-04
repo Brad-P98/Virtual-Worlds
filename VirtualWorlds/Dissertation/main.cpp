@@ -14,7 +14,6 @@ Scene* scene;
 Camera* mainCamera;
 
 
-const int TERRAIN_CHUNK_RESOLUTION = 10;
 
 int main(int argc, char** argv) {
 
@@ -41,7 +40,7 @@ int main(int argc, char** argv) {
 	DirectionalLight* mainLight = new DirectionalLight();
 	mainLight->direction = glm::vec4(0.6f, 1.0f, 0.3f, 0.0f);
 	mainLight->ambient = 0.02f;
-	mainLight->colourIntensities = glm::vec4(0.6f, 0.6f, 0.6f, 0.0f);
+	mainLight->colourIntensities = glm::vec4(0.7f, 0.7f, 0.7f, 0.0f);
 	LightManager::addLight(mainLight);
 
 	//Create a new terrain
