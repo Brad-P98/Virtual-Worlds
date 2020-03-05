@@ -14,7 +14,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startDirection)
 	right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), front));
 	up = glm::cross(front, right);
 
-	projectionMat = glm::perspective(glm::radians(60.0f), 800.0f / 640.0f, 0.1f, 1000.0f);
+	projectionMat = glm::perspective(glm::radians(60.0f), 800.0f / 640.0f, 0.1f, 5000.0f);
 
 	viewMat = glm::mat4(1.0);
 	viewMat = glm::lookAt(position, position + front, up);

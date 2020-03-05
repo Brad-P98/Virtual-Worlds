@@ -24,7 +24,8 @@ public:
 	void adjustZRow(bool direction);
 
 	//Add chunks to scene from the temp vectors
-	void finalizeGeneration();
+	void finalizeXGeneration();
+	void finalizeZGeneration();
 
 private:
 
@@ -37,7 +38,7 @@ private:
 
 public:
 	//chunks generated in each direction from current chunk (excludes current chunk)
-	const int RENDER_DISTANCE_CHUNKS = 5;
+	const int RENDER_DISTANCE_CHUNKS = 10;
 
 	static PerlinNoise* noiseGenerator;
 
@@ -52,13 +53,14 @@ public:
 	bool doneGeneratingX = false;
 	bool doneGeneratingZ = false;
 
+	//idle when not working on generating terrain
+	bool idleX = true;
+	bool idleZ = true;
+
 private:
 
 	std::vector<std::vector<TerrainChunk*>> activeTerrainChunks;
 
-	//idle when not working on generating terrain
-	bool idleX = true;
-	bool idleZ = true;
 	//temp vectors storing the chunks that need to be added to the scene once finished generating
 	std::vector<TerrainChunk*> chunksToAddX;
 	std::vector<TerrainChunk*> chunksToAddZ;
@@ -75,6 +77,8 @@ public:
 	TerrainChunk(int gridX, int gridZ, GLuint shader);
 	~TerrainChunk();
 
+	//Generate the VAO with the vertex data already worked out
+	void generateVAO();
 
 private:
 
@@ -97,6 +101,8 @@ private:
 	std::vector<float> normals;
 
 private:
+
+	GLuint m_shader;
 
 	float x;						//World position
 	float y;						//"

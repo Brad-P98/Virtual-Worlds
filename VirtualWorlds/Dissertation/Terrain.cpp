@@ -83,6 +83,8 @@ void Terrain::generateInitChunks(glm::vec3 startChunkGridPos)
 		for (int j = 0; j < 2 * RENDER_DISTANCE_CHUNKS + 1; j++) {
 
 			TerrainChunk* newChunk = new TerrainChunk(startChunkGridPos.x + i-RENDER_DISTANCE_CHUNKS, startChunkGridPos.z + j - RENDER_DISTANCE_CHUNKS, shader);
+
+			newChunk->generateVAO();
 			Instance::m_scene->addObject(newChunk);
 
 			activeTerrainChunks[i][j] = newChunk;
@@ -209,22 +211,31 @@ void Terrain::adjustZRow(bool direction)
 	doneGeneratingZ = true;
 }
 
-void Terrain::finalizeGeneration()
+void Terrain::finalizeXGeneration()
 {
 
 	for (int i = 0; i < chunksToAddX.size(); i++) {
 
+		chunksToAddX[i]->generateVAO();
 		Instance::m_scene->addObject(chunksToAddX[i]);
-	}
-
-	for (int i = 0; i < chunksToAddZ.size(); i++) {
-
-		Instance::m_scene->addObject(chunksToAddZ[i]);
 	}
 
 	for (int i = 0; i < chunksToRemoveX.size(); i++) {
 
 		Instance::m_scene->removeObject(chunksToRemoveX[i]);
+	}
+	
+	chunksToAddX.clear();
+	chunksToRemoveX.clear();
+}
+
+void Terrain::finalizeZGeneration()
+{
+
+	for (int i = 0; i < chunksToAddZ.size(); i++) {
+
+		chunksToAddZ[i]->generateVAO();
+		Instance::m_scene->addObject(chunksToAddZ[i]);
 	}
 
 	for (int i = 0; i < chunksToRemoveZ.size(); i++) {
@@ -232,10 +243,7 @@ void Terrain::finalizeGeneration()
 		Instance::m_scene->removeObject(chunksToRemoveZ[i]);
 
 	}
-	
-	chunksToAddX.clear();
 	chunksToAddZ.clear();
-	chunksToRemoveX.clear();
 	chunksToRemoveZ.clear();
 }
 
@@ -251,6 +259,8 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 	m_gridX = gridX;
 	m_gridZ = gridZ;
 
+	m_shader = shader;
+
 	x = gridX * SIZE;
 	z = gridZ * SIZE;
 
@@ -263,14 +273,17 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 	//Fill out positions and normals
 	generateUniqueVertexPositions();
 
-	VAOLoader* loader = VAOLoader::getInstance();
-
-	init(loader->loadToVAO(positions, normals, indices), shader);
-
 }
 
 TerrainChunk::~TerrainChunk()
 {
+}
+
+void TerrainChunk::generateVAO()
+{
+	VAOLoader* loader = VAOLoader::getInstance();
+
+	init(loader->loadToVAO(positions, normals, indices), m_shader);
 }
 
 void TerrainChunk::generateUniqueVertexPositions()

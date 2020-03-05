@@ -31,5 +31,8 @@ private:
 
 	Terrain* m_Terrain;
 
+	std::thread threadX;
+	std::thread threadZ;
+
 };
 
