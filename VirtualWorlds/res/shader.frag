@@ -3,9 +3,11 @@
 out vec4 fragColour;
 
 in vec3 vertexPos;
-in vec4 vertexColour;
 in vec3 normal;
 in vec4 camPos;
+in vec2 texCoord;
+
+uniform sampler2D texSampler;
 
 struct Light {
 	vec4 direction;
@@ -47,8 +49,8 @@ vec3 applyLight(Light currLight, vec3 vertexPos, vec3 vertexColour, vec3 surface
 
 void main() {
 
-	//set initial fragmentcolour as that passed in by vertex shader
-	vec4 tempFragColour = vertexColour;
+	//set initial fragment colour
+	vec4 tempFragColour = texture(texSampler, texCoord);
 
 	//Get direction between camera and surface (Used for specular effect)
 	vec3 surfaceToCam = normalize(camPos.xyz
@@ -58,7 +60,7 @@ void main() {
 
 	for(int i = 0; i < numLights; i++) {
 
-		totalLightColour += applyLight(lights[i], vertexPos.xyz, vertexColour.xyz, surfaceToCam);
+		totalLightColour += applyLight(lights[i], vertexPos.xyz, tempFragColour.xyz, surfaceToCam);
 	}
 
 	vec3 gamma = vec3(1.0/2.2);

@@ -6,6 +6,7 @@ const int TerrainChunk::VERTEX_COUNT = 32;
 
 std::vector<float> Terrain::defaultVertexPositions;
 std::vector<GLuint> Terrain::defaultVertexIndices;
+std::vector<float> Terrain::defaultTextureCoords;
 
 PerlinNoise* Terrain::noiseGenerator;
 #pragma region Terrain
@@ -15,6 +16,7 @@ Terrain::Terrain()
 
 	generateDefaultVertexPositions();
 	generateDefaultVertexIndices();
+	generateDefaultTextureCoords();
 }
 
 Terrain::~Terrain()
@@ -26,6 +28,7 @@ void Terrain::init()
 	noiseGenerator = new PerlinNoise();
 }
 
+//X and Z are always the same for every terrain chunk
 void Terrain::generateDefaultVertexPositions()
 {
 	for (int i = 0; i < TerrainChunk::VERTEX_COUNT; i++) {
@@ -40,21 +43,7 @@ void Terrain::generateDefaultVertexPositions()
 	}
 }
 
-void Terrain::generateDefaultVertexNormals()
-{
-	for (int i = 0; i < TerrainChunk::VERTEX_COUNT; i++) {
-		for (int j = 0; j < TerrainChunk::VERTEX_COUNT; j++) {
-			//x
-			defaultVertexPositions.push_back(0.0f);
-			//y
-			defaultVertexPositions.push_back(1.0f);
-			//z
-			defaultVertexPositions.push_back(0.0f);
-		}
-	}
-
-}
-
+//indices are always the same for every terrain chunk
 void Terrain::generateDefaultVertexIndices()
 {
 	for (int i = 0; i < TerrainChunk::VERTEX_COUNT - 1; i++) {
@@ -73,6 +62,21 @@ void Terrain::generateDefaultVertexIndices()
 			defaultVertexIndices.push_back(bottomRight);
 		}
 	}
+}
+
+//Texture coords are always the same for every terrain chunk
+void Terrain::generateDefaultTextureCoords()
+{
+	float vertexSeperationDist = TerrainChunk::SIZE / TerrainChunk::VERTEX_COUNT;
+
+	for (int i = 0; i < TerrainChunk::VERTEX_COUNT; i++) {
+		for (int j = 0; j < TerrainChunk::VERTEX_COUNT; j++) {
+			
+			defaultTextureCoords.push_back(((float)i / ((float)TerrainChunk::VERTEX_COUNT - 1) * TerrainChunk::SIZE) / 100); //x
+			defaultTextureCoords.push_back(((float)j / ((float)TerrainChunk::VERTEX_COUNT - 1) * TerrainChunk::SIZE) / 100); //z
+		}
+	}
+
 }
 
 void Terrain::generateInitChunks(glm::vec3 startChunkGridPos)
@@ -247,8 +251,6 @@ void Terrain::finalizeZGeneration()
 	chunksToRemoveZ.clear();
 }
 
-
-
 #pragma endregion
 
 
@@ -266,9 +268,10 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 
 	chunkMinXZ = glm::vec3(x, 0, z);
 
-	//Default & standard
+	//Default to pregenerated values.
 	positions = Terrain::defaultVertexPositions;
 	indices = Terrain::defaultVertexIndices;
+	texCoords = Terrain::defaultTextureCoords;
 
 	//Fill out positions and normals
 	generateUniqueVertexPositions();
@@ -283,13 +286,11 @@ void TerrainChunk::generateVAO()
 {
 	VAOLoader* loader = VAOLoader::getInstance();
 
-	init(loader->loadToVAO(positions, normals, indices), m_shader);
+	init(loader->loadToVAO(positions, normals, indices, texCoords), "Assets/grass_terrain.jpg", m_shader);
 }
 
 void TerrainChunk::generateUniqueVertexPositions()
 {
-	float factor = 0.002f;
-	float factor2 = 0.02f;
 	for (int i = 0, j = 1, k = 2; i < positions.size(); i+=3, j+=3, k+=3) {
 		positions[i] += x;
 
@@ -345,10 +346,14 @@ void TerrainChunk::generateUniqueVertexPositions()
 		normals.push_back(vertexNormal.z);
 	}
 }
+
+//Generate layers of noise.
 float TerrainChunk::generateTotalNoise(float xPos, float zPos)
 {
 	float totalNoise = 0.0f;
 
+	//First value			= amplitude
+	//Noise 3rd parameter	= frequency
 	totalNoise += 100 * Terrain::noiseGenerator->noise(xPos, zPos, 0.001f, NULL);
 	totalNoise += 70 * Terrain::noiseGenerator->noise(xPos, zPos, 0.003f, NULL);
 	totalNoise += 10 * Terrain::noiseGenerator->noise(xPos, zPos, 0.01f, NULL);

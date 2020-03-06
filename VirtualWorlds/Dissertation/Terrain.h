@@ -31,22 +31,26 @@ private:
 
 	void init();
 
+	//No need for default normals, as every normal is new per terrain chunk, so defaults serve no purpose
 	//Generate the details for a plain terrain chunk
 	void generateDefaultVertexPositions();
-	void generateDefaultVertexNormals();
 	void generateDefaultVertexIndices();
+
+	//Named default but not intending to change these later
+	void generateDefaultTextureCoords();
 
 public:
 	//chunks generated in each direction from current chunk (excludes current chunk)
-	const int RENDER_DISTANCE_CHUNKS = 10;
+	const int RENDER_DISTANCE_CHUNKS = 5;
 
 	static PerlinNoise* noiseGenerator;
 
 	GLuint shader;
 
+	//No need for default normals, as every normal is new per terrain chunk, so defaults serve no purpose
 	static std::vector<float> defaultVertexPositions;
-	static std::vector<float> defaultVertexNormals;
 	static std::vector<GLuint> defaultVertexIndices;
+	static std::vector<float> defaultTextureCoords;
 
 public:
 
@@ -99,6 +103,7 @@ private:
 	std::vector<GLuint> indices;
 	std::vector<float> positions;
 	std::vector<float> normals;
+	std::vector<float> texCoords;
 
 private:
 

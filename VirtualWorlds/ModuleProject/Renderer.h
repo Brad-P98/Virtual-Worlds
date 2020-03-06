@@ -7,7 +7,7 @@ class Renderer
 
 public:
 
-	void render(VAOData* vaoData);
+	void render(VAOData* vaoData, GLuint textureID);
 
 	GLuint shaderProgram;
 

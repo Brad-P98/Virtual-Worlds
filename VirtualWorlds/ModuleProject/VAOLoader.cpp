@@ -17,7 +17,7 @@ VAOLoader::VAOLoader()
 {
 }
 
-VAOData* VAOLoader::loadToVAO(std::vector<float> positions, std::vector<float> normals, std::vector<GLuint> indices)
+VAOData* VAOLoader::loadToVAO(std::vector<float> positions, std::vector<float> normals, std::vector<GLuint> indices, std::vector<float> texCoords)
 {
 	//Create and bind vao
 	int vaoID = createVAO();
@@ -26,13 +26,17 @@ VAOData* VAOLoader::loadToVAO(std::vector<float> positions, std::vector<float> n
 	storeVertexDataInAttributeList(0, positions);
 	//fill buffer for vertex normals
 	//Same layout, different attribute number
-	storeVertexDataInAttributeList(2, normals);
+	storeVertexDataInAttributeList(2, normals);	
+
+	//fill buffer for texture coords
+	storeTexCoordsInAttributeList(4, texCoords);
 	//fill buffer for indices
 	storeIndicesDataInAttributeList(3, indices);
 
+
 	unbindVAO();
 
-	return new VAOData(vaoID, positions.size(), normals.size(), indices.size());
+	return new VAOData(vaoID, positions.size(), normals.size(), indices.size(), texCoords.size());
 }
 
 int VAOLoader::createVAO()
@@ -68,6 +72,20 @@ void VAOLoader::storeIndicesDataInAttributeList(int attributeNumber, std::vector
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(GLuint), data.data(), GL_STATIC_DRAW);
+
+}
+
+void VAOLoader::storeTexCoordsInAttributeList(int attributeNumber, std::vector<float> data)
+{
+	GLuint vboID;
+	glGenBuffers(1, &vboID);
+	vbos.push_back(vboID);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboID);
+	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(attributeNumber, 2, GL_FLOAT, false, 0, 0);
+	glEnableVertexAttribArray(attributeNumber);
+
 
 }
 

@@ -12,7 +12,7 @@ class VAOLoader
 public:
 
 
-	static VAOData* loadToVAO(std::vector<float> positions, std::vector<float> normals, std::vector<GLuint> indices);
+	static VAOData* loadToVAO(std::vector<float> positions, std::vector<float> normals, std::vector<GLuint> indices, std::vector<float> texCoords);
 
 	static VAOLoader * getInstance();
 private:
@@ -28,6 +28,8 @@ private:
 
 	static void storeVertexDataInAttributeList(int attributeNumber, std::vector<float> data);
 	static void storeIndicesDataInAttributeList(int attributeNumber, std::vector<GLuint> data);
+	static void storeTexCoordsInAttributeList(int attributeNumber, std::vector<float> data);
+
 	static int createVAO();
 	
 	static void unbindVAO();
