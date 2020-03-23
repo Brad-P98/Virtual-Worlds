@@ -127,11 +127,15 @@
   <ItemGroup>
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainBehaviour.h" />
+    <ClInclude Include="WaterPlane.h" />
+    <ClInclude Include="WaterPlaneBehaviour.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainBehaviour.cpp" />
+    <ClCompile Include="WaterPlane.cpp" />
+    <ClCompile Include="WaterPlaneBehaviour.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

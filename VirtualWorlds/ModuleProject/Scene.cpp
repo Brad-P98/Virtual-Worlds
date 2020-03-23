@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "TextureManager.h"
 
 Scene::Scene()
 {
@@ -16,6 +17,8 @@ void Scene::initScene()
 	mainCamera->initCameraUBOs();
 
 	LightManager::initLightsUBOs();
+
+	TextureManager::loadTexture("Assets/default.jpg");
 }
 
 void Scene::update()
@@ -42,6 +45,10 @@ void Scene::render()
 	//update all objects
 	for (size_t i = 0; i < gameObjects.size(); i++) {
 		gameObjects[i]->draw();
+	}
+
+	if (skybox != nullptr) {
+		skybox->draw();
 	}
 }
 
@@ -87,4 +94,9 @@ void Scene::removeBehaviour(Behaviour* behaviour)
 		}
 	}
 
+}
+
+void Scene::setSkybox(Skybox * s)
+{
+	skybox = s;
 }

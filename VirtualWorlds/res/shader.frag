@@ -6,6 +6,7 @@ in vec3 vertexPos;
 in vec3 normal;
 in vec4 camPos;
 in vec2 texCoord;
+in float visibility;
 
 uniform sampler2D texSampler;
 
@@ -42,13 +43,15 @@ vec3 applyLight(Light currLight, vec3 vertexPos, vec3 vertexColour, vec3 surface
 		specularCoefficient = pow(max(0.0f, dot(surfaceToCamera.xyz, reflect(-currLight.direction.xyz, normal.xyz))), 10.0f);
 	}
 	//shininess * coeff * colour * intensity
-	vec3 specular = 0.03f * specularCoefficient * vec3(1,1,1) * currLight.intensities.xyz;
+	vec3 specular = 0.015f * specularCoefficient * vec3(1,1,1) * currLight.intensities.xyz;
 
 	return ambient + attenuation * (diffuse + specular);
 }
 
 void main() {
 
+
+	//Lighting
 	//set initial fragment colour
 	vec4 tempFragColour = texture(texSampler, texCoord);
 
@@ -65,5 +68,8 @@ void main() {
 
 	vec3 gamma = vec3(1.0/2.2);
 
+	//lighting
 	fragColour = vec4(pow(totalLightColour, gamma), tempFragColour.a);
+	//fog
+	fragColour = mix(vec4(0.5,0.7,0.8,1.0), fragColour, visibility);
 }

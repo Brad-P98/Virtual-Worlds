@@ -24,7 +24,7 @@ public:
 protected:
 
 	//Only derived classes can override these methods
-	void init(VAOData* vaoData, const char* textureFilePath, GLuint shader);
+	void init(VAOData* vaoData, GLuint textureID, GLuint shader);
 	void setShaderProgram(GLuint shader);
 
 	//Default Initialization and update. Only called from within object3d.
@@ -35,9 +35,6 @@ private:
 
 	void initModelUBO();
 	void updateModelUBO();
-private:
-
-	void genTextureBuffer(const char* filePath);
 
 public:
 
@@ -48,7 +45,7 @@ private:
 	Renderer m_Renderer;
 	VAOData* m_VaoData;
 
-	GLuint textureID;
+	GLuint m_TextureID;
 
 	static struct ModelBuffer {
 		glm::mat4 transform;

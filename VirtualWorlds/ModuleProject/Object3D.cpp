@@ -1,17 +1,14 @@
 #include "Object3D.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 Object3D::ModelBuffer Object3D::modelBuffer;
 
-void Object3D::init(VAOData* vaoData, const char* textureFilePath, GLuint shader)
+void Object3D::init(VAOData* vaoData, GLuint textureID, GLuint shader)
 {
 	m_VaoData = vaoData;
 
 	setShaderProgram(shader);
 
-	genTextureBuffer(textureFilePath);
+	m_TextureID = textureID;
 
 	//initialize with identity matrix
 	transform = glm::mat4(1.0f);
@@ -79,35 +76,10 @@ void Object3D::updateModelUBO()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void Object3D::genTextureBuffer(const char* filePath)
-{
-
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	int width, height, numChannels;
-	unsigned char* data = stbi_load(filePath, &width, &height, &numChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
-}
-
 void Object3D::draw()
 {
 	glUseProgram(m_Renderer.shaderProgram);
-	m_Renderer.render(m_VaoData, textureID);
+	m_Renderer.render(m_VaoData, m_TextureID);
 }
 
 void Object3D::setShaderProgram(GLuint shader)

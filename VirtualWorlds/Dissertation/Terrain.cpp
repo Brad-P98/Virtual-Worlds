@@ -79,6 +79,7 @@ void Terrain::generateDefaultTextureCoords()
 
 }
 
+//MULTI THREAD THIS
 void Terrain::generateInitChunks(glm::vec3 startChunkGridPos)
 {
 	activeTerrainChunks.resize(RENDER_DISTANCE_CHUNKS * 2 + 1, std::vector<TerrainChunk*>(RENDER_DISTANCE_CHUNKS * 2 + 1, nullptr));
@@ -193,7 +194,6 @@ void Terrain::adjustZRow(bool direction)
 			activeTerrainChunks[i].erase(activeTerrainChunks[i].begin() + 2*RENDER_DISTANCE_CHUNKS);
 		}
 	}
-	activeTerrainChunks;
 
 	//Create all new chunks and push into vector
 	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
@@ -286,7 +286,9 @@ void TerrainChunk::generateVAO()
 {
 	VAOLoader* loader = VAOLoader::getInstance();
 
-	init(loader->loadToVAO(positions, normals, indices, texCoords), "Assets/grass_terrain.jpg", m_shader);
+	GLuint texID = TextureManager::getTextureID("Assets/grass_terrain.jpg");
+
+	init(loader->loadToVAO(positions, normals, indices, texCoords), texID, m_shader);
 }
 
 void TerrainChunk::generateUniqueVertexPositions()

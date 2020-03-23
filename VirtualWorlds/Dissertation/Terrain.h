@@ -7,6 +7,8 @@
 #include <VAOLoader.h>
 #include <PerlinNoise.hpp>
 
+#include <TextureManager.h>
+
 
 class TerrainChunk;
 
@@ -41,7 +43,7 @@ private:
 
 public:
 	//chunks generated in each direction from current chunk (excludes current chunk)
-	const int RENDER_DISTANCE_CHUNKS = 5;
+	const int RENDER_DISTANCE_CHUNKS = 10;
 
 	static PerlinNoise* noiseGenerator;
 

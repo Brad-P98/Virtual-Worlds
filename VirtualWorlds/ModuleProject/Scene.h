@@ -15,6 +15,7 @@
 #include "Behaviour.h"
 
 #include "LightManager.h"
+#include "Skybox.h"
 
 
 class Scene
@@ -42,6 +43,8 @@ public:
 	void removeObject(Object3D* object);
 	void removeBehaviour(Behaviour* behaviour);
 
+	void setSkybox(Skybox* skybox);
+
 	Camera* getMainCamera() const
 	{
 		return mainCamera;
@@ -58,5 +61,7 @@ private:
 
 	std::vector<GameObject*> gameObjects;
 	std::vector<Behaviour*> behaviours;
+
+	Skybox* skybox;
 };
 

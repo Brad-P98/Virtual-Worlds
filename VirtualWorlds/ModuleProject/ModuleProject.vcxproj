@@ -141,14 +141,15 @@
     <ClCompile Include="gl3w.c" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="LightManager.cpp" />
-    <ClCompile Include="MainRenderer.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="shader_setup.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="StringUtility.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="VAOData.cpp" />
     <ClCompile Include="VAOLoader.cpp" />
     <ClCompile Include="Instance.cpp" />
@@ -164,7 +165,6 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
-    <ClInclude Include="MainRenderer.h" />
     <ClInclude Include="NoiseInterface.hpp" />
     <ClInclude Include="Object3D.h" />
     <ClInclude Include="PerlinNoise.hpp" />
@@ -172,8 +172,10 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="shader_setup.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="StringUtility.hpp" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="VAOData.h" />
     <ClInclude Include="VAOLoader.h" />
     <ClInclude Include="Instance.h" />
