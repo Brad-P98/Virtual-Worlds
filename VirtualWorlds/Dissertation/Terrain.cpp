@@ -1,5 +1,5 @@
 #include "Terrain.h"
-
+#include "WaterPlane.h"
 
 const float TerrainChunk::SIZE = 100;
 const int TerrainChunk::VERTEX_COUNT = 32;
@@ -327,6 +327,9 @@ void TerrainChunk::generateUniqueVertexPositions()
 		//y last
 		positions[j] += generateTotalNoise(positions[i], positions[k]);
 
+
+
+
 		//VERTEX NORMAL CALCULATION
 		//Calculate normal for this point
 		int h0 = positions[j];	//Height at this point
@@ -382,10 +385,12 @@ float TerrainChunk::generateTotalNoise(float xPos, float zPos)
 
 	//First value			= amplitude
 	//Noise 3rd parameter	= frequency
-	totalNoise += 100 * Terrain::noiseGenerator->noise(xPos, zPos, 0.001f, NULL);
-	totalNoise += 70 * Terrain::noiseGenerator->noise(xPos, zPos, 0.003f, NULL);
+	totalNoise += 100 * Terrain::noiseGenerator->noise(xPos, zPos, 0.0004f, NULL);
+	totalNoise += 70 * Terrain::noiseGenerator->noise(xPos, zPos, 0.002f, NULL);
 	totalNoise += 10 * Terrain::noiseGenerator->noise(xPos, zPos, 0.01f, NULL);
 	totalNoise += 3 * Terrain::noiseGenerator->noise(xPos, zPos, 0.02f, NULL);
+
+
 
 	return totalNoise;
 }

@@ -33,7 +33,7 @@ private:
 
 public:
 
-	const int RENDER_DISTANCE_CHUNKS = 10;
+	const int RENDER_DISTANCE_CHUNKS = 18;
 	static const float SEA_LEVEL;
 
 	GLuint shader;

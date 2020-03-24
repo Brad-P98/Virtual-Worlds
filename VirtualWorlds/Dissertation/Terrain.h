@@ -47,7 +47,7 @@ private:
 
 public:
 	//chunks generated in each direction from current chunk (excludes current chunk)
-	const int RENDER_DISTANCE_CHUNKS = 10;
+	const int RENDER_DISTANCE_CHUNKS = 18;
 
 	static PerlinNoise* noiseGenerator;
 
