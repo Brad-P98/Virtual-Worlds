@@ -26,6 +26,9 @@ Terrain::~Terrain()
 void Terrain::init()
 {
 	noiseGenerator = new PerlinNoise();
+
+	//Allocate space for all terrain chunks
+	activeTerrainChunks.resize(RENDER_DISTANCE_CHUNKS * 2 + 1, std::vector<TerrainChunk*>(RENDER_DISTANCE_CHUNKS * 2 + 1, nullptr));
 }
 
 //X and Z are always the same for every terrain chunk
@@ -79,24 +82,52 @@ void Terrain::generateDefaultTextureCoords()
 
 }
 
-//MULTI THREAD THIS
-void Terrain::generateInitChunks(glm::vec3 startChunkGridPos)
+
+//Generate just one row of chunks, rowIndex distance away from current chunk in x axis.
+//Does not consider any other chunks that may already be here, simply overwrites.
+//if row == 0, generates a row on current position
+void Terrain::generateXRow(glm::vec3 currentChunkPos, int row)
 {
-	activeTerrainChunks.resize(RENDER_DISTANCE_CHUNKS * 2 + 1, std::vector<TerrainChunk*>(RENDER_DISTANCE_CHUNKS * 2 + 1, nullptr));
+	//If outside render distance, do not generate chunks
+	if (abs(row) > RENDER_DISTANCE_CHUNKS) return;
 
-	for (int i = 0; i < 2*RENDER_DISTANCE_CHUNKS + 1; i++) {
-		for (int j = 0; j < 2 * RENDER_DISTANCE_CHUNKS + 1; j++) {
 
-			TerrainChunk* newChunk = new TerrainChunk(startChunkGridPos.x + i-RENDER_DISTANCE_CHUNKS, startChunkGridPos.z + j - RENDER_DISTANCE_CHUNKS, shader);
+	//x coord in the world chunk grid to generate chunks onto
+	int xPos = currentChunkPos.x + row;
 
-			newChunk->generateVAO();
-			Instance::m_scene->addObject(newChunk);
+	//starting z coord in the world chunk grid.
+	int zStart = currentChunkPos.z - RENDER_DISTANCE_CHUNKS;
 
-			activeTerrainChunks[i][j] = newChunk;
-		}
+	//index of this row in the active chunk vector.
+	int rowIndexInActiveChunks = row + RENDER_DISTANCE_CHUNKS;
+
+	//Create the new row of chunks
+	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
+
+		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, shader);
+
+		//Add chunk to the correct position in active chunks
+		activeTerrainChunks[rowIndexInActiveChunks][i] = newChunk;
 	}
+
 }
 
+//Called when row is finished generating on thread
+void Terrain::finalizeXRow(int rowIndex)
+{
+	//iterate through Z chunks on one X row
+	for (int i = 0; i < activeTerrainChunks[rowIndex].size(); i++) {
+
+		//Generate and add to scene
+		activeTerrainChunks[rowIndex][i]->generateVAO();
+		Instance::m_scene->addObject(activeTerrainChunks[rowIndex][i]);
+	}
+
+}
+
+
+
+//Methods for generating new rows at the render distance bounds when player moves.
 //false = remove lowest x chunk, add higher x chunk
 void Terrain::adjustXRow(bool direction)
 {
@@ -123,7 +154,6 @@ void Terrain::adjustXRow(bool direction)
 		//Remove from scene
 		for (int i = 0; i < activeTerrainChunks[0].size(); i++) {
 
-			//Instance::m_scene->removeObject(activeTerrainChunks[0][i]);
 			chunksToRemoveX.push_back(activeTerrainChunks[0][i]);
 		}
 		//remove from vector
@@ -131,8 +161,6 @@ void Terrain::adjustXRow(bool direction)
 	}
 	else {
 		for (int i = 0; i < activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS].size(); i++) {
-
-			//Instance::m_scene->removeObject(activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][i]);
 			chunksToRemoveX.push_back(activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][i]);
 		}
 		activeTerrainChunks.erase(activeTerrainChunks.begin() + 2 * RENDER_DISTANCE_CHUNKS);
@@ -142,11 +170,9 @@ void Terrain::adjustXRow(bool direction)
 	std::vector<TerrainChunk*> tempChunkRow;
 	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
 		
-
 		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, shader);
 
 		tempChunkRow.push_back(newChunk);
-		//Instance::m_scene->addObject(newChunk);
 		chunksToAddX.push_back(newChunk);
 	}
 	//Add the row of chunks to the correct end of the vector

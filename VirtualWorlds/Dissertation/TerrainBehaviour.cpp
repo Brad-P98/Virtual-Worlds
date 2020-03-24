@@ -13,15 +13,40 @@ TerrainBehaviour::TerrainBehaviour()
 
 }
 
-//Called after the active terrain has been set
-void TerrainBehaviour::init()
-{
-	m_Terrain->generateInitChunks(chunkPos);
-}
-
 TerrainBehaviour::~TerrainBehaviour()
 {
 }
+
+//Called after the active terrain has been set
+void TerrainBehaviour::init()
+{
+	//m_Terrain->generateInitChunks(chunkPos);
+	initializeChunks();
+}
+
+void TerrainBehaviour::initializeChunks()
+{
+	//Generate rows of chunks on seperate threads.
+	//When a row is done generating, finalize it.
+
+	//Thread per chunk row. Not optimal efficiency but it'll do for now.
+	threads.resize(m_Terrain->RENDER_DISTANCE_CHUNKS * 2 + 1);
+
+	for (int i = 0; i < threads.size(); i++) {
+
+		threads[i] = std::thread(&Terrain::generateXRow, m_Terrain, chunkPos, i - m_Terrain->RENDER_DISTANCE_CHUNKS);
+	}
+	//Wait for thread to finish, then finalize the row.
+	for (int i = 0; i < threads.size(); i++) {
+
+		threads[i].join();
+
+		m_Terrain->finalizeXRow(i);
+	}
+
+}
+
+
 
 void TerrainBehaviour::update()
 {

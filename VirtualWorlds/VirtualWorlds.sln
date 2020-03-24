@@ -11,6 +11,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Dissertation", "Dissertatio
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Assignment", "Assignment\Assignment.vcxproj", "{C1894CB4-6EA8-4CD5-89D0-2A4884731734}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AE3EF2BC-4D3F-4CC8-BC6A-410AF2318D35} = {AE3EF2BC-4D3F-4CC8-BC6A-410AF2318D35}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

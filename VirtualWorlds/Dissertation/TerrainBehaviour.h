@@ -23,6 +23,9 @@ public:
 private:
 
 	void init();
+
+	void initializeChunks();
+
 private:
 
 	glm::vec3 worldPos;		//Current position in the world
@@ -30,6 +33,8 @@ private:
 	glm::vec3 prevChunkPos;	//When this is different to current, player is in new chunk
 
 	Terrain* m_Terrain;
+
+	std::vector<std::thread> threads;
 
 	std::thread threadX;
 	std::thread threadZ;
