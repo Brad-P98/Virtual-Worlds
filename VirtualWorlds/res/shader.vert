@@ -10,9 +10,12 @@ out vec4 camPos;
 out vec2 texCoord;
 out float visibility;
 
-
+//Fog settings
 const float density = 0.001;
 const float gradient = 3.0;
+
+//Texture tiling factor. temp
+float tilingFactor = 7.0;
 
 layout (std140) uniform Camera
 {
@@ -44,7 +47,7 @@ void main() {
 	camPos = camPosIn;
 	
 	//Tex coord passed straight to frag 
-	texCoord = texCoordIn * 7;
+	texCoord = texCoordIn * tilingFactor;
 
 	gl_Position = projection * view * model * vec4(vertexPosIn, 1.0f);
 }

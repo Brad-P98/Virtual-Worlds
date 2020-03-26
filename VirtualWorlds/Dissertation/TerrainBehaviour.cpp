@@ -1,11 +1,8 @@
 #include "TerrainBehaviour.h"
 #include "ChunkSettings.h"
-#include <iostream>
 
 #define renderDistance ChunkSettings::CHUNK_RENDER_DISTANCE
 #define chunkSize ChunkSettings::CHUNK_SIZE
-
-
 
 
 TerrainBehaviour::TerrainBehaviour()
