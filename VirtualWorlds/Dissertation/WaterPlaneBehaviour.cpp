@@ -17,7 +17,30 @@ WaterPlaneBehaviour::WaterPlaneBehaviour()
 void WaterPlaneBehaviour::init()
 {
 	//generate chunks, centered around chunk pos
-	m_waterPlane->generateInitChunks(chunkPos);
+	//m_waterPlane->generateInitChunks(chunkPos);
+
+	initializeChunks();
+}
+
+void WaterPlaneBehaviour::initializeChunks()
+{
+		//Generate rows of chunks on seperate threads.
+		//When a row is done generating, finalize it.
+
+		//Thread per chunk row. Not optimal efficiency but it'll do for now.
+		threads.resize(renderDistance * 2 + 1);
+
+		for (int i = 0; i < threads.size(); i++) {
+
+			threads[i] = std::thread(&WaterPlane::generateXRow, m_waterPlane, chunkPos, i - renderDistance);
+		}
+		//Wait for thread to finish, then finalize the row.
+		for (int i = 0; i < threads.size(); i++) {
+
+			threads[i].join();
+
+			m_waterPlane->finalizeXRow(i);
+		}
 }
 
 WaterPlaneBehaviour::~WaterPlaneBehaviour()
@@ -44,11 +67,9 @@ void WaterPlaneBehaviour::update()
 		}
 
 		if (chunkPos.z > prevChunkPos.z) {
-			//m_Terrain->adjustZRow(false);
 			threadZ = std::thread(&WaterPlane::adjustZRow, m_waterPlane, false);
 		}
 		else if (chunkPos.z < prevChunkPos.z) {
-			//m_Terrain->adjustZRow(true);
 			threadZ = std::thread(&WaterPlane::adjustZRow, m_waterPlane, true);
 		}
 	}

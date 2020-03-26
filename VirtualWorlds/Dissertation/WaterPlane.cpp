@@ -29,7 +29,7 @@ WaterPlane::~WaterPlane()
 
 void WaterPlane::init()
 {
-
+	activeWaterChunks.resize(renderDistance * 2 + 1, std::vector<WaterChunk*>(renderDistance * 2 + 1, nullptr));
 }
 
 void WaterPlane::generateVertexData()
@@ -82,20 +82,39 @@ void WaterPlane::generateVertexData()
 	textureCoords.push_back(1.0f);
 }
 
-void WaterPlane::generateInitChunks(glm::vec3 startChunkGridPos)
+void WaterPlane::generateXRow(glm::vec3 currentChunkPos, int row)
 {
-	activeWaterChunks.resize(renderDistance * 2 + 1, std::vector<WaterChunk*>(renderDistance * 2 + 1, nullptr));
+	//If outside render distance, do not generate chunks
+	if (abs(row) > renderDistance) return;
 
+
+	//x coord in the world chunk grid to generate chunks onto
+	int xPos = currentChunkPos.x + row;
+
+	//starting z coord in the world chunk grid.
+	int zStart = currentChunkPos.z - renderDistance;
+
+	//index of this row in the active chunk vector.
+	int rowIndexInActiveChunks = row + renderDistance;
+
+	//Create the new row of chunks
 	for (int i = 0; i < 2 * renderDistance + 1; i++) {
-		for (int j = 0; j < 2 * renderDistance + 1; j++) {
 
-			WaterChunk* newChunk = new WaterChunk(startChunkGridPos.x + i - renderDistance, startChunkGridPos.z + j - renderDistance, shader);
+		WaterChunk* newChunk = new WaterChunk(xPos, zStart + i, shader);
 
-			newChunk->generateVAO();
-			Instance::m_scene->addObject(newChunk);
+		//Add chunk to the correct position in active chunks
+		activeWaterChunks[rowIndexInActiveChunks][i] = newChunk;
+	}
+}
 
-			activeWaterChunks[i][j] = newChunk;
-		}
+void WaterPlane::finalizeXRow(int rowIndex)
+{
+	//iterate through Z chunks on one X row
+	for (int i = 0; i < activeWaterChunks[rowIndex].size(); i++) {
+
+		//Generate and add to scene
+		activeWaterChunks[rowIndex][i]->generateVAO();
+		Instance::m_scene->addObject(activeWaterChunks[rowIndex][i]);
 	}
 }
 

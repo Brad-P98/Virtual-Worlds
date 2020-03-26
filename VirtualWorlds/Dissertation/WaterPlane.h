@@ -17,7 +17,8 @@ public:
 	WaterPlane();
 	~WaterPlane();
 
-	void generateInitChunks(glm::vec3 startChunkGridPos);
+	void generateXRow(glm::vec3 currentChunkPos, int row);
+	void finalizeXRow(int rowIndex);
 
 	void adjustXRow(bool direction);
 	void adjustZRow(bool direction);

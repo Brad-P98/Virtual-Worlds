@@ -23,6 +23,8 @@ public:
 private:
 
 	void init();
+
+	void initializeChunks();
 private:
 
 	glm::vec3 worldPos;
@@ -30,6 +32,8 @@ private:
 	glm::vec3 prevChunkPos;
 
 	WaterPlane* m_waterPlane;
+
+	std::vector<std::thread> threads;
 
 	std::thread threadX;
 	std::thread threadZ;

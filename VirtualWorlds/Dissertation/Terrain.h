@@ -9,8 +9,12 @@
 
 #include <TextureManager.h>
 
+#include "TerrainChunk.h"
+#include "TerrainNoise.h"
+
 
 class TerrainChunk;
+class TerrainSampler;
 
 class Terrain {
 
@@ -19,8 +23,6 @@ public:
 
 	Terrain();
 	~Terrain();
-
-	void generateInitChunks(glm::vec3 startChunkGridPos);
 
 	void generateXRow(glm::vec3 currentChunkPos, int rowIndex);
 	void finalizeXRow(int rowIndex);
@@ -74,48 +76,3 @@ private:
 	std::vector<TerrainChunk*> chunksToRemoveX;
 	std::vector<TerrainChunk*> chunksToRemoveZ;
 };
-
-
-#pragma region Terrain Chunk
-class TerrainChunk : public Object3D
-{
-public:
-
-	TerrainChunk(int gridX, int gridZ, GLuint shader);
-	~TerrainChunk();
-
-	//Generate the VAO with the vertex data already worked out
-	void generateVAO();
-
-private:
-
-	void generateUniqueVertexPositions();
-
-public:
-
-	glm::vec3 chunkMinXZ;	//in world coords, the lowest x and lowest z vertex position
-	int m_gridX;
-	int m_gridZ;
-
-private:
-
-	std::vector<GLuint> indices;
-	std::vector<float> positions;
-	std::vector<float> normals;
-	std::vector<float> texCoords;
-
-	//settlement score of every vertex.
-	std::vector<int> score;
-
-private:
-
-	GLuint m_shader;
-
-	float x;						//World position
-	float y;						//"
-	float z;						//"
-
-};
-
-#pragma endregion
-

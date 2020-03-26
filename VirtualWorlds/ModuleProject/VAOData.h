@@ -7,6 +7,10 @@ class VAOData
 public:
 
 	VAOData(int vaoID, int vertexCount, int normalCount, int indexCount, int texCoordCount);
+
+	//Optional, for terrain.
+	VAOData(int vaoID, int vertexCount, int normalCount, int indexCount, int texCoordCount, int score);
+
 	~VAOData();
 
 	int getVaoID() const { return m_vaoID; }
@@ -14,6 +18,8 @@ public:
 	int getNormalCount() const { return m_normalCount; }
 	int getIndexCount() const { return m_indexCount; }
 	int getTexCoordCount() const { return m_texCoordCount; }
+	
+	int getScoreCount() const { return m_scoreCount; }
 
 private:
 
@@ -24,5 +30,7 @@ private:
 	int m_indexCount;
 	int m_texCoordCount;
 
+	//terrain optional
+	int m_scoreCount;
 };
 

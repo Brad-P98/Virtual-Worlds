@@ -1,7 +1,6 @@
 #include "Terrain.h"
 #include "WaterPlane.h"
 #include "ChunkSettings.h"
-#include "TerrainNoise.h"
 
 //Constants used for generating chunks. Predefined to clean up code.
 #define chunkSize ChunkSettings::CHUNK_SIZE
@@ -37,7 +36,6 @@ void Terrain::init()
 	TerrainNoise::layers.push_back(new NoiseLayer(70, 0.002f));
 	TerrainNoise::layers.push_back(new NoiseLayer(10, 0.01f));
 	TerrainNoise::layers.push_back(new NoiseLayer(3, 0.02f));
-
 
 	//Allocate space for all terrain chunks
 	activeTerrainChunks.resize(renderDistance * 2 + 1, std::vector<TerrainChunk*>(renderDistance * 2 + 1, nullptr));
@@ -216,8 +214,6 @@ void Terrain::adjustZRow(bool direction)
 	if (!direction) {
 		//Remove from scene
 		for (int i = 0; i < activeTerrainChunks.size(); i++) {
-
-			//Instance::m_scene->removeObject(activeTerrainChunks[i][0]);
 			chunksToRemoveZ.push_back(activeTerrainChunks[i][0]);
 
 			activeTerrainChunks[i].erase(activeTerrainChunks[i].begin());
@@ -226,7 +222,6 @@ void Terrain::adjustZRow(bool direction)
 	else {
 		for (int i = 0; i < activeTerrainChunks.size(); i++) {
 
-			//Instance::m_scene->removeObject(activeTerrainChunks[i][2*RENDER_DISTANCE_CHUNKS]);
 			chunksToRemoveZ.push_back(activeTerrainChunks[i][2 * renderDistance]);
 
 			activeTerrainChunks[i].erase(activeTerrainChunks[i].begin() + 2*renderDistance);
@@ -237,7 +232,6 @@ void Terrain::adjustZRow(bool direction)
 	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 	
 		TerrainChunk* newChunk = new TerrainChunk(xStart + i, zPos, shader);
-		//Instance::m_scene->addObject(newChunk);
 
 		chunksToAddZ.push_back(newChunk);
 
@@ -290,102 +284,3 @@ void Terrain::finalizeZGeneration()
 }
 
 #pragma endregion
-
-
-#pragma region TerrainChunks
-
-TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
-{
-	m_gridX = gridX;
-	m_gridZ = gridZ;
-
-	m_shader = shader;
-
-	x = gridX * chunkSize;
-	z = gridZ * chunkSize;
-
-	chunkMinXZ = glm::vec3(x, 0, z);
-
-	//Default to pregenerated values.
-	positions = Terrain::defaultVertexPositions;
-	indices = Terrain::defaultVertexIndices;
-	texCoords = Terrain::defaultTextureCoords;
-
-	//Fill out positions and normals
-	generateUniqueVertexPositions();
-
-}
-
-TerrainChunk::~TerrainChunk()
-{
-}
-
-void TerrainChunk::generateVAO()
-{
-	VAOLoader* loader = VAOLoader::getInstance();
-
-	GLuint texID = TextureManager::getTextureID("Assets/grass_terrain.jpg");
-
-	init(loader->loadToVAO(positions, normals, indices, texCoords), texID, m_shader);
-}
-
-void TerrainChunk::generateUniqueVertexPositions()
-{
-	for (int i = 0, j = 1, k = 2; i < positions.size(); i+=3, j+=3, k+=3) {
-		positions[i] += x;
-
-		positions[k] += z;
-
-		//y last
-		positions[j] += TerrainNoise::generateTotalNoise(positions[i], positions[k]);
-
-		//VERTEX NORMAL CALCULATION
-		//Calculate normal for this point
-		int h0 = positions[j];	//Height at this point
-
-		glm::vec3 p0 = glm::vec3(positions[i], h0, positions[k]);
-
-		//Info about surrounding points
-		float vertexSeperationDist = chunkSize / vertexCount;
-		float nextXPos = positions[i] + vertexSeperationDist;
-		float nextZPos = positions[k] + vertexSeperationDist;
-		float prevXPos = positions[i] - vertexSeperationDist;
-		float prevZPos = positions[k] - vertexSeperationDist;
-
-		//Height of surrounding points, clockwise
-		float h1 = TerrainNoise::generateTotalNoise(nextXPos, positions[k]);
-		float h2 = TerrainNoise::generateTotalNoise(positions[i], nextZPos);
-		float h3 = TerrainNoise::generateTotalNoise(prevXPos, nextZPos);
-		float h4 = TerrainNoise::generateTotalNoise(prevXPos, positions[k]);
-		float h5 = TerrainNoise::generateTotalNoise(positions[i], prevZPos);
-		float h6 = TerrainNoise::generateTotalNoise(nextXPos, prevZPos);
-
-		//vector for each point
-		glm::vec3 p1 = glm::vec3(nextXPos,		h1, positions[k]);
-		glm::vec3 p2 = glm::vec3(positions[i],	h2, nextZPos);
-		glm::vec3 p3 = glm::vec3(prevXPos,		h3, nextZPos);
-		glm::vec3 p4 = glm::vec3(prevXPos,		h4, positions[k]);
-		glm::vec3 p5 = glm::vec3(positions[i],	h5, prevZPos);
-		glm::vec3 p6 = glm::vec3(nextXPos,		h6, prevZPos);
-		
-
-		//calculate surface normal direction of the 6 surrounding triangles
-		glm::vec3 n1 = glm::normalize(glm::cross(p1 - p0, p2 - p0));
-		glm::vec3 n2 = glm::normalize(glm::cross(p2 - p0, p3 - p0));
-		glm::vec3 n3 = glm::normalize(glm::cross(p3 - p0, p4 - p0));
-		glm::vec3 n4 = glm::normalize(glm::cross(p4 - p0, p5 - p0));
-		glm::vec3 n5 = glm::normalize(glm::cross(p5 - p0, p6 - p0));
-		glm::vec3 n6 = glm::normalize(glm::cross(p6 - p0, p1 - p0));
-
-		//calculate the average direction of the surface normals
-		glm::vec3 vertexNormal = -glm::normalize(n1 + n2 + n3 + n4 + n5 + n6);
-
-		//push the normal data into the vector
-		normals.push_back(vertexNormal.x);
-		normals.push_back(vertexNormal.y);
-		normals.push_back(vertexNormal.z);
-	}
-}
-#pragma endregion
-
-

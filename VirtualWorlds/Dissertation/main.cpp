@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 
 	//Create a new terrain
 	Terrain* terrain = new Terrain();
-	terrain->shader = mainShader;
+	terrain->shader = terrain_wireframeShader;
 
 	TerrainBehaviour terrainBehaviour;
 	terrainBehaviour.setActiveTerrain(terrain);

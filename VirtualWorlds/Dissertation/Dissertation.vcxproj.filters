@@ -36,13 +36,13 @@
     <ClInclude Include="WaterPlaneBehaviour.h">
       <Filter>Header Files\Behaviours</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainSampler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ChunkSettings.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="TerrainNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainChunk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,10 +62,10 @@
     <ClCompile Include="WaterPlaneBehaviour.cpp">
       <Filter>Source Files\Behaviours</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainSampler.cpp">
+    <ClCompile Include="TerrainNoise.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainNoise.cpp">
+    <ClCompile Include="TerrainChunk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

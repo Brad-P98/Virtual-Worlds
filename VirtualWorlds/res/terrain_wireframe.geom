@@ -3,6 +3,7 @@
 mat4 mvpMatrix;
 
 in vec3[] normal;
+in float[] score;
 
 layout (triangles) in;
 
@@ -44,7 +45,7 @@ void main(void) {
     gl_Position = mvpMatrix * gl_in[0].gl_Position;
     EmitVertex();
 
-    vec4 normalPoint = gl_in[0].gl_Position + (vec4(normal[0] ,0)) * normalHeightModifier;
+    vec4 normalPoint = gl_in[0].gl_Position + (vec4(normal[0] ,0)) * score[0];
     gl_Position = mvpMatrix * normalPoint;
     EmitVertex();
 
