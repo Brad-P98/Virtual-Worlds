@@ -19,6 +19,9 @@
     <Filter Include="Header Files\Behaviours">
       <UniqueIdentifier>{7133a001-3b89-46a3-a172-7a2838ffce5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{544a8808-782b-4924-8a85-3b22932cf609}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Terrain.h">
@@ -33,7 +36,13 @@
     <ClInclude Include="WaterPlaneBehaviour.h">
       <Filter>Header Files\Behaviours</Filter>
     </ClInclude>
+    <ClInclude Include="TerrainSampler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ChunkSettings.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainNoise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -52,6 +61,12 @@
     </ClCompile>
     <ClCompile Include="WaterPlaneBehaviour.cpp">
       <Filter>Source Files\Behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainSampler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainNoise.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

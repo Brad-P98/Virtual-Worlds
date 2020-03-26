@@ -1,6 +1,7 @@
 #include "Terrain.h"
 #include "WaterPlane.h"
 #include "ChunkSettings.h"
+#include "TerrainNoise.h"
 
 //Constants used for generating chunks. Predefined to clean up code.
 #define chunkSize ChunkSettings::CHUNK_SIZE
@@ -11,7 +12,6 @@ std::vector<float> Terrain::defaultVertexPositions;
 std::vector<GLuint> Terrain::defaultVertexIndices;
 std::vector<float> Terrain::defaultTextureCoords;
 
-PerlinNoise* Terrain::noiseGenerator;
 
 
 #pragma region Terrain
@@ -30,7 +30,14 @@ Terrain::~Terrain()
 
 void Terrain::init()
 {
-	noiseGenerator = new PerlinNoise();
+	//Initialize TerrainNoise details
+	TerrainNoise::noiseGenerator = new PerlinNoise();
+	//Add noise layers to an easily accessible struct.
+	TerrainNoise::layers.push_back(new NoiseLayer(100, 0.0004f));
+	TerrainNoise::layers.push_back(new NoiseLayer(70, 0.002f));
+	TerrainNoise::layers.push_back(new NoiseLayer(10, 0.01f));
+	TerrainNoise::layers.push_back(new NoiseLayer(3, 0.02f));
+
 
 	//Allocate space for all terrain chunks
 	activeTerrainChunks.resize(renderDistance * 2 + 1, std::vector<TerrainChunk*>(renderDistance * 2 + 1, nullptr));
@@ -330,7 +337,7 @@ void TerrainChunk::generateUniqueVertexPositions()
 		positions[k] += z;
 
 		//y last
-		positions[j] += generateTotalNoise(positions[i], positions[k]);
+		positions[j] += TerrainNoise::generateTotalNoise(positions[i], positions[k]);
 
 		//VERTEX NORMAL CALCULATION
 		//Calculate normal for this point
@@ -346,12 +353,12 @@ void TerrainChunk::generateUniqueVertexPositions()
 		float prevZPos = positions[k] - vertexSeperationDist;
 
 		//Height of surrounding points, clockwise
-		float h1 = generateTotalNoise(nextXPos, positions[k]);
-		float h2 = generateTotalNoise(positions[i], nextZPos);
-		float h3 = generateTotalNoise(prevXPos, nextZPos);
-		float h4 = generateTotalNoise(prevXPos, positions[k]);
-		float h5 = generateTotalNoise(positions[i], prevZPos);
-		float h6 = generateTotalNoise(nextXPos, prevZPos);
+		float h1 = TerrainNoise::generateTotalNoise(nextXPos, positions[k]);
+		float h2 = TerrainNoise::generateTotalNoise(positions[i], nextZPos);
+		float h3 = TerrainNoise::generateTotalNoise(prevXPos, nextZPos);
+		float h4 = TerrainNoise::generateTotalNoise(prevXPos, positions[k]);
+		float h5 = TerrainNoise::generateTotalNoise(positions[i], prevZPos);
+		float h6 = TerrainNoise::generateTotalNoise(nextXPos, prevZPos);
 
 		//vector for each point
 		glm::vec3 p1 = glm::vec3(nextXPos,		h1, positions[k]);
@@ -378,23 +385,6 @@ void TerrainChunk::generateUniqueVertexPositions()
 		normals.push_back(vertexNormal.y);
 		normals.push_back(vertexNormal.z);
 	}
-}
-
-//Generate layers of noise.
-float TerrainChunk::generateTotalNoise(float xPos, float zPos)
-{
-	float totalNoise = 0.0f;
-
-	//First value			= amplitude
-	//Noise 3rd parameter	= frequency
-	totalNoise += 100 * Terrain::noiseGenerator->noise(xPos, zPos, 0.0004f, NULL);
-	totalNoise += 70 * Terrain::noiseGenerator->noise(xPos, zPos, 0.002f, NULL);
-	totalNoise += 10 * Terrain::noiseGenerator->noise(xPos, zPos, 0.01f, NULL);
-	totalNoise += 3 * Terrain::noiseGenerator->noise(xPos, zPos, 0.02f, NULL);
-
-
-
-	return totalNoise;
 }
 #pragma endregion
 

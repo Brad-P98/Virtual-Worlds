@@ -46,10 +46,7 @@ private:
 	void generateDefaultTextureCoords();
 
 public:
-	//chunks generated in each direction from current chunk (excludes current chunk)
-	int renderDistance;
 
-	static PerlinNoise* noiseGenerator;
 
 	GLuint shader;
 
@@ -93,11 +90,10 @@ public:
 private:
 
 	void generateUniqueVertexPositions();
-	float generateTotalNoise(float xPos, float zPos);
 
 public:
 
-	glm::vec3 chunkMinXZ;			//in world coords
+	glm::vec3 chunkMinXZ;	//in world coords, the lowest x and lowest z vertex position
 	int m_gridX;
 	int m_gridZ;
 
@@ -107,6 +103,9 @@ private:
 	std::vector<float> positions;
 	std::vector<float> normals;
 	std::vector<float> texCoords;
+
+	//settlement score of every vertex.
+	std::vector<int> score;
 
 private:
 

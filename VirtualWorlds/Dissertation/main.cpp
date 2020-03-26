@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 	terrainBehaviour.setActiveTerrain(terrain);
 	scene->addBehaviour(&terrainBehaviour);
 
-
+	//Create level plane of water.
 	WaterPlane* water = new WaterPlane();
 	water->shader = mainShader;
 
