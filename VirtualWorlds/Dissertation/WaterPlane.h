@@ -33,9 +33,6 @@ private:
 
 public:
 
-	const int RENDER_DISTANCE_CHUNKS = 18;
-	static const float SEA_LEVEL;
-
 	GLuint shader;
 
 	static std::vector<float> vertexPositions;
@@ -80,8 +77,6 @@ public:
 	glm::vec3 chunkMinXZ;
 	int m_gridX;
 	int m_gridZ;
-
-	const static float SIZE;
 
 private:
 

@@ -44,7 +44,7 @@ void main() {
 	camPos = camPosIn;
 	
 	//Tex coord passed straight to frag 
-	texCoord = texCoordIn;
+	texCoord = texCoordIn * 7;
 
 	gl_Position = projection * view * model * vec4(vertexPosIn, 1.0f);
 }

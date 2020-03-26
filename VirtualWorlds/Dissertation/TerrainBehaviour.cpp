@@ -1,5 +1,9 @@
 #include "TerrainBehaviour.h"
+#include "ChunkSettings.h"
 #include <iostream>
+
+#define renderDistance ChunkSettings::CHUNK_RENDER_DISTANCE
+#define chunkSize ChunkSettings::CHUNK_SIZE
 
 
 
@@ -8,7 +12,7 @@ TerrainBehaviour::TerrainBehaviour()
 {
 	worldPos = Instance::m_scene->getMainCamera()->getWorldPos();
 
-	chunkPos = glm::vec3(round(worldPos.x / TerrainChunk::SIZE + 0.499f) - 1, 0, round(worldPos.z / TerrainChunk::SIZE + 0.499f) - 1);
+	chunkPos = glm::vec3(round(worldPos.x / chunkSize + 0.499f) - 1, 0, round(worldPos.z / chunkSize + 0.499f) - 1);
 
 
 }
@@ -30,11 +34,11 @@ void TerrainBehaviour::initializeChunks()
 	//When a row is done generating, finalize it.
 
 	//Thread per chunk row. Not optimal efficiency but it'll do for now.
-	threads.resize(m_Terrain->RENDER_DISTANCE_CHUNKS * 2 + 1);
+	threads.resize(renderDistance * 2 + 1);
 
 	for (int i = 0; i < threads.size(); i++) {
 
-		threads[i] = std::thread(&Terrain::generateXRow, m_Terrain, chunkPos, i - m_Terrain->RENDER_DISTANCE_CHUNKS);
+		threads[i] = std::thread(&Terrain::generateXRow, m_Terrain, chunkPos, i - renderDistance);
 	}
 	//Wait for thread to finish, then finalize the row.
 	for (int i = 0; i < threads.size(); i++) {
@@ -52,7 +56,7 @@ void TerrainBehaviour::update()
 {
 	worldPos = Instance::m_scene->getMainCamera()->getWorldPos();
 
-	chunkPos = glm::vec3(round(worldPos.x / TerrainChunk::SIZE + 0.499f) - 1, 0, round(worldPos.z / TerrainChunk::SIZE + 0.499f) - 1);
+	chunkPos = glm::vec3(round(worldPos.x / chunkSize + 0.499f) - 1, 0, round(worldPos.z / chunkSize + 0.499f) - 1);
 
 	if (chunkPos != prevChunkPos && (m_Terrain->idleX && m_Terrain->idleZ)) {
 

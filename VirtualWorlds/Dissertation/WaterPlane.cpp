@@ -1,8 +1,10 @@
 #include "WaterPlane.h"
+#include "ChunkSettings.h"
 
-const float WaterChunk::SIZE = 100;
 
-const float WaterPlane::SEA_LEVEL = -20.0f;
+#define renderDistance ChunkSettings::CHUNK_RENDER_DISTANCE
+#define chunkSize ChunkSettings::CHUNK_SIZE
+#define seaLevel ChunkSettings::SEA_LEVEL
 
 std::vector<float> WaterPlane::vertexPositions;
 std::vector<float> WaterPlane::vertexNormals;
@@ -82,12 +84,12 @@ void WaterPlane::generateVertexData()
 
 void WaterPlane::generateInitChunks(glm::vec3 startChunkGridPos)
 {
-	activeWaterChunks.resize(RENDER_DISTANCE_CHUNKS * 2 + 1, std::vector<WaterChunk*>(RENDER_DISTANCE_CHUNKS * 2 + 1, nullptr));
+	activeWaterChunks.resize(renderDistance * 2 + 1, std::vector<WaterChunk*>(renderDistance * 2 + 1, nullptr));
 
-	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
-		for (int j = 0; j < 2 * RENDER_DISTANCE_CHUNKS + 1; j++) {
+	for (int i = 0; i < 2 * renderDistance + 1; i++) {
+		for (int j = 0; j < 2 * renderDistance + 1; j++) {
 
-			WaterChunk* newChunk = new WaterChunk(startChunkGridPos.x + i - RENDER_DISTANCE_CHUNKS, startChunkGridPos.z + j - RENDER_DISTANCE_CHUNKS, shader);
+			WaterChunk* newChunk = new WaterChunk(startChunkGridPos.x + i - renderDistance, startChunkGridPos.z + j - renderDistance, shader);
 
 			newChunk->generateVAO();
 			Instance::m_scene->addObject(newChunk);
@@ -107,7 +109,7 @@ void WaterPlane::adjustXRow(bool direction)
 	int xPos;
 	if (!direction) {
 
-		xPos = activeWaterChunks[2 * RENDER_DISTANCE_CHUNKS][0]->m_gridX + 1;
+		xPos = activeWaterChunks[2 * renderDistance][0]->m_gridX + 1;
 	}
 	else {
 
@@ -115,7 +117,7 @@ void WaterPlane::adjustXRow(bool direction)
 	}
 
 	//new row's starting z position in grid
-	int zStart = activeWaterChunks[2 * RENDER_DISTANCE_CHUNKS][0]->m_gridZ;
+	int zStart = activeWaterChunks[2 * renderDistance][0]->m_gridZ;
 	//Erase the correct row of chunks from the vector
 	if (!direction) {
 		//Remove from scene
@@ -128,16 +130,16 @@ void WaterPlane::adjustXRow(bool direction)
 		activeWaterChunks.erase(activeWaterChunks.begin());
 	}
 	else {
-		for (int i = 0; i < activeWaterChunks[2 * RENDER_DISTANCE_CHUNKS].size(); i++) {
+		for (int i = 0; i < activeWaterChunks[2 * renderDistance].size(); i++) {
 
-			chunksToRemoveX.push_back(activeWaterChunks[2 * RENDER_DISTANCE_CHUNKS][i]);
+			chunksToRemoveX.push_back(activeWaterChunks[2 * renderDistance][i]);
 		}
-		activeWaterChunks.erase(activeWaterChunks.begin() + 2 * RENDER_DISTANCE_CHUNKS);
+		activeWaterChunks.erase(activeWaterChunks.begin() + 2 * renderDistance);
 	}
 
 	//Create the new row of chunks
 	std::vector<WaterChunk*> tempChunkRow;
-	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
+	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 
 
 		WaterChunk* newChunk = new WaterChunk(xPos, zStart + i, shader);
@@ -163,7 +165,7 @@ void WaterPlane::adjustZRow(bool direction)
 	idleZ = false;
 	int zPos;
 	if (!direction) {
-		zPos = activeWaterChunks[0][2 * RENDER_DISTANCE_CHUNKS]->m_gridZ + 1;
+		zPos = activeWaterChunks[0][2 * renderDistance]->m_gridZ + 1;
 	}
 	else {
 		zPos = activeWaterChunks[0][0]->m_gridZ - 1;
@@ -183,18 +185,16 @@ void WaterPlane::adjustZRow(bool direction)
 	else {
 		for (int i = 0; i < activeWaterChunks.size(); i++) {
 
-			//Instance::m_scene->removeObject(activeTerrainChunks[i][2*RENDER_DISTANCE_CHUNKS]);
-			chunksToRemoveZ.push_back(activeWaterChunks[i][2 * RENDER_DISTANCE_CHUNKS]);
+			chunksToRemoveZ.push_back(activeWaterChunks[i][2 * renderDistance]);
 
-			activeWaterChunks[i].erase(activeWaterChunks[i].begin() + 2 * RENDER_DISTANCE_CHUNKS);
+			activeWaterChunks[i].erase(activeWaterChunks[i].begin() + 2 * renderDistance);
 		}
 	}
 
 	//Create all new chunks and push into vector
-	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
+	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 
 		WaterChunk* newChunk = new WaterChunk(xStart + i, zPos, shader);
-		//Instance::m_scene->addObject(newChunk);
 
 		chunksToAddZ.push_back(newChunk);
 
@@ -256,8 +256,8 @@ WaterChunk::WaterChunk(int gridX, int gridZ, GLuint shader)
 
 	m_shader = shader;
 
-	x = gridX * SIZE;
-	z = gridZ * SIZE;
+	x = gridX * chunkSize;
+	z = gridZ * chunkSize;
 
 	chunkMinXZ = glm::vec3(x, 0, z);
 
@@ -289,7 +289,7 @@ void WaterChunk::generateUniqueVertexPositions()
 	for (int i = 0, j = 1, k = 2; i < positions.size(); i += 3, j += 3, k += 3) {
 
 		positions[i] += x;
-		positions[j] += WaterPlane::SEA_LEVEL;
+		positions[j] += seaLevel;
 		positions[k] += z;
 
 

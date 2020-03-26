@@ -1,14 +1,19 @@
 #include "Terrain.h"
 #include "WaterPlane.h"
+#include "ChunkSettings.h"
 
-const float TerrainChunk::SIZE = 100;
-const int TerrainChunk::VERTEX_COUNT = 32;
+//Constants used for generating chunks. Predefined to clean up code.
+#define chunkSize ChunkSettings::CHUNK_SIZE
+#define vertexCount ChunkSettings::CHUNK_EDGE_VERTEX_COUNT
+#define renderDistance ChunkSettings::CHUNK_RENDER_DISTANCE
 
 std::vector<float> Terrain::defaultVertexPositions;
 std::vector<GLuint> Terrain::defaultVertexIndices;
 std::vector<float> Terrain::defaultTextureCoords;
 
 PerlinNoise* Terrain::noiseGenerator;
+
+
 #pragma region Terrain
 Terrain::Terrain()
 {
@@ -28,20 +33,20 @@ void Terrain::init()
 	noiseGenerator = new PerlinNoise();
 
 	//Allocate space for all terrain chunks
-	activeTerrainChunks.resize(RENDER_DISTANCE_CHUNKS * 2 + 1, std::vector<TerrainChunk*>(RENDER_DISTANCE_CHUNKS * 2 + 1, nullptr));
+	activeTerrainChunks.resize(renderDistance * 2 + 1, std::vector<TerrainChunk*>(renderDistance * 2 + 1, nullptr));
 }
 
 //X and Z are always the same for every terrain chunk
 void Terrain::generateDefaultVertexPositions()
 {
-	for (int i = 0; i < TerrainChunk::VERTEX_COUNT; i++) {
-		for (int j = 0; j < TerrainChunk::VERTEX_COUNT; j++) {
+	for (int i = 0; i < vertexCount; i++) {
+		for (int j = 0; j < vertexCount; j++) {
 			//x
-			defaultVertexPositions.push_back((float)j / ((float)TerrainChunk::VERTEX_COUNT - 1) * TerrainChunk::SIZE);
+			defaultVertexPositions.push_back((float)j / ((float)vertexCount - 1) * chunkSize);
 			//y
 			defaultVertexPositions.push_back(0.0f);
 			//z
-			defaultVertexPositions.push_back((float)i / ((float)TerrainChunk::VERTEX_COUNT - 1) * TerrainChunk::SIZE);
+			defaultVertexPositions.push_back((float)i / ((float)vertexCount - 1) * chunkSize);
 		}
 	}
 }
@@ -49,12 +54,12 @@ void Terrain::generateDefaultVertexPositions()
 //indices are always the same for every terrain chunk
 void Terrain::generateDefaultVertexIndices()
 {
-	for (int i = 0; i < TerrainChunk::VERTEX_COUNT - 1; i++) {
-		for (int j = 0; j < TerrainChunk::VERTEX_COUNT - 1; j++) {
+	for (int i = 0; i < vertexCount - 1; i++) {
+		for (int j = 0; j < vertexCount - 1; j++) {
 
-			int topLeft = (i*TerrainChunk::VERTEX_COUNT) + j;
+			int topLeft = (i*vertexCount) + j;
 			int topRight = topLeft + 1;
-			int bottomLeft = ((i + 1) * TerrainChunk::VERTEX_COUNT) + j;
+			int bottomLeft = ((i + 1) * vertexCount) + j;
 			int bottomRight = bottomLeft + 1;
 
 			defaultVertexIndices.push_back(topLeft);
@@ -70,13 +75,13 @@ void Terrain::generateDefaultVertexIndices()
 //Texture coords are always the same for every terrain chunk
 void Terrain::generateDefaultTextureCoords()
 {
-	float vertexSeperationDist = TerrainChunk::SIZE / TerrainChunk::VERTEX_COUNT;
+	float vertexSeperationDist = chunkSize / vertexCount;
 
-	for (int i = 0; i < TerrainChunk::VERTEX_COUNT; i++) {
-		for (int j = 0; j < TerrainChunk::VERTEX_COUNT; j++) {
+	for (int i = 0; i < vertexCount; i++) {
+		for (int j = 0; j < vertexCount; j++) {
 			
-			defaultTextureCoords.push_back(((float)i / ((float)TerrainChunk::VERTEX_COUNT - 1) * TerrainChunk::SIZE) / 100); //x
-			defaultTextureCoords.push_back(((float)j / ((float)TerrainChunk::VERTEX_COUNT - 1) * TerrainChunk::SIZE) / 100); //z
+			defaultTextureCoords.push_back(((float)i / ((float)vertexCount - 1) * chunkSize) / 100); //x
+			defaultTextureCoords.push_back(((float)j / ((float)vertexCount - 1) * chunkSize) / 100); //z
 		}
 	}
 
@@ -89,20 +94,20 @@ void Terrain::generateDefaultTextureCoords()
 void Terrain::generateXRow(glm::vec3 currentChunkPos, int row)
 {
 	//If outside render distance, do not generate chunks
-	if (abs(row) > RENDER_DISTANCE_CHUNKS) return;
+	if (abs(row) > renderDistance) return;
 
 
 	//x coord in the world chunk grid to generate chunks onto
 	int xPos = currentChunkPos.x + row;
 
 	//starting z coord in the world chunk grid.
-	int zStart = currentChunkPos.z - RENDER_DISTANCE_CHUNKS;
+	int zStart = currentChunkPos.z - renderDistance;
 
 	//index of this row in the active chunk vector.
-	int rowIndexInActiveChunks = row + RENDER_DISTANCE_CHUNKS;
+	int rowIndexInActiveChunks = row + renderDistance;
 
 	//Create the new row of chunks
-	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
+	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 
 		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, shader);
 
@@ -138,7 +143,7 @@ void Terrain::adjustXRow(bool direction)
 	int xPos;
 	if (!direction) {
 
-		xPos = activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][0]->m_gridX + 1;
+		xPos = activeTerrainChunks[2 * renderDistance][0]->m_gridX + 1;
 	}
 	else {
 
@@ -147,7 +152,7 @@ void Terrain::adjustXRow(bool direction)
 
 
 	//new row's starting z position in grid
-	int zStart = activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][0]->m_gridZ;
+	int zStart = activeTerrainChunks[2 * renderDistance][0]->m_gridZ;
 
 	//Erase the correct row of chunks from the vector
 	if (!direction) {
@@ -160,15 +165,15 @@ void Terrain::adjustXRow(bool direction)
 		activeTerrainChunks.erase(activeTerrainChunks.begin());
 	}
 	else {
-		for (int i = 0; i < activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS].size(); i++) {
-			chunksToRemoveX.push_back(activeTerrainChunks[2 * RENDER_DISTANCE_CHUNKS][i]);
+		for (int i = 0; i < activeTerrainChunks[2 * renderDistance].size(); i++) {
+			chunksToRemoveX.push_back(activeTerrainChunks[2 * renderDistance][i]);
 		}
-		activeTerrainChunks.erase(activeTerrainChunks.begin() + 2 * RENDER_DISTANCE_CHUNKS);
+		activeTerrainChunks.erase(activeTerrainChunks.begin() + 2 * renderDistance);
 	}
 
 	//Create the new row of chunks
 	std::vector<TerrainChunk*> tempChunkRow;
-	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
+	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 		
 		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, shader);
 
@@ -192,7 +197,7 @@ void Terrain::adjustZRow(bool direction)
 	idleZ = false;
 	int zPos;
 	if (!direction) {
-		zPos = activeTerrainChunks[0][2 * RENDER_DISTANCE_CHUNKS]->m_gridZ + 1;
+		zPos = activeTerrainChunks[0][2 * renderDistance]->m_gridZ + 1;
 	}
 	else {
 		zPos = activeTerrainChunks[0][0]->m_gridZ - 1;
@@ -215,14 +220,14 @@ void Terrain::adjustZRow(bool direction)
 		for (int i = 0; i < activeTerrainChunks.size(); i++) {
 
 			//Instance::m_scene->removeObject(activeTerrainChunks[i][2*RENDER_DISTANCE_CHUNKS]);
-			chunksToRemoveZ.push_back(activeTerrainChunks[i][2 * RENDER_DISTANCE_CHUNKS]);
+			chunksToRemoveZ.push_back(activeTerrainChunks[i][2 * renderDistance]);
 
-			activeTerrainChunks[i].erase(activeTerrainChunks[i].begin() + 2*RENDER_DISTANCE_CHUNKS);
+			activeTerrainChunks[i].erase(activeTerrainChunks[i].begin() + 2*renderDistance);
 		}
 	}
 
 	//Create all new chunks and push into vector
-	for (int i = 0; i < 2 * RENDER_DISTANCE_CHUNKS + 1; i++) {
+	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 	
 		TerrainChunk* newChunk = new TerrainChunk(xStart + i, zPos, shader);
 		//Instance::m_scene->addObject(newChunk);
@@ -289,8 +294,8 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 
 	m_shader = shader;
 
-	x = gridX * SIZE;
-	z = gridZ * SIZE;
+	x = gridX * chunkSize;
+	z = gridZ * chunkSize;
 
 	chunkMinXZ = glm::vec3(x, 0, z);
 
@@ -327,9 +332,6 @@ void TerrainChunk::generateUniqueVertexPositions()
 		//y last
 		positions[j] += generateTotalNoise(positions[i], positions[k]);
 
-
-
-
 		//VERTEX NORMAL CALCULATION
 		//Calculate normal for this point
 		int h0 = positions[j];	//Height at this point
@@ -337,7 +339,7 @@ void TerrainChunk::generateUniqueVertexPositions()
 		glm::vec3 p0 = glm::vec3(positions[i], h0, positions[k]);
 
 		//Info about surrounding points
-		float vertexSeperationDist = TerrainChunk::SIZE / TerrainChunk::VERTEX_COUNT;
+		float vertexSeperationDist = chunkSize / vertexCount;
 		float nextXPos = positions[i] + vertexSeperationDist;
 		float nextZPos = positions[k] + vertexSeperationDist;
 		float prevXPos = positions[i] - vertexSeperationDist;

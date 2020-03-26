@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ChunkSettings.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainBehaviour.h" />
     <ClInclude Include="WaterPlane.h" />

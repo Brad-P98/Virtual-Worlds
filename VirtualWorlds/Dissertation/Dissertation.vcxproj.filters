@@ -33,6 +33,9 @@
     <ClInclude Include="WaterPlaneBehaviour.h">
       <Filter>Header Files\Behaviours</Filter>
     </ClInclude>
+    <ClInclude Include="ChunkSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Terrain.cpp">

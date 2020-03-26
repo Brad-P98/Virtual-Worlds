@@ -1,11 +1,17 @@
 #include "WaterPlaneBehaviour.h"
+#include "ChunkSettings.h"
+
+
+#define renderDistance ChunkSettings::CHUNK_RENDER_DISTANCE
+#define chunkSize ChunkSettings::CHUNK_SIZE
+
 
 WaterPlaneBehaviour::WaterPlaneBehaviour()
 {
 
 	worldPos = Instance::m_scene->getMainCamera()->getWorldPos();
 
-	chunkPos = glm::vec3(round(worldPos.x / WaterChunk::SIZE + 0.499f) - 1, 0, round(worldPos.z / WaterChunk::SIZE + 0.499f) - 1);
+	chunkPos = glm::vec3(round(worldPos.x / chunkSize + 0.499f) - 1, 0, round(worldPos.z / chunkSize + 0.499f) - 1);
 }
 
 void WaterPlaneBehaviour::init()
@@ -23,7 +29,7 @@ void WaterPlaneBehaviour::update()
 {
 	worldPos = Instance::m_scene->getMainCamera()->getWorldPos();
 
-	chunkPos = glm::vec3(round(worldPos.x / WaterChunk::SIZE + 0.499f) - 1, 0, round(worldPos.z / WaterChunk::SIZE + 0.499f) - 1);
+	chunkPos = glm::vec3(round(worldPos.x / chunkSize + 0.499f) - 1, 0, round(worldPos.z / chunkSize + 0.499f) - 1);
 
 	if (chunkPos != prevChunkPos && (m_waterPlane->idleX && m_waterPlane->idleZ)) {
 
