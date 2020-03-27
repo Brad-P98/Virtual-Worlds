@@ -29,13 +29,14 @@ Terrain::~Terrain()
 
 void Terrain::init()
 {
+	noiseInterface = new NoiseGenerator();
 	//Initialize TerrainNoise details
-	TerrainNoise::noiseGenerator = new PerlinNoise();
+	noiseInterface->noiseGenerator = new PerlinNoise();
 	//Add noise layers to an easily accessible struct.
-	TerrainNoise::layers.push_back(new NoiseLayer(100, 0.0004f));
-	TerrainNoise::layers.push_back(new NoiseLayer(70, 0.002f));
-	TerrainNoise::layers.push_back(new NoiseLayer(10, 0.01f));
-	TerrainNoise::layers.push_back(new NoiseLayer(3, 0.02f));
+	noiseInterface->layers.push_back(new NoiseLayer(100, 0.0004f));
+	noiseInterface->layers.push_back(new NoiseLayer(70, 0.002f));
+	noiseInterface->layers.push_back(new NoiseLayer(10, 0.01f));
+	noiseInterface->layers.push_back(new NoiseLayer(3, 0.02f));
 
 	//Allocate space for all terrain chunks
 	activeTerrainChunks.resize(renderDistance * 2 + 1, std::vector<TerrainChunk*>(renderDistance * 2 + 1, nullptr));
@@ -114,7 +115,7 @@ void Terrain::generateXRow(glm::vec3 currentChunkPos, int row)
 	//Create the new row of chunks
 	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 
-		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, shader);
+		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, noiseInterface, shader);
 
 		//Add chunk to the correct position in active chunks
 		activeTerrainChunks[rowIndexInActiveChunks][i] = newChunk;
@@ -180,7 +181,7 @@ void Terrain::adjustXRow(bool direction)
 	std::vector<TerrainChunk*> tempChunkRow;
 	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 		
-		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, shader);
+		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, noiseInterface, shader);
 
 		tempChunkRow.push_back(newChunk);
 		chunksToAddX.push_back(newChunk);
@@ -231,7 +232,7 @@ void Terrain::adjustZRow(bool direction)
 	//Create all new chunks and push into vector
 	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 	
-		TerrainChunk* newChunk = new TerrainChunk(xStart + i, zPos, shader);
+		TerrainChunk* newChunk = new TerrainChunk(xStart + i, zPos, noiseInterface, shader);
 
 		chunksToAddZ.push_back(newChunk);
 

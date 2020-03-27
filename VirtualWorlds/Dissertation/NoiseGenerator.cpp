@@ -1,10 +1,7 @@
-#include "TerrainNoise.h"
+#include "NoiseGenerator.h"
 
 
-std::vector<NoiseLayer*> TerrainNoise::layers;
-PerlinNoise* TerrainNoise::noiseGenerator;
-
-float TerrainNoise::generateTotalNoise(float xPos, float zPos)
+float NoiseGenerator::generateTotalNoise(float xPos, float zPos)
 {
 	float totalNoise = 0.0f;
 

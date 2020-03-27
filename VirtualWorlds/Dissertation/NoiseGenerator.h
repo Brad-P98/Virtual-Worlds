@@ -11,14 +11,14 @@ struct NoiseLayer {
 };
 
 //Easily accessible struct containing all noise layers actively being used.
-static class TerrainNoise {
+class NoiseGenerator {
 
 public:
 
-	static std::vector<NoiseLayer*> layers;
+	std::vector<NoiseLayer*> layers;
 
-	static PerlinNoise* noiseGenerator;
+	PerlinNoise* noiseGenerator;
 
-	static float generateTotalNoise(float xPos, float zPos);
+	float generateTotalNoise(float xPos, float zPos);
 };
 

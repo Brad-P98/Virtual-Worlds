@@ -10,7 +10,6 @@
 #include <TextureManager.h>
 
 #include "TerrainChunk.h"
-#include "TerrainNoise.h"
 
 
 class TerrainChunk;
@@ -51,6 +50,7 @@ public:
 
 
 	GLuint shader;
+	NoiseGenerator* noiseInterface;
 
 	//No need for default normals, as every normal is new per terrain chunk, so defaults serve no purpose
 	static std::vector<float> defaultVertexPositions;

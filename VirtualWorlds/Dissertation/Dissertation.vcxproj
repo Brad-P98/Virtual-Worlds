@@ -131,7 +131,7 @@
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainBehaviour.h" />
     <ClInclude Include="TerrainChunk.h" />
-    <ClInclude Include="TerrainNoise.h" />
+    <ClInclude Include="NoiseGenerator.h" />
     <ClInclude Include="WaterPlane.h" />
     <ClInclude Include="WaterPlaneBehaviour.h" />
   </ItemGroup>
@@ -142,7 +142,7 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainBehaviour.cpp" />
     <ClCompile Include="TerrainChunk.cpp" />
-    <ClCompile Include="TerrainNoise.cpp" />
+    <ClCompile Include="NoiseGenerator.cpp" />
     <ClCompile Include="WaterPlane.cpp" />
     <ClCompile Include="WaterPlaneBehaviour.cpp" />
   </ItemGroup>

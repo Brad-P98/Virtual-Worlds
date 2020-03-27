@@ -5,13 +5,15 @@
 #include <Object3D.h>
 #include <VAOLoader.h>
 
+#include "NoiseGenerator.h"
+
 
 #pragma region Terrain Chunk
 class TerrainChunk : public Object3D
 {
 public:
 
-	TerrainChunk(int gridX, int gridZ, GLuint shader);
+	TerrainChunk(int gridX, int gridZ, NoiseGenerator* noiseInterface, GLuint shader);
 	~TerrainChunk();
 
 	//Generate the VAO with the vertex data already worked out
@@ -56,6 +58,7 @@ private:
 private:
 
 	GLuint m_shader;
+	NoiseGenerator* m_noiseInterface;
 
 	float x;						//World position
 	float y;						//"

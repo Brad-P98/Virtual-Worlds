@@ -10,11 +10,11 @@
 #pragma region TerrainChunks
 
 
-TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
+TerrainChunk::TerrainChunk(int gridX, int gridZ, NoiseGenerator* noiseInterface, GLuint shader)
 {
 	m_gridX = gridX;
 	m_gridZ = gridZ;
-
+	m_noiseInterface = noiseInterface;
 	m_shader = shader;
 
 	x = gridX * chunkSize;
@@ -52,7 +52,7 @@ void TerrainChunk::generateUniqueVertexPositions()
 		positions[k] += z;
 
 		//y last
-		positions[j] += TerrainNoise::generateTotalNoise(positions[i], positions[k]);
+		positions[j] += m_noiseInterface->generateTotalNoise(positions[i], positions[k]);
 
 		//VERTEX NORMAL CALCULATION
 		//Calculate normal for this point
@@ -68,12 +68,12 @@ void TerrainChunk::generateUniqueVertexPositions()
 		float prevZPos = positions[k] - vertexSeperationDist;
 
 		//Height of surrounding points, clockwise
-		float h1 = TerrainNoise::generateTotalNoise(nextXPos, positions[k]);
-		float h2 = TerrainNoise::generateTotalNoise(positions[i], nextZPos);
-		float h3 = TerrainNoise::generateTotalNoise(prevXPos, nextZPos);
-		float h4 = TerrainNoise::generateTotalNoise(prevXPos, positions[k]);
-		float h5 = TerrainNoise::generateTotalNoise(positions[i], prevZPos);
-		float h6 = TerrainNoise::generateTotalNoise(nextXPos, prevZPos);
+		float h1 = m_noiseInterface->generateTotalNoise(nextXPos, positions[k]);
+		float h2 = m_noiseInterface->generateTotalNoise(positions[i], nextZPos);
+		float h3 = m_noiseInterface->generateTotalNoise(prevXPos, nextZPos);
+		float h4 = m_noiseInterface->generateTotalNoise(prevXPos, positions[k]);
+		float h5 = m_noiseInterface->generateTotalNoise(positions[i], prevZPos);
+		float h6 = m_noiseInterface->generateTotalNoise(nextXPos, prevZPos);
 
 		//vector for each point
 		glm::vec3 p1 = glm::vec3(nextXPos, h1, positions[k]);
@@ -115,7 +115,7 @@ void TerrainChunk::generateUniqueVertexPositions()
 float TerrainChunk::calcGradientScore(float xPos, float zPos, glm::vec3 vertexNormal) 
 {
 	//if less than just above sea level, return no score
-	if (TerrainNoise::generateTotalNoise(xPos, zPos) <= seaLevel + 0.5f) return 0;
+	if (m_noiseInterface->generateTotalNoise(xPos, zPos) <= seaLevel + 0.5f) return 0;
 	
 	//calc gradient based off vertex normal. If normal is close to up vector, dot is closer to 0.
 	float grad = 1.0f - glm::dot(vertexNormal, glm::vec3(0, 1, 0));
@@ -129,7 +129,7 @@ float TerrainChunk::calcGradientScore(float xPos, float zPos, glm::vec3 vertexNo
 
 float TerrainChunk::calcAltitudeScore(float xPos, float zPos)
 {
-	float altitude = TerrainNoise::generateTotalNoise(xPos, zPos);
+	float altitude = m_noiseInterface->generateTotalNoise(xPos, zPos);
 
 	//if less than just above sea level, return no score
 	if (altitude <= seaLevel + 0.2f) return 0;
