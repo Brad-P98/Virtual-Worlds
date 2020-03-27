@@ -16,8 +16,6 @@ WaterPlaneBehaviour::WaterPlaneBehaviour()
 
 void WaterPlaneBehaviour::init()
 {
-	//generate chunks, centered around chunk pos
-	//m_waterPlane->generateInitChunks(chunkPos);
 
 	initializeChunks();
 }

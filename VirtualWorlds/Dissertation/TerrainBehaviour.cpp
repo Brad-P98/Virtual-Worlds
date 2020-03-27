@@ -62,12 +62,10 @@ void TerrainBehaviour::update()
 		//and add a new row within the render distance
 		if (chunkPos.x > prevChunkPos.x) {
 			//moved +x, so delete row of chunks with lowest x, and add row after highest x
-			//m_Terrain->adjustXRow(false);
 			threadX = std::thread(&Terrain::adjustXRow, m_Terrain, false);
 		}
 		else if (chunkPos.x < prevChunkPos.x) {
 			//moved -x, so delete row of chunks with highest x, and add row before lowest x
-			//m_Terrain->adjustXRow(true);
 			threadX = std::thread(&Terrain::adjustXRow, m_Terrain, true);
 
 		}

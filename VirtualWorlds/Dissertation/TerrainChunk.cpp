@@ -27,7 +27,7 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, GLuint shader)
 	indices = Terrain::defaultVertexIndices;
 	texCoords = Terrain::defaultTextureCoords;
 
-	//Fill out positions and normals
+	//Fill out positions and normals with unique values.
 	generateUniqueVertexPositions();
 
 }
@@ -101,7 +101,7 @@ void TerrainChunk::generateUniqueVertexPositions()
 		normals.push_back(vertexNormal.z);
 
 
-		//Calculate score of vertex
+		//VERTEX SCORE CALCULATION
 		float vertexScore = 0.0f;
 		vertexScore += calcGradientScore(positions[i], positions[k], vertexNormal);
 		vertexScore += calcAltitudeScore(positions[i], positions[k]);
@@ -111,12 +111,13 @@ void TerrainChunk::generateUniqueVertexPositions()
 	}
 }
 
+
 float TerrainChunk::calcGradientScore(float xPos, float zPos, glm::vec3 vertexNormal) 
 {
 	//if less than just above sea level, return no score
 	if (TerrainNoise::generateTotalNoise(xPos, zPos) <= seaLevel + 0.5f) return 0;
 	
-	//calc gradient based off vertex normal
+	//calc gradient based off vertex normal. If normal is close to up vector, dot is closer to 0.
 	float grad = 1.0f - glm::dot(vertexNormal, glm::vec3(0, 1, 0));
 
 	//The closer to flat, the higher the score, up to a cap.
@@ -135,7 +136,7 @@ float TerrainChunk::calcAltitudeScore(float xPos, float zPos)
 
 	//The closer to sea level, the better the score, up to a cap
 	float score = (1/(altitude - seaLevel)) * 15;
-	if (score > 10) return 10;
+	if (score > 15) return 15;
 	return score;
 }
 float TerrainChunk::calcSettlementProxScore(float xPos, float zPos)

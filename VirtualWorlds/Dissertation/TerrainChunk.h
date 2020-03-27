@@ -32,7 +32,7 @@ private:
 	float calcAltitudeScore(float xPos, float zPos);
 
 	//3. SampleSettlementProximity
-	//Every settlement has a 'focal point' vertex, as well as a value suggesting the size of the settlement. This iterates through nearby focal points. If a focal point is nearby, reduce the score of the vertex, but only if it is below the threshold that decides if buildings should be there.
+	//Every settlement has a 'focal point' vertex, as well as a value suggesting the size of the settlement. This method iterates through nearby focal points, giving a score based on proximity to other settlements.
 	float calcSettlementProxScore(float xPos, float zPos);
 
 public:

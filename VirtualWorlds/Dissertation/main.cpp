@@ -12,6 +12,8 @@
 #include "WaterPlane.h"
 #include "WaterPlaneBehaviour.h"
 
+#include "SettlementManager.h"
+
 
 
 Instance* instance;
@@ -19,6 +21,7 @@ Scene* scene;
 
 Camera* mainCamera;
 
+SettlementManager* settlementManager;
 
 
 int main(int argc, char** argv) {
@@ -46,8 +49,11 @@ int main(int argc, char** argv) {
 	//Initialises a completely empty scene and 1st person camera
 	scene->initScene();
 
+
 	mainCamera = scene->getMainCamera();
-	mainCamera->setWorldPos(glm::vec3(50, 1, 50));
+	mainCamera->setWorldPos(glm::vec3(50, 30, 50));
+
+	settlementManager = new SettlementManager();
 
 	Skybox* newSkybox = new Skybox("Skybox", skyboxShader);
 	scene->setSkybox(newSkybox);
