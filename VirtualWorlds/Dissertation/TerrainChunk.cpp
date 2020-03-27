@@ -131,7 +131,7 @@ float TerrainChunk::calcAltitudeScore(float xPos, float zPos)
 	float altitude = TerrainNoise::generateTotalNoise(xPos, zPos);
 
 	//if less than just above sea level, return no score
-	if (altitude <= seaLevel + 0.5f) return 0;
+	if (altitude <= seaLevel + 0.2f) return 0;
 
 	//The closer to sea level, the better the score, up to a cap
 	float score = (1/(altitude - seaLevel)) * 15;
