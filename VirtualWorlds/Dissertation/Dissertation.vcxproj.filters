@@ -22,11 +22,20 @@
     <Filter Include="Header Files\Utility">
       <UniqueIdentifier>{544a8808-782b-4924-8a85-3b22932cf609}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Settlements">
+      <UniqueIdentifier>{44a07de0-08e6-410f-92ec-37bb697fbb13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Settlements">
+      <UniqueIdentifier>{d49c0b0f-95fd-4427-8dee-b2f4a59f5b09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Terrain">
+      <UniqueIdentifier>{e23639b1-b203-420d-997c-cb3c2f6d6366}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Terrain">
+      <UniqueIdentifier>{955428b9-ab6c-4857-882e-1c1082d48aa0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TerrainBehaviour.h">
       <Filter>Header Files\Behaviours</Filter>
     </ClInclude>
@@ -42,14 +51,20 @@
     <ClInclude Include="TerrainNoise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Settlement.h">
+      <Filter>Header Files\Settlements</Filter>
+    </ClInclude>
+    <ClInclude Include="SettlementManager.h">
+      <Filter>Header Files\Settlements</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Header Files\Terrain</Filter>
+    </ClInclude>
     <ClInclude Include="TerrainChunk.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Terrain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -65,8 +80,17 @@
     <ClCompile Include="TerrainNoise.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Settlement.cpp">
+      <Filter>Source Files\Settlements</Filter>
+    </ClCompile>
+    <ClCompile Include="SettlementManager.cpp">
+      <Filter>Source Files\Settlements</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Source Files\Terrain</Filter>
+    </ClCompile>
     <ClCompile Include="TerrainChunk.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Terrain</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

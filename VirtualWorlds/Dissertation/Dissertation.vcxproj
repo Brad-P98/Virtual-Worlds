@@ -126,6 +126,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ChunkSettings.h" />
+    <ClInclude Include="Settlement.h" />
+    <ClInclude Include="SettlementManager.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainBehaviour.h" />
     <ClInclude Include="TerrainChunk.h" />
@@ -135,6 +137,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Settlement.cpp" />
+    <ClCompile Include="SettlementManager.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainBehaviour.cpp" />
     <ClCompile Include="TerrainChunk.cpp" />

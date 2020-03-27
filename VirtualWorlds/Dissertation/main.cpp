@@ -21,7 +21,6 @@ Scene* scene;
 
 Camera* mainCamera;
 
-SettlementManager* settlementManager;
 
 
 int main(int argc, char** argv) {
