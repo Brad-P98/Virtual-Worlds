@@ -11,15 +11,14 @@ public:
 	SettlementManager();
 	~SettlementManager();
 
+	static SettlementManager* getInstance() { return settlementManager; }
+
 	void addSettlement(Settlement* newSettlement);
 
 	void removeSettlement(Settlement* newSettlement);
 
-	//Return every settlement on this chunk.
-	void getSettlementsOnChunk(int chunkX, int chunkZ);
-
-	//Return every settlement within this circle radius.
-	void getSettlementsInArea(float radius);
+	//Return every settlement within this circle radius center x and z.
+	std::vector<Settlement*> getSettlementsInArea(float radius, float xPos, float zPos);
 private:
 
 	//Store all currently generated settlements.

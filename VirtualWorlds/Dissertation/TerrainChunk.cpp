@@ -121,9 +121,9 @@ float TerrainChunk::calcGradientScore(float xPos, float zPos, glm::vec3 vertexNo
 	float grad = 1.0f - glm::dot(vertexNormal, glm::vec3(0, 1, 0));
 
 	//The closer to flat, the higher the score, up to a cap.
-	grad = 1 / (grad * 60);
-	if (grad > 10) return 10;
-	return grad;
+	float gradScore = 1 / (grad * 40);
+	if (gradScore > 20) return 20;
+	return gradScore;
 }
 
 
@@ -135,12 +135,20 @@ float TerrainChunk::calcAltitudeScore(float xPos, float zPos)
 	if (altitude <= seaLevel + 0.2f) return 0;
 
 	//The closer to sea level, the better the score, up to a cap
-	float score = (1/(altitude - seaLevel)) * 15;
-	if (score > 15) return 15;
+	float score = (1/(altitude - seaLevel)) * 300;
+	if (score > 30) return 30;
 	return score;
 }
 float TerrainChunk::calcSettlementProxScore(float xPos, float zPos)
 {
+
+	SettlementManager* settlementMgr = SettlementManager::getInstance();
+
+	//Get all settlements within a suitable radius of this vertex.
+	//Evaluate the 'effect' each settlement has on this point, based on distance and it's influence score combined.
+
+
+
 	return 0.0f;
 }
 #pragma endregion

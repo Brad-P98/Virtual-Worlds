@@ -22,5 +22,8 @@ public:
 	//grid coordinates of the chunk that this settlement resides on
 	glm::vec2 homeChunkCoords;
 
+private:
+
+	//Vector of buildings game objects.
 };
 

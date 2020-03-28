@@ -7,6 +7,8 @@
 
 #include "NoiseGenerator.h"
 
+#include "SettlementManager.h"
+
 
 #pragma region Terrain Chunk
 class TerrainChunk : public Object3D

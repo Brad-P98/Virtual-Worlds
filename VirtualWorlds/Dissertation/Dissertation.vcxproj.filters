@@ -34,6 +34,9 @@
     <Filter Include="Source Files\Terrain">
       <UniqueIdentifier>{955428b9-ab6c-4857-882e-1c1082d48aa0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{b5936232-4151-40da-bf26-6d3f5e9cb63e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TerrainBehaviour.h">
@@ -61,7 +64,7 @@
       <Filter>Header Files\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="NoiseGenerator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -90,7 +93,7 @@
       <Filter>Source Files\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="NoiseGenerator.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
