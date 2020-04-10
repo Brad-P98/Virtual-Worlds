@@ -27,9 +27,17 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, NoiseGenerator* noiseInterface,
 	indices = Terrain::defaultVertexIndices;
 	texCoords = Terrain::defaultTextureCoords;
 
-	//Fill out positions and normals with unique values.
+	//Fill out positions and normals with unique values, as well as give every vertex a 'settlement score'
 	generateUniqueVertexPositions();
 
+	//Try to generate settlements. If a vertex has a high enough total score, a settlement focal point may begin there.
+	//bool generating = true;
+	//while (generating) {
+	//	//If false, no settlements were able to be built anymore.
+	//	generating = generateSettlements();
+	//	//Only resample if settlement was added.
+	//	if (generating) resampleVertexScores();
+	//}
 }
 
 TerrainChunk::~TerrainChunk()
@@ -105,7 +113,6 @@ void TerrainChunk::generateUniqueVertexPositions()
 		float vertexScore = 0.0f;
 		vertexScore += calcGradientScore(positions[i], positions[k], vertexNormal);
 		vertexScore += calcAltitudeScore(positions[i], positions[k]);
-		vertexScore += calcSettlementProxScore(positions[i], positions[k]);
 
 		scores.push_back(vertexScore);
 	}
@@ -139,16 +146,81 @@ float TerrainChunk::calcAltitudeScore(float xPos, float zPos)
 	if (score > 30) return 30;
 	return score;
 }
-float TerrainChunk::calcSettlementProxScore(float xPos, float zPos)
-{
 
-	SettlementManager* settlementMgr = SettlementManager::getInstance();
+
+float TerrainChunk::calcSettlementProxScore(glm::vec3 position)
+{
 
 	//Get all settlements within a suitable radius of this vertex.
 	//Evaluate the 'effect' each settlement has on this point, based on distance and it's influence score combined.
+	SettlementManager* sMgr = SettlementManager::getInstance();
+
+	
+
+	std::vector<Settlement*> settlements = sMgr->getSettlementsInArea(300, position.x, position.z);
+	
+	for (int i = 0; i < settlements.size(); i++) {
+
+		//iterate through each settlement
+		float distance = glm::vec3(settlements[i]->focalPointPos - position).length();
+		float score = (distance *settlements[i]->influenceScore) / 200;
+		return score;
+	}
 
 
-
-	return 0.0f;
+	//No settlements within radius. give max score.
+	return 40.0f;
 }
+
+
+bool TerrainChunk::generateSettlements()
+{
+	//Look for highest score vertex, and generate a settlement there. If multiple vertices have the same highest score, first one will be picked.
+	glm::vec3 highestScorePos;
+	float highestScore = 0.0f;
+
+	for (int i = 0; i < scores.size(); i++) {
+
+		if (scores[i] > highestScore) {
+			//overwrite current high score with new higher score.
+			highestScore = scores[i];
+			highestScorePos = glm::vec3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]);
+		}
+	}
+
+	if (highestScore > SettlementManager::getInstance()->minSettlementScore) {
+		//Generate settlement at location of the highest score.
+
+		float influenceScore = 40.0f;
+		Settlement* newSettlement = new Settlement(highestScorePos, influenceScore);
+
+		SettlementManager::getInstance()->addSettlement(newSettlement);
+
+		return true;
+	}
+
+	//No vertices were above minimum settlement score.
+	return false;
+
+}
+
+
+void TerrainChunk::resampleVertexScores()
+{
+	//Empty score vector
+	scores.clear();
+
+	//Iterate through every vertex.
+	for (int i = 0; i < positions.size()/3; i++) {
+
+		//VERTEX SCORE CALCULATION
+		float vertexScore = 0.0f;
+		vertexScore += calcGradientScore(positions[i * 3], positions[i * 3], glm::vec3(normals[i*3], normals[(i*3) + 1], normals[(i * 3) + 2]));
+		vertexScore += calcAltitudeScore(positions[i], positions[(i * 3) + 2]);
+		vertexScore += calcSettlementProxScore(glm::vec3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]));
+
+		scores.push_back(vertexScore);
+	}
+}
+
 #pragma endregion

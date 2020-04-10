@@ -2,7 +2,7 @@
 #include "WaterPlane.h"
 #include "ChunkSettings.h"
 
-//Constants used for generating chunks. Predefined to clean up code.
+//Constants used for generating chunks. Defined to clean up code.
 #define chunkSize ChunkSettings::CHUNK_SIZE
 #define vertexCount ChunkSettings::CHUNK_EDGE_VERTEX_COUNT
 #define renderDistance ChunkSettings::CHUNK_RENDER_DISTANCE
@@ -32,7 +32,7 @@ void Terrain::init()
 	noiseInterface = new NoiseGenerator();
 	//Initialize TerrainNoise details
 	noiseInterface->noiseGenerator = new PerlinNoise();
-	//Add noise layers to an easily accessible struct.
+	//Add noise layers to struct.
 	noiseInterface->layers.push_back(new NoiseLayer(100, 0.0004f));
 	noiseInterface->layers.push_back(new NoiseLayer(70, 0.002f));
 	noiseInterface->layers.push_back(new NoiseLayer(10, 0.01f));

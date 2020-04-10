@@ -8,6 +8,7 @@
 #include "NoiseGenerator.h"
 
 #include "SettlementManager.h"
+#include <mutex>
 
 
 #pragma region Terrain Chunk
@@ -37,7 +38,17 @@ private:
 
 	//3. SampleSettlementProximity
 	//Every settlement has a 'focal point' vertex, as well as a value suggesting the size of the settlement. This method iterates through nearby focal points, giving a score based on proximity to other settlements.
-	float calcSettlementProxScore(float xPos, float zPos);
+	float calcSettlementProxScore(glm::vec3 position);
+
+	//Method to recalculate vertex scores for the whole chunk
+	//Intended for use after building a settlement, as that doesnt mean there cannot be another one on the chunk.
+	void resampleVertexScores();
+	
+	//Updates the score VBO with the current data stored in scores.
+	void updateScoresVBO();
+
+	bool generateSettlements();
+
 
 public:
 
@@ -45,7 +56,8 @@ public:
 	int m_gridX;
 	int m_gridZ;
 
-	//settlement score of every vertex.
+	//score of every vertex, based only on terrain factors when pushed into VAO.
+	//After chunk is generated, these scores can be updated to include score based on settlements.
 	std::vector<float> scores;
 
 private:

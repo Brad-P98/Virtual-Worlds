@@ -28,12 +28,10 @@ private:
 	static std::vector<GLuint> vaos;
 	static std::vector<GLuint> vbos;
 
+	static void storeFloatDataInAttributeList(int attributeNumber, int numOfComponents, std::vector<float> data);
 
-	static void storeVertexDataInAttributeList(int attributeNumber, std::vector<float> data);
 	static void storeIndicesDataInAttributeList(int attributeNumber, std::vector<GLuint> data);
-	static void storeTexCoordsInAttributeList(int attributeNumber, std::vector<float> data);
 
-	static void storeScoresInAttributeList(int attributeNumber, std::vector<float> data);
 
 	static int createVAO();
 	

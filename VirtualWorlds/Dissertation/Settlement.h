@@ -6,7 +6,7 @@ class Settlement
 {
 public:
 
-	Settlement();
+	Settlement(glm::vec3 focalPos, float score);
 	~Settlement();
 
 	void generateSettlement();

@@ -21,7 +21,7 @@ Scene* scene;
 
 Camera* mainCamera;
 
-
+SettlementManager* settlementManager;
 
 int main(int argc, char** argv) {
 
@@ -53,6 +53,7 @@ int main(int argc, char** argv) {
 	mainCamera->setWorldPos(glm::vec3(50, 30, 50));
 
 	settlementManager = new SettlementManager();
+	SettlementManager::setInstance(settlementManager);
 
 	Skybox* newSkybox = new Skybox("Skybox", skyboxShader);
 	scene->setSkybox(newSkybox);
@@ -84,6 +85,7 @@ int main(int argc, char** argv) {
 
 	ShaderManager::cleanup();
 	TextureManager::cleanup();
+	delete water;
 	delete terrain;
 	delete instance;
 	delete scene;

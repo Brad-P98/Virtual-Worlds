@@ -23,7 +23,7 @@ public:
 
 protected:
 
-	//Only derived classes can override these methods
+
 	void init(VAOData* vaoData, GLuint textureID, GLuint shader);
 	void setShaderProgram(GLuint shader);
 

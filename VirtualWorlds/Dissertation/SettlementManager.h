@@ -1,17 +1,21 @@
 #pragma once
 #include <vector>
+#include <mutex>
 #include "Settlement.h"
 
-class SettlementManager;
-static SettlementManager *settlementManager = nullptr;
 
 class SettlementManager
 {
+private:
+
+	static SettlementManager* instance;
+
 public:
 	SettlementManager();
 	~SettlementManager();
 
-	static SettlementManager* getInstance() { return settlementManager; }
+	static SettlementManager* getInstance() { return instance; }
+	static void setInstance(SettlementManager* inst) { instance = inst; }
 
 	void addSettlement(Settlement* newSettlement);
 
@@ -23,5 +27,11 @@ private:
 
 	//Store all currently generated settlements.
 	static std::vector<Settlement*> activeSettlements;
+
+
+public:
+
+	//Minimum score a vertex can have to have a settlement focal point
+	float minSettlementScore = 40.0f;
 };
 

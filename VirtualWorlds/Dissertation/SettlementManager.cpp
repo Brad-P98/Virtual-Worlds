@@ -2,12 +2,14 @@
 
 #include <assert.h>
 
-std::vector<Settlement*> SettlementManager::activeSettlements;
+SettlementManager* SettlementManager::instance;
+
+std::vector<Settlement*> SettlementManager::activeSettlements; 
 
 SettlementManager::SettlementManager()
 {
-	assert(settlementManager == nullptr);
-	settlementManager = this;
+	assert(instance == nullptr);
+	instance = this;
 }
 
 SettlementManager::~SettlementManager()
@@ -41,10 +43,12 @@ std::vector<Settlement*> SettlementManager::getSettlementsInArea(float radius, f
 		float xDist = abs(activeSettlements[i]->focalPointPos.x - xPos);
 		float zDist = abs(activeSettlements[i]->focalPointPos.z - zPos);
 
-		if (sqrt((xDist * xDist) + (zDist * zDist)) < radius) {
+		float res = sqrt((xDist * xDist) + (zDist * zDist));
+		if (res < radius) {
 			//settlement is within radius, push to settlements found vector.
 			settlementsFound.push_back(activeSettlements[i]);
 		}
 	}
+
 	return settlementsFound;
 }
