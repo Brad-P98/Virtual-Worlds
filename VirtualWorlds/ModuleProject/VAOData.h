@@ -21,6 +21,7 @@ public:
 	
 	int getScoreCount() const { return m_scoreCount; }
 
+	GLuint scoreVBOID;
 private:
 
 	//Member variables
@@ -32,5 +33,7 @@ private:
 
 	//terrain optional
 	int m_scoreCount;
+
+
 };
 

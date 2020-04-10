@@ -52,6 +52,13 @@ void TerrainChunk::generateVAO()
 	init(loader->loadToVAO(positions, normals, indices, texCoords, scores), texID, m_shader);
 }
 
+void TerrainChunk::updateScoresVBO()
+{
+	VAOLoader* loader = VAOLoader::getInstance();
+	//Rewrite the scoreVBO of this object's VAO with the new score data in attribute index 5, with 1 component per vertex.
+	loader->updateVBOInVAO(getVAOData()->getVaoID(), getVAOData()->scoreVBOID, 5, 1, scores);
+}
+
 void TerrainChunk::generateUniqueVertexPositions()
 {
 	for (int i = 0, j = 1, k = 2; i < positions.size(); i += 3, j += 3, k += 3) {
@@ -171,6 +178,7 @@ float TerrainChunk::calcSettlementProxScore(glm::vec3 position)
 	//No settlements within radius. give max score.
 	return 40.0f;
 }
+
 
 
 bool TerrainChunk::generateSettlements()

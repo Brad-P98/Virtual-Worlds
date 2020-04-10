@@ -45,6 +45,7 @@ private:
 	void resampleVertexScores();
 	
 	//Updates the score VBO with the current data stored in scores.
+	//Call this method to update scores at any time after original VAO is already generated.
 	void updateScoresVBO();
 
 	bool generateSettlements();

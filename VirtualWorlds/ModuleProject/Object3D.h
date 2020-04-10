@@ -19,7 +19,8 @@ public:
 	virtual void update() override;
 	virtual void draw() override;
 
-	GLuint getShaderProgram() { return m_Renderer.shaderProgram; }
+	GLuint getShaderProgram() const { return m_Renderer.shaderProgram; }
+	VAOData* getVAOData() const { return m_VaoData; }
 
 protected:
 

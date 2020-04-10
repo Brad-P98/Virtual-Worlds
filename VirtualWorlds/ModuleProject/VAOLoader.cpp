@@ -55,11 +55,17 @@ VAOData * VAOLoader::loadToVAO(std::vector<float> positions, std::vector<float> 
 	storeFloatDataInAttributeList(4, 2, texCoords);
 
 	//store scores
-	storeFloatDataInAttributeList(5, 1, scores);
+	GLuint scoreVBO = storeFloatDataInAttributeList(5, 1, scores);
+
+	//Create the new VAOData;
+	VAOData* vaoData = new VAOData(vaoID, positions.size(), normals.size(), indices.size(), texCoords.size(), scores.size());
 
 	unbindVAO();
 
-	return new VAOData(vaoID, positions.size(), normals.size(), indices.size(), texCoords.size(), scores.size());
+	//include the score VBO ID in VAOData - lazy.
+	vaoData->scoreVBOID = scoreVBO;
+
+	return vaoData;
 }
 
 int VAOLoader::createVAO()
@@ -74,17 +80,17 @@ int VAOLoader::createVAO()
 }
 
 //Store a vector of floats at index of attributeNumber, with n components per vertex.
-void VAOLoader::storeFloatDataInAttributeList(int attributeNumber, int numOfComponents, std::vector<float> data)
+GLuint VAOLoader::storeFloatDataInAttributeList(int attributeNumber, int numOfComponents, std::vector<float> data)
 {
 	GLuint vboID;
 	glGenBuffers(1, &vboID);
-	vbos.push_back(vboID);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboID);
 	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(attributeNumber, numOfComponents, GL_FLOAT, false, 0, 0);
 	glEnableVertexAttribArray(attributeNumber);
 
+	return vboID;
 }
 
 //Element array GLuints. 1 component.
@@ -92,11 +98,27 @@ void VAOLoader::storeIndicesDataInAttributeList(int attributeNumber, std::vector
 {
 	GLuint vboID;
 	glGenBuffers(1, &vboID);
-	vbos.push_back(vboID);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(GLuint), data.data(), GL_STATIC_DRAW);
 
+}
+
+
+void VAOLoader::updateVBOInVAO(GLuint vaoID, GLuint vboID, int attributeNumber, int numOfComponents, std::vector<float> data)
+{
+	//Bind VAO
+	glBindVertexArray(vaoID);
+
+	//Bind VBO
+	glBindBuffer(GL_ARRAY_BUFFER, vboID);
+
+	//Write VBO with new vector data
+	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(attributeNumber, numOfComponents, GL_FLOAT, false, 0, 0);
+	glEnableVertexAttribArray(attributeNumber);
+
+	unbindVAO();
 }
 
 void VAOLoader::unbindVAO()

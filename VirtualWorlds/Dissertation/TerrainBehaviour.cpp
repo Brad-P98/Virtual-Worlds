@@ -21,7 +21,6 @@ TerrainBehaviour::~TerrainBehaviour()
 //Called after the active terrain has been set
 void TerrainBehaviour::init()
 {
-	//m_Terrain->generateInitChunks(chunkPos);
 	initializeChunks();
 }
 
