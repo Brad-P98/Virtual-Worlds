@@ -159,12 +159,11 @@ void TerrainChunk::tryGenRock(glm::vec3 pos, float chance)
 	int randNum = rand() % 1001;
 	if (chance == 1000) {
 		//Gen rock always
-		Rock* rock = new Rock(pos);
+		Rock* rock = new Rock(pos, 10000);
 	}
 	else if (randNum < chance) {
 		//Gen rock
-		Rock* rock = new Rock(pos);
-
+		Rock* rock = new Rock(pos, 10000);
 	}
 	else {
 		//No rock generated

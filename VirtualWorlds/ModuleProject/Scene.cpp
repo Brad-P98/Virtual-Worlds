@@ -33,6 +33,12 @@ void Scene::update()
 		behaviours[i]->update();
 	}
 
+
+	//update all instanced objects.
+	for (auto itt = instancedGameObjects.begin(); itt != instancedGameObjects.end(); itt++) {
+		itt->second->update();
+	}
+
 	//update all objects
 	for (size_t i = 0; i < gameObjects.size(); i++) {
 		gameObjects[i]->update();
@@ -43,9 +49,14 @@ void Scene::update()
 
 void Scene::render()
 {
-	//update all objects
+	//draw all objects
 	for (size_t i = 0; i < gameObjects.size(); i++) {
 		gameObjects[i]->draw();
+	}
+
+	//draw all instanced objects.
+	for (auto itt = instancedGameObjects.begin(); itt != instancedGameObjects.end(); itt++) {
+		itt->second->draw();
 	}
 
 	if (skybox != nullptr) {
@@ -62,6 +73,11 @@ void Scene::quit()
 void Scene::addObject(Object3D* object)
 {
 	gameObjects.push_back(object);
+}
+
+void Scene::addInstancedObject(std::string objectName, InstancedObject3D * object)
+{
+	instancedGameObjects.insert(std::make_pair(objectName, object));
 }
 
 void Scene::addBehaviour(Behaviour* behaviour)
@@ -82,6 +98,11 @@ void Scene::removeObject(Object3D* object)
 	}
 }
 
+void Scene::removeInstancedObject(std::string objectName)
+{
+	instancedGameObjects.erase(objectName);
+}
+
 void Scene::removeBehaviour(Behaviour* behaviour)
 {
 	for (int i = 0; i < behaviours.size(); i++) 
@@ -95,6 +116,27 @@ void Scene::removeBehaviour(Behaviour* behaviour)
 		}
 	}
 
+}
+
+bool Scene::instancedObjectExists(std::string objectName)
+{
+	//Loop through objects
+	for (auto itt = instancedGameObjects.begin(); itt != instancedGameObjects.end(); itt++) {
+		//Check if object name matches one that exists already
+		if (itt->first == objectName) return true;
+	}
+
+	return false;
+}
+
+InstancedObject3D * Scene::getInstancedObject(std::string objectName)
+{
+	//Loop through objects
+	for (auto itt = instancedGameObjects.begin(); itt != instancedGameObjects.end(); itt++) {
+		//Check if object name matches one that exists already
+		if (itt->first == objectName) return itt->second;
+	}
+	return nullptr;
 }
 
 void Scene::setSkybox(Skybox * s)

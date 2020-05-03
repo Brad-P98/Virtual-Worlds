@@ -140,6 +140,8 @@
     <ClCompile Include="Clock.cpp" />
     <ClCompile Include="gl3w.c" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="InstancedObject3D.cpp" />
+    <ClCompile Include="InstancedRenderer.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="Object3D.cpp" />
     <ClCompile Include="PerlinNoise.cpp" />
@@ -163,6 +165,8 @@
     <ClInclude Include="GLShaderFactory.hpp" />
     <ClInclude Include="GLShaderStage.hpp" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="InstancedObject3D.h" />
+    <ClInclude Include="InstancedRenderer.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="NoiseInterface.hpp" />

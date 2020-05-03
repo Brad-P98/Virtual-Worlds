@@ -15,6 +15,8 @@ public:
 		return shaderPrograms.size();
 	}
 
+	static void initTextureLocations();
+
 	static void cleanup();
 
 	static std::map<std::string, GLuint> shaderPrograms;

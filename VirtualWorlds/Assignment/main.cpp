@@ -48,6 +48,8 @@ int main(int argc, char** argv) {
 	ShaderManager::addShader("perlinNoiseComputeShader", perlin_noise_compute_shader);
 	ShaderManager::addShader("terrain_tess_basic", terrain_tess_basic_shader);
 
+	ShaderManager::initTextureLocations();
+
 	//Load all textures
 	TextureManager::loadTexture("Assets/grass_terrain.jpg");
 	TextureManager::loadTexture("Assets/snow_terrain.jpg");

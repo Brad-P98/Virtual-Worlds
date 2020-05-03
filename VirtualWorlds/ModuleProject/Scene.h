@@ -12,6 +12,7 @@
 #include "shader_setup.h"
 
 #include "Object3D.h"
+#include "InstancedObject3D.h"
 #include "Behaviour.h"
 
 #include "LightManager.h"
@@ -36,19 +37,24 @@ public:
 
 public:
 
-	void addObject(Object3D* object);
+	void setSkybox(Skybox* skybox);
 
+	void addObject(Object3D* object);
+	void addInstancedObject(std::string objectName, InstancedObject3D* object);
 	void addBehaviour(Behaviour* behaviour);
 
 	void removeObject(Object3D* object);
+	void removeInstancedObject(std::string objectName);
 	void removeBehaviour(Behaviour* behaviour);
 
-	void setSkybox(Skybox* skybox);
+	bool instancedObjectExists(std::string objectName);
+	InstancedObject3D* getInstancedObject(std::string objectName);
 
 	Camera* getMainCamera() const
 	{
 		return mainCamera;
 	}
+
 
 private:
 
@@ -59,7 +65,8 @@ private:
 	GLuint shader;
 	std::vector<GLuint> shaderPrograms;
 
-	std::vector<GameObject*> gameObjects;
+	std::vector<Object3D*> gameObjects;
+	std::map<std::string, InstancedObject3D*> instancedGameObjects;
 	std::vector<Behaviour*> behaviours;
 
 	Skybox* skybox;

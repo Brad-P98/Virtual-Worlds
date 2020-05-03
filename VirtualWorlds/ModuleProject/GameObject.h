@@ -4,6 +4,7 @@
 
 #include "VAOData.h"
 #include "Renderer.h"
+#include "InstancedRenderer.h"
 
 class GameObject {
 
