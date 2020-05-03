@@ -71,7 +71,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)Libs;$(SolutionDir)ModuleProject;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Libs\freeglut 3.0.0\lib;$(SolutionDir)Libs\Base\x64\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Libs\freeglut 3.0.0\lib;$(SolutionDir)Libs\assimp;$(SolutionDir)Libs\Base\x64\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\Dissertation\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\Dissertation\intermediates\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -84,7 +84,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Libs\glm-0.9.9.6;$(SolutionDir)Libs\gl3w\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Base.lib;freeglut.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Base.lib;freeglut.lib;assimp-vc141-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -125,6 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Building.h" />
     <ClInclude Include="ChunkSettings.h" />
     <ClInclude Include="Settlement.h" />
     <ClInclude Include="SettlementManager.h" />
@@ -136,6 +137,7 @@
     <ClInclude Include="WaterPlaneBehaviour.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Settlement.cpp" />
     <ClCompile Include="SettlementManager.cpp" />

@@ -41,3 +41,7 @@ typedef enum GLSL_ERROR_CODES {
 GLuint setupShaders(const std::string& vsPath, const std::string& fsPath, GLSL_ERROR *error_result=NULL);
 
 GLuint setupShaders(const std::string& vsPath, const std::string& gsPath, const std::string& fsPath, GLSL_ERROR *error_result = NULL);
+
+GLuint setupShaders(const std::string& vsPath, const std::string& tcsPath, const std::string& tesPath, const std::string& fsPath, GLSL_ERROR *error_result = NULL);
+
+GLuint setupShaders(const std::string& csPath, GLSL_ERROR *error_result = NULL);

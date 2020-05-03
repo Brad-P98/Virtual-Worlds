@@ -8,7 +8,11 @@ in vec4 camPos;
 in vec2 texCoord;
 in float visibility;
 
-uniform sampler2D texSampler;
+uniform sampler2D texSampler0;
+uniform sampler2D texSampler1;
+uniform sampler2D texSampler2;
+uniform sampler2D texSampler3;
+uniform sampler2D texSampler4;
 
 struct Light {
 	vec4 direction;
@@ -53,8 +57,8 @@ void main() {
 
 	//Lighting
 	//set initial fragment colour
-	vec4 tempFragColour = texture(texSampler, texCoord);
-
+	vec4 tempFragColour = texture(texSampler0, texCoord);
+	
 	//Get direction between camera and surface (Used for specular effect)
 	vec3 surfaceToCam = normalize(camPos.xyz
 	 - vertexPos.xyz);

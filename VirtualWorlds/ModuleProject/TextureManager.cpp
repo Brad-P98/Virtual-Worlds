@@ -38,6 +38,12 @@ void TextureManager::loadTexture(const char* fileName)
 
 }
 
+void TextureManager::addTexture(std::string name, GLuint id)
+{
+	textures.insert(std::make_pair(name, id));
+}
+
+
 const GLuint TextureManager::getTextureID(const std::string & name)
 {
 	for (auto tex : textures) {

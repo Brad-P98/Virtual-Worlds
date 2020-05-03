@@ -22,10 +22,9 @@ public:
 	glm::mat4 getProjMatrix() const { return projectionMat; }
 	glm::mat4 getViewMatrix() const { return viewMat; }
 
-	glm::vec3 getWorldPos() const
-	{
-		return position;
-	}
+	glm::vec3 getWorldPos() const { return position; }
+	float getNearPlane() const { return nearPlane; }
+	float getFarPlane() const { return farPlane; }
 
 	void setWorldPos(glm::vec3 pos) {
 		position = pos;
@@ -44,6 +43,8 @@ private:
 		glm::mat4 projMat;
 		glm::mat4 viewMat;
 		glm::vec4 camPos;
+		float nearPlane;
+		float farPlane;
 	} cameraBuffer;
 
 	glm::mat4 projectionMat;
@@ -57,6 +58,9 @@ private:
 	glm::vec3 front;
 	glm::vec3 right;
 	glm::vec3 up;
+
+	float nearPlane = 1.0f;
+	float farPlane = 5000.0f;
 
 private:
 	

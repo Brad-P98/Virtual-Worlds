@@ -38,6 +38,7 @@ void Scene::update()
 		gameObjects[i]->update();
 	}
 
+	InputHandler::lateUpdate();
 }
 
 void Scene::render()

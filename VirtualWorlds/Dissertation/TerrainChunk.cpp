@@ -29,15 +29,6 @@ TerrainChunk::TerrainChunk(int gridX, int gridZ, NoiseGenerator* noiseInterface,
 
 	//Fill out positions and normals with unique values, as well as give every vertex a 'settlement score'
 	generateUniqueVertexPositions();
-
-	//Try to generate settlements. If a vertex has a high enough total score, a settlement focal point may begin there.
-	//bool generating = true;
-	//while (generating) {
-	//	//If false, no settlements were able to be built anymore.
-	//	generating = generateSettlements();
-	//	//Only resample if settlement was added.
-	//	if (generating) resampleVertexScores();
-	//}
 }
 
 TerrainChunk::~TerrainChunk()
@@ -48,16 +39,23 @@ void TerrainChunk::generateVAO()
 {
 	VAOLoader* loader = VAOLoader::getInstance();
 
-	GLuint texID = TextureManager::getTextureID("Assets/grass_terrain.jpg");
-	init(loader->loadToVAO(positions, normals, indices, texCoords, scores), texID, m_shader);
+	std::vector<GLuint> texIDs;
+	texIDs.push_back(TextureManager::getTextureID("Assets/grass_terrain.jpg"));
+	texIDs.push_back(TextureManager::getTextureID("Assets/snow_terrain.jpg"));
+	texIDs.push_back(TextureManager::getTextureID("Assets/gravel_terrain.jpg"));
+	//standard
+	init(loader->loadToVAO(positions, normals, indices, texCoords, terrainScores), texIDs, m_shader);
+	//init(loader->loadToVAO(positions, normals, indices, texCoords, settlementInfluenceScores), texID, m_shader);
 }
 
 void TerrainChunk::updateScoresVBO()
 {
 	VAOLoader* loader = VAOLoader::getInstance();
 	//Rewrite the scoreVBO of this object's VAO with the new score data in attribute index 5, with 1 component per vertex.
-	loader->updateVBOInVAO(getVAOData()->getVaoID(), getVAOData()->scoreVBOID, 5, 1, scores);
+	loader->updateVBOInVAO(getVAOData()->getVaoID(), getVAOData()->scoreVBOID, 5, 1, terrainScores);
+	//loader->updateVBOInVAO(getVAOData()->getVaoID(), getVAOData()->scoreVBOID, 5, 1, settlementInfluenceScores);
 }
+
 
 void TerrainChunk::generateUniqueVertexPositions()
 {
@@ -117,11 +115,13 @@ void TerrainChunk::generateUniqueVertexPositions()
 
 
 		//VERTEX SCORE CALCULATION
-		float vertexScore = 0.0f;
-		vertexScore += calcGradientScore(positions[i], positions[k], vertexNormal);
-		vertexScore += calcAltitudeScore(positions[i], positions[k]);
+		float terrainVertexScore = 0.0f;
+		terrainVertexScore += calcGradientScore(positions[i], positions[k], vertexNormal);
+		terrainVertexScore += calcAltitudeScore(positions[i], positions[k]);
 
-		scores.push_back(vertexScore);
+		terrainScores.push_back(terrainVertexScore);
+		//Initialize at max score as no settlements are nearby. Will be updated later.
+		settlementInfluenceScores.push_back(0.0f);
 	}
 }
 
@@ -159,76 +159,100 @@ float TerrainChunk::calcSettlementProxScore(glm::vec3 position)
 {
 
 	//Get all settlements within a suitable radius of this vertex.
-	//Evaluate the 'effect' each settlement has on this point, based on distance and it's influence score combined.
+	//Evaluate the 'effect' each settlement has on this vertex, based on distance and it's influence score.
 	SettlementManager* sMgr = SettlementManager::getInstance();
+	std::vector<Settlement*> settlements = sMgr->getSettlementsInArea(150, position.x, position.z);
 
-	
-
-	std::vector<Settlement*> settlements = sMgr->getSettlementsInArea(300, position.x, position.z);
-	
+	float totalScore = 0.0f;
 	for (int i = 0; i < settlements.size(); i++) {
 
 		//iterate through each settlement
-		float distance = glm::vec3(settlements[i]->focalPointPos - position).length();
-		float score = (distance *settlements[i]->influenceScore) / 200;
-		return score;
+		float distance =  5 *glm::distance(settlements[i]->focalPointPos, position);
+		float score = ( settlements[i]->influenceScore / distance) * 20 ;
+		totalScore += score;
 	}
 
+	return totalScore;
 
-	//No settlements within radius. give max score.
-	return 40.0f;
 }
 
 
-
-bool TerrainChunk::generateSettlements()
+//Stride will change the number of vertices skipped. Improves speed of generation when increased.
+//Generate settlements based on terrain only
+std::vector<glm::vec3> TerrainChunk::generateSettlementPositions(int stride)
 {
-	//Look for highest score vertex, and generate a settlement there. If multiple vertices have the same highest score, first one will be picked.
-	glm::vec3 highestScorePos;
-	float highestScore = 0.0f;
+	std::vector<glm::vec3> potentialPositions;
 
-	for (int i = 0; i < scores.size(); i++) {
+	//Iterate through vertices
+	for (int i = 0; i < terrainScores.size(); i+= stride) {
+		if (terrainScores[i] > 49) {
 
-		if (scores[i] > highestScore) {
-			//overwrite current high score with new higher score.
-			highestScore = scores[i];
-			highestScorePos = glm::vec3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]);
+			potentialPositions.push_back(glm::vec3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]));
 		}
 	}
 
-	if (highestScore > SettlementManager::getInstance()->minSettlementScore) {
-		//Generate settlement at location of the highest score.
+	return potentialPositions;
+}
 
-		float influenceScore = 40.0f;
-		Settlement* newSettlement = new Settlement(highestScorePos, influenceScore);
+//Generate settlements based heavily on how far away from other settlements they are.
+std::vector<glm::vec3> TerrainChunk::generateSettlementPositionsProxBased(int stride)
+{
+	std::vector<glm::vec3> potentialPositions;
 
-		SettlementManager::getInstance()->addSettlement(newSettlement);
+	//Iterate through vertices
+	for (int i = 0; i < terrainScores.size(); i += stride) {
+		glm::vec3 currPos = glm::vec3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]);
+		//If terrain score is not horrific, and no settlements nearby, make candidate.
+		if (terrainScores[i] > 25 && SettlementManager::getInstance()->getNearestSettlementPos(currPos) < 300) {
 
-		return true;
+			potentialPositions.push_back(currPos);
+		}
 	}
 
-	//No vertices were above minimum settlement score.
-	return false;
-
+	return potentialPositions;
 }
 
 
-void TerrainChunk::resampleVertexScores()
+void TerrainChunk::resampleVertexScores(bool settlementsOnly, int vertexStride)
 {
-	//Empty score vector
-	scores.clear();
 
-	//Iterate through every vertex.
-	for (int i = 0; i < positions.size()/3; i++) {
-
-		//VERTEX SCORE CALCULATION
-		float vertexScore = 0.0f;
-		vertexScore += calcGradientScore(positions[i * 3], positions[i * 3], glm::vec3(normals[i*3], normals[(i*3) + 1], normals[(i * 3) + 2]));
-		vertexScore += calcAltitudeScore(positions[i], positions[(i * 3) + 2]);
-		vertexScore += calcSettlementProxScore(glm::vec3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]));
-
-		scores.push_back(vertexScore);
+	//Empty score vectors
+	if (settlementsOnly) {
+		settlementInfluenceScores.clear();
 	}
+	else {
+		terrainScores.clear();
+		settlementInfluenceScores.clear();
+	}
+
+
+	//Iterate through vertices. stride will skip vertices, and 
+	for (int i = 0; i < positions.size()/3; i+=vertexStride) {
+
+		//Only recalc settlements
+		if (settlementsOnly) {
+			float settlementVertexScore = 0.0f;
+			settlementVertexScore += calcSettlementProxScore(glm::vec3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]));
+			settlementInfluenceScores.push_back(settlementVertexScore);
+
+		}
+		//Recalc all
+		else {
+			//TOTAL VERTEX SCORE CALCULATION
+			float terrainVertexScore = 0.0f;
+			float settlementVertexScore = 0.0f;
+
+			terrainVertexScore += calcGradientScore(positions[i * 3], positions[i * 3], glm::vec3(normals[i*3], normals[(i*3) + 1], normals[(i * 3) + 2]));
+			terrainVertexScore += calcAltitudeScore(positions[i], positions[(i * 3) + 2]);
+
+			settlementVertexScore += calcSettlementProxScore(glm::vec3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]));
+
+			terrainScores.push_back(terrainVertexScore);
+			settlementInfluenceScores.push_back(settlementVertexScore);
+		}
+
+	}
+	updateScoresVBO();
 }
 
 #pragma endregion

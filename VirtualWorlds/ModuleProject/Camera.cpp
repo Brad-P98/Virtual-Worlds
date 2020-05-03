@@ -14,7 +14,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startDirection)
 	right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), front));
 	up = glm::cross(front, right);
 
-	projectionMat = glm::perspective(glm::radians(60.0f), 800.0f / 640.0f, 1.0f, 5000.0f);
+	projectionMat = glm::perspective(glm::radians(60.0f), 800.0f / 640.0f, nearPlane, farPlane);
 
 	viewMat = glm::mat4(1.0);
 	viewMat = glm::lookAt(position, position + front, up);
@@ -61,28 +61,28 @@ void Camera::update() {
 
 void Camera::checkMove()
 {
-	if (InputHandler::checkKeyPressed('\\')) {
+	if (InputHandler::checkKeyHeld('\\')) {
 		maxSpeed = 0.012f;
 	}
 	else maxSpeed = 0.04f;
 
-	if (InputHandler::checkKeyPressed('w') || InputHandler::checkKeyPressed('W')) {
+	if (InputHandler::checkKeyHeld('w') || InputHandler::checkKeyHeld('W')) {
 		position += maxSpeed * front * (float)Clock::deltaTime;
 	}
-	if (InputHandler::checkKeyPressed('s')) {
+	if (InputHandler::checkKeyHeld('s')) {
 		position -= maxSpeed * front * (float)Clock::deltaTime;
 	}
-	if (InputHandler::checkKeyPressed('a')) {
+	if (InputHandler::checkKeyHeld('a')) {
 		position -= glm::normalize(glm::cross(front, up)) * maxSpeed * (float)Clock::deltaTime;
 	}
-	if (InputHandler::checkKeyPressed('d')) {
+	if (InputHandler::checkKeyHeld('d')) {
 		position += glm::normalize(glm::cross(front, up)) * maxSpeed * (float)Clock::deltaTime;
 	}
 
-	if (InputHandler::checkKeyPressed('r')) {
+	if (InputHandler::checkKeyHeld('r')) {
 		position += maxSpeed * up * (float)Clock::deltaTime;
 	}
-	if (InputHandler::checkKeyPressed('f')) {
+	if (InputHandler::checkKeyHeld('f')) {
 		position -= maxSpeed * up * (float)Clock::deltaTime;
 	}
 	viewMat = glm::translate(viewMat, position - prevPosition);
@@ -95,14 +95,11 @@ void Camera::checkRotate()
 		yDelta = InputHandler::mouseDelta.y;
 
 		yaw += xDelta * xSens * Clock::deltaTime;
-		//std::cout << yaw << std::endl;
 		pitch -= yDelta * ySens * Clock::deltaTime;
-		//std::cout << pitch << std::endl;
 
 		if (pitch > 89.0f) pitch = 89.0f;
 		if (pitch < -89.0f) pitch = -89.0f;
 
-		//front = glm::rotate(front, yaw, glm::vec3(0, 1, 0));
 	}
 
 	glm::vec3 direction;
@@ -119,7 +116,11 @@ void Camera::updateCameraUBOs()
 	cameraBuffer.projMat = projectionMat;
 	cameraBuffer.viewMat = viewMat;
 	cameraBuffer.camPos = glm::vec4(getWorldPos(), 1.0f);
+	cameraBuffer.nearPlane = nearPlane;
+	cameraBuffer.farPlane = farPlane;
 
+
+	int i = sizeof(cameraBuffer);
 	glBindBuffer(GL_UNIFORM_BUFFER, cameraUBO);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(cameraBuffer), &cameraBuffer, GL_STATIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);

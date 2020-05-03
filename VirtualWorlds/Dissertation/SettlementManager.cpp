@@ -28,7 +28,6 @@ void SettlementManager::removeSettlement(Settlement * settlement)
 			activeSettlements.erase(activeSettlements.begin() + i);
 
 			delete settlement;
-
 			break;
 		}
 	}
@@ -51,4 +50,22 @@ std::vector<Settlement*> SettlementManager::getSettlementsInArea(float radius, f
 	}
 
 	return settlementsFound;
+}
+
+float SettlementManager::getNearestSettlementPos(glm::vec3 posIn)
+{
+	float nearestDist = 0.0f;
+	//Retrieve the settlement that is closest to the position input.
+	for (int i = 0; i < activeSettlements.size(); i++) {
+
+		float xDist = abs(activeSettlements[i]->focalPointPos.x - posIn.x);
+		float zDist = abs(activeSettlements[i]->focalPointPos.z - posIn.z);
+
+		//Dist between two points
+		float res = sqrt((xDist * xDist) + (zDist * zDist));
+		//If dist is shorter, replace
+		if (res < nearestDist) nearestDist = res;
+	}
+
+	return nearestDist;
 }

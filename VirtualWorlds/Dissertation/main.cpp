@@ -33,17 +33,24 @@ int main(int argc, char** argv) {
 	Clock::start();
 	
 	GLuint mainShader = setupShaders("shader.vert", "shader.frag");
+	GLuint terrain_basic_shader = setupShaders("terrain_basic.vert", "terrain_basic.frag");
 	GLuint terrain_wireframeShader = setupShaders("terrain_wireframe.vert", "terrain_wireframe.geom", "terrain_wireframe.frag");
-
 	GLuint skyboxShader = setupShaders("skyboxShader.vert", "skyboxShader.frag");
 
+	//Add all shaders
 	ShaderManager::addShader("basic", mainShader);
+	ShaderManager::addShader("terrain_basic", terrain_basic_shader);
 	ShaderManager::addShader("terrain_wireframe", terrain_wireframeShader);
 	ShaderManager::addShader("skyboxShader", skyboxShader);
 
-
+	//Load all textures
 	TextureManager::loadTexture("Assets/grass_terrain.jpg");
+	TextureManager::loadTexture("Assets/snow_terrain.jpg");
+	TextureManager::loadTexture("Assets/gravel_terrain.jpg");
 	TextureManager::loadTexture("Assets/water.png");
+
+	//Pull in any models
+	VAOLoader::LoadOBJ("box.obj");
 
 	//Initialises a completely empty scene and 1st person camera
 	scene->initScene();
@@ -67,7 +74,7 @@ int main(int argc, char** argv) {
 
 	//Create a new terrain
 	Terrain* terrain = new Terrain();
-	terrain->shader = terrain_wireframeShader;
+	terrain->shader = terrain_basic_shader;
 
 	TerrainBehaviour terrainBehaviour;
 	terrainBehaviour.setActiveTerrain(terrain);

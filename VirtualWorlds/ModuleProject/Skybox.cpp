@@ -77,6 +77,7 @@ void Skybox::loadCubeMap()
 void Skybox::draw()
 {
 	glUseProgram(m_shader);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureID);

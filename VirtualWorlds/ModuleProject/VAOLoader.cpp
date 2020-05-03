@@ -4,6 +4,8 @@ VAOLoader * VAOLoader::thisPointer = nullptr;
 std::vector<GLuint> VAOLoader::vaos;
 std::vector<GLuint> VAOLoader::vbos;
 
+std::map<std::string, VAOData*> VAOLoader::models;
+
 VAOLoader * VAOLoader::getInstance()
 {
 	if (thisPointer == nullptr)
@@ -15,6 +17,55 @@ VAOLoader * VAOLoader::getInstance()
 
 VAOLoader::VAOLoader()
 {
+}
+
+
+void VAOLoader::LoadOBJ(const std::string &fileName)
+{
+	std::string fullPath = "Assets/Models/" + fileName;
+
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(fullPath, aiProcess_GenNormals);
+
+	std::vector<float> positions;
+	std::vector<float> normals;
+	std::vector<float> texCoords;
+	std::vector<GLuint> indices;
+
+	processNode(positions, normals, texCoords, indices, scene->mRootNode, scene);
+
+	VAOData* vao = loadToVAO(positions, normals, indices, texCoords);
+
+	models.insert(std::make_pair(fileName, vao));
+
+}
+
+void VAOLoader::processNode(std::vector<float>& positions, std::vector<float>& normals, std::vector<float>& texCoords, std::vector<GLuint>& indices, aiNode * node, const aiScene* scene)
+{
+
+	for (int meshCount = 0; meshCount < node->mNumMeshes; meshCount++) {
+
+		aiMesh* currMesh = scene->mMeshes[node->mMeshes[meshCount]];
+		for (int vertexCount = 0; vertexCount < currMesh->mNumVertices; vertexCount++) {
+			positions.push_back(currMesh->mVertices[vertexCount].x);
+			positions.push_back(currMesh->mVertices[vertexCount].y);
+			positions.push_back(currMesh->mVertices[vertexCount].z);
+
+			normals.push_back(currMesh->mNormals[vertexCount].x);
+			normals.push_back(currMesh->mNormals[vertexCount].y);
+			normals.push_back(currMesh->mNormals[vertexCount].z);
+
+			texCoords.push_back(currMesh->mTextureCoords[0][vertexCount].x);
+			texCoords.push_back(currMesh->mTextureCoords[0][vertexCount].y);
+
+			indices.push_back(vertexCount);
+		}
+	}
+
+	for (int childCount = 0; childCount < node->mNumChildren; childCount++) {
+		processNode(positions, normals, texCoords, indices, node->mChildren[childCount], scene);
+	}
+
 }
 
 //Generic indexed objects can use this.

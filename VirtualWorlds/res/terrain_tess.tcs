@@ -1,0 +1,82 @@
+#version 460
+
+layout (vertices = 3) out;
+
+layout (std140) uniform Model
+{
+	mat4 model;
+};
+
+in ControlPoint {
+    float linearDepth;
+	vec3 normal;
+	vec4 worldPos;
+	vec2 textureCoord;
+	vec4 camPos;
+	float visibility;
+
+} inControlPoint[];
+
+// Output control point array
+out ControlPoint {
+
+	float linearDepth;
+	vec3 normal;
+	vec4 worldPos;
+	vec2 textureCoord;
+	vec4 camPos;
+	float visibility;
+
+} outputControlPoint[];
+
+
+// Linear calculation for tessellation factor
+float linearFactor(float d) {
+
+	float minDist = 0.0f;
+	float maxDist = 2.0f;
+
+	float scaledDist = clamp((d - minDist) / (maxDist - minDist), 0.0f, 1.0f);
+
+	float tessFactor = mix(20.0f, 1.0f, scaledDist);
+
+	return tessFactor;
+}
+
+// Exponential calculation for tessellation factor
+float exponentialFactor(float d) {
+
+	float d_ = 1.0f / exp(d * 0.03f);
+	d_ *= 100;
+
+	float tessFactor = max(d_ * 4.0f, 1.0f);
+	tessFactor = min(tessFactor, 16);
+
+	return tessFactor;
+}
+
+// Tessellation Control Shader
+void main() {
+
+
+	// 1. Pass-through control points
+	outputControlPoint[gl_InvocationID].linearDepth = inControlPoint[gl_InvocationID].linearDepth;
+	outputControlPoint[gl_InvocationID].normal = inControlPoint[gl_InvocationID].normal;
+	outputControlPoint[gl_InvocationID].worldPos = inControlPoint[gl_InvocationID].worldPos;
+	outputControlPoint[gl_InvocationID].textureCoord = inControlPoint[gl_InvocationID].textureCoord;
+	outputControlPoint[gl_InvocationID].camPos = inControlPoint[gl_InvocationID].camPos;
+	outputControlPoint[gl_InvocationID].visibility = inControlPoint[gl_InvocationID].visibility;
+
+	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
+
+	// 2. Calc Tessellation Factors (use Euclidean distance, not linearDepth which has the normalised range [0, 1])
+	float d0 = length(gl_in[0].gl_Position);
+	float d1 = length(gl_in[1].gl_Position);
+	float d2 = length(gl_in[2].gl_Position);
+
+	gl_TessLevelOuter[0] = exponentialFactor(mix(d0, d1, 0.5f));
+	gl_TessLevelOuter[1] = exponentialFactor(mix(d1, d2, 0.5f));
+	gl_TessLevelOuter[2] = exponentialFactor(mix(d2, d0, 0.5f));
+
+	gl_TessLevelInner[0] = exponentialFactor((d0 + d1 + d2) / 3.0f);
+}

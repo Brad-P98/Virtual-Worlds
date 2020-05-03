@@ -1,0 +1,83 @@
+#version 460
+
+layout (std140) uniform Camera
+{
+	mat4 projection;
+	mat4 view;
+	vec4 camPosIn;
+    float nearPlane;
+	float farPlane;
+};
+
+layout (std140) uniform Model
+{
+	mat4 model;
+};
+
+// Get the primitive generator to create triangles, with tessellated vertices at equal spacing and order in a counter-clockwise ordering.
+layout (triangles, equal_spacing, ccw) in;
+
+// Array of 3 control points in...
+in ControlPoint {
+
+	float linearDepth;
+	vec3 normal;
+	vec4 worldPos;
+	vec2 textureCoord;
+    vec4 camPos;
+	float visibility;
+
+} inControlPoint[];
+
+// ...Single vertex out!
+out TessVertex {
+
+	float linearDepth;
+	vec3 normal;
+	vec4 worldPos;
+	vec2 textureCoord;
+	vec4 camPos;
+	float visibility;
+
+} outputVertex;
+
+// Tessellation Evaluation Shader
+void main() {
+
+
+	// Get barycentric coords
+	float a = gl_TessCoord.x;
+	float b = gl_TessCoord.y;
+	float c = gl_TessCoord.z;
+
+	// Interpolate per-vertex data for given tessellated vertex in gl_TessCoord
+
+	outputVertex.linearDepth = inControlPoint[0].linearDepth * a +
+								inControlPoint[1].linearDepth * b +
+								inControlPoint[2].linearDepth * c;
+
+	outputVertex.normal = inControlPoint[0].normal * a +
+								inControlPoint[1].normal * b +
+								inControlPoint[2].normal * c;
+	
+	outputVertex.worldPos = inControlPoint[0].worldPos * a +
+								inControlPoint[1].worldPos * b +
+								inControlPoint[2].worldPos * c;
+
+	outputVertex.textureCoord = inControlPoint[0].textureCoord * a +
+								inControlPoint[1].textureCoord * b +
+								inControlPoint[2].textureCoord * c;
+
+	outputVertex.camPos = inControlPoint[0].camPos * a +
+							inControlPoint[1].camPos * b +
+							inControlPoint[2].camPos * c;
+
+							
+	outputVertex.visibility = inControlPoint[0].visibility;
+
+	vec3 pos = gl_in[0].gl_Position.xyz * a +
+				gl_in[1].gl_Position.xyz * b +
+				gl_in[2].gl_Position.xyz * c;
+
+	gl_Position = projection * vec4(pos, 1.0f);
+}

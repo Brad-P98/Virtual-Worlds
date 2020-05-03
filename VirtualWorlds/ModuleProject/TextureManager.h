@@ -11,6 +11,8 @@ public:
 
 	static void loadTexture(const char* fileName);
 
+	static void addTexture(std::string name, GLuint id);
+
 	static const GLuint getTextureID(const std::string& name);
 
 	static const int getTextureCount() { return textures.size(); }

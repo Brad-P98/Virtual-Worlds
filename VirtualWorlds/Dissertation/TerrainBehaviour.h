@@ -26,6 +26,9 @@ private:
 
 	void initializeChunks();
 
+	//Generate settlements. Many of these will be eliminated later along in the process.
+	void generateSettlements();
+
 private:
 
 	glm::vec3 worldPos;		//Current position in the world
@@ -38,6 +41,11 @@ private:
 
 	std::thread threadX;
 	std::thread threadZ;
+
+	bool terrainChanged = false;
+
+private:
+	std::vector<glm::vec3> eliminatePositions(std::vector<glm::vec3>, float);
 
 };
 

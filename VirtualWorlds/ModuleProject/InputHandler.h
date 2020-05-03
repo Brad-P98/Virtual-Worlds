@@ -23,6 +23,7 @@ class InputHandler
 public:
 
 	static void update();
+	static void lateUpdate();
 
 	//Callbacks
 	static void mouseFunction(int button, int state, int x, int y);
@@ -32,9 +33,12 @@ public:
 	static void keyUp(unsigned char key, int x, int y);
 
 
-	static bool checkKeyPressed(char key);
-	static bool checkKeyPressed(int key);
+	static bool checkKeyHeld(char key);
+	static bool checkKeyHeld(int key);
 	static bool checkMousePressed(int button);
+
+	static bool keyDownTriggered(char key);
+	static bool keyUpTriggered(unsigned char key);
 
 	static std::queue<KeyEvent> keyEventQueue;
 	static std::queue<MouseEvent> mouseEventQueue;
@@ -45,6 +49,9 @@ public:
 	//Possible states
 	static const int RELEASED = 0;
 	static const int PRESSED = 1;
+
+	//Key state changes per frame
+	static std::vector<unsigned char> keysUpThisFrame;
 
 	//Change in mouse position
 	static glm::vec2 mouseDelta;

@@ -34,6 +34,10 @@ public:
 	void finalizeXGeneration();
 	void finalizeZGeneration();
 
+	std::vector<std::vector<TerrainChunk*>> getActiveTerrainChunks() const { return activeTerrainChunks; }
+
+	float getYAtPosition(float x, float z);
+
 private:
 
 	void init();

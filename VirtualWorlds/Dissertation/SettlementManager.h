@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-#include <mutex>
+#include <map>
+
 #include "Settlement.h"
 
 
@@ -23,11 +24,13 @@ public:
 
 	//Return every settlement within this circle radius center x and z.
 	std::vector<Settlement*> getSettlementsInArea(float radius, float xPos, float zPos);
+
+	float getNearestSettlementPos(glm::vec3 posIn);
+
 private:
 
 	//Store all currently generated settlements.
 	static std::vector<Settlement*> activeSettlements;
-
 
 public:
 

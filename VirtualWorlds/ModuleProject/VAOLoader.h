@@ -4,12 +4,21 @@
 #include <freeglut 3.0.0/include/GL/freeglut.h>
 #include <glm/glm/glm.hpp>
 #include <vector>
+#include <map>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 #include "VAOData.h"
 
 class VAOLoader
 {
 public:
+
+	//Load from .obj file
+	static void LoadOBJ(const std::string&);
+	static void processNode(std::vector<float>&, std::vector<float>&, std::vector<float>&, std::vector<GLuint>&, aiNode*, const aiScene*);
 
 	//Generic object VAO
 	static VAOData* loadToVAO(std::vector<float> positions, std::vector<float> normals, std::vector<GLuint> indices, std::vector<float> texCoords);
@@ -21,10 +30,16 @@ public:
 	static void updateVBOInVAO(GLuint vaoID, GLuint vboID, int attributeNumber, int numOfComponents, std::vector<float> data);
 
 	static VAOLoader * getInstance();
+
+	static VAOData* getModelVAO(const std::string& name) {
+		if (models.count(name) != 0) return models[name];
+	}
+
 private:
 
 	static VAOLoader * thisPointer;
 
+	static std::map<std::string, VAOData*> models;
 
 	VAOLoader();
 	

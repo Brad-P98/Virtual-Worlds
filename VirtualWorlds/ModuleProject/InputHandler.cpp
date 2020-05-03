@@ -7,6 +7,8 @@ std::queue<MouseEvent> InputHandler::mouseEventQueue;
 unsigned int InputHandler::keyStates[255];
 unsigned int InputHandler::mouseStates[5];
 
+std::vector<unsigned char> InputHandler::keysUpThisFrame;
+
 glm::vec2 InputHandler::mousePos;
 glm::vec2 InputHandler::mouseDelta;
 glm::vec2 InputHandler::prevMousePos;
@@ -19,6 +21,11 @@ void InputHandler::update()
 
 	//Now check for any movement events
 	handleEvents();
+}
+
+void InputHandler::lateUpdate()
+{
+	keysUpThisFrame.clear();
 }
 
 void InputHandler::handleEvents()
@@ -53,7 +60,9 @@ void InputHandler::handleEvents()
 		KeyEvent currentEvent = keyEventQueue.front();
 
 		if (currentEvent.state) {
+			//Set to pressed
 			keyStates[currentEvent.key] = PRESSED;
+
 		}
 		else {
 			keyStates[currentEvent.key] = RELEASED;
@@ -63,7 +72,7 @@ void InputHandler::handleEvents()
 	}
 }
 
-bool InputHandler::checkKeyPressed(char key)
+bool InputHandler::checkKeyHeld(char key)
 {
 	if (keyStates[(int)key] == PRESSED) {
 		return true;
@@ -72,7 +81,7 @@ bool InputHandler::checkKeyPressed(char key)
 	return false;
 }
 
-bool InputHandler::checkKeyPressed(int key)
+bool InputHandler::checkKeyHeld(int key)
 {
 	if (keyStates[key] == PRESSED) return true;
 
@@ -83,6 +92,24 @@ bool InputHandler::checkMousePressed(int button)
 {
 	if (mouseStates[button] == PRESSED) return true;
 
+	return false;
+}
+
+//Returns true during the frame that the key down was measured, else is false.
+bool InputHandler::keyDownTriggered(char key)
+{
+	return false;
+}
+
+//Returns true during the frame that the key up was measured, else is false.
+bool InputHandler::keyUpTriggered(unsigned char key)
+{
+	for (int i = 0; i < keysUpThisFrame.size(); i++) {
+		if (key == keysUpThisFrame[i]) {
+			//Key up this frame
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -136,4 +163,5 @@ void InputHandler::keyUp(unsigned char key, int x, int y)
 	evt.pos = glm::vec2(x,y)
 	};
 	InputHandler::keyEventQueue.push(evt);
+	keysUpThisFrame.push_back(key);
 }

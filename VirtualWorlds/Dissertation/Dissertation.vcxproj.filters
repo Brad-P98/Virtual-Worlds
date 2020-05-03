@@ -66,6 +66,9 @@
     <ClInclude Include="NoiseGenerator.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Header Files\Settlements</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -94,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="NoiseGenerator.cpp">
       <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Source Files\Settlements</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -8,7 +8,7 @@
 #include "NoiseGenerator.h"
 
 #include "SettlementManager.h"
-#include <mutex>
+#include "Building.h"
 
 
 #pragma region Terrain Chunk
@@ -21,6 +21,12 @@ public:
 
 	//Generate the VAO with the vertex data already worked out
 	void generateVAO();
+
+	std::vector<glm::vec3> generateSettlementPositions(int stride);
+	std::vector<glm::vec3> generateSettlementPositionsProxBased(int stride);
+
+	//Method to recalculate vertex scores for the whole chunk
+	void resampleVertexScores(bool settlementsOnly, int vertexStride);
 
 private:
 
@@ -40,15 +46,11 @@ private:
 	//Every settlement has a 'focal point' vertex, as well as a value suggesting the size of the settlement. This method iterates through nearby focal points, giving a score based on proximity to other settlements.
 	float calcSettlementProxScore(glm::vec3 position);
 
-	//Method to recalculate vertex scores for the whole chunk
-	//Intended for use after building a settlement, as that doesnt mean there cannot be another one on the chunk.
-	void resampleVertexScores();
+
 	
 	//Updates the score VBO with the current data stored in scores.
 	//Call this method to update scores at any time after original VAO is already generated.
 	void updateScoresVBO();
-
-	bool generateSettlements();
 
 
 public:
@@ -58,8 +60,11 @@ public:
 	int m_gridZ;
 
 	//score of every vertex, based only on terrain factors when pushed into VAO.
-	//After chunk is generated, these scores can be updated to include score based on settlements.
-	std::vector<float> scores;
+	std::vector<float> terrainScores;
+	//Score of every vertex, based only on settlement influence factors.
+	std::vector<float> settlementInfluenceScores;
+
+	bool settlementsGenerated = false;
 
 private:
 

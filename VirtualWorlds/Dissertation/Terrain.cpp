@@ -33,7 +33,7 @@ void Terrain::init()
 	//Initialize TerrainNoise details
 	noiseInterface->noiseGenerator = new PerlinNoise();
 	//Add noise layers to struct.
-	noiseInterface->layers.push_back(new NoiseLayer(100, 0.0004f));
+	noiseInterface->layers.push_back(new NoiseLayer(90, 0.0006f));
 	noiseInterface->layers.push_back(new NoiseLayer(70, 0.002f));
 	noiseInterface->layers.push_back(new NoiseLayer(10, 0.01f));
 	noiseInterface->layers.push_back(new NoiseLayer(3, 0.02f));
@@ -284,4 +284,12 @@ void Terrain::finalizeZGeneration()
 	chunksToRemoveZ.clear();
 }
 
+#pragma endregion
+
+#pragma region Helpers
+float Terrain::getYAtPosition(float x, float z)
+{
+
+	return noiseInterface->generateTotalNoise(x,z);
+}
 #pragma endregion
