@@ -23,7 +23,7 @@ TerrainBehaviour::~TerrainBehaviour()
 void TerrainBehaviour::init()
 {
 	initializeChunks();
-	//genSurfaceDetails();
+	genSurfaceDetails();
 }
 
 void TerrainBehaviour::initializeChunks()
@@ -53,8 +53,10 @@ void TerrainBehaviour::genSurfaceDetails()
 	//For every terrain chunk
 	for (int i = 0; i < m_Terrain->getActiveTerrainChunks().size(); i++) {
 		for (int j = 0; j < m_Terrain->getActiveTerrainChunks()[i].size(); j++) {
+			if (!m_Terrain->getActiveTerrainChunks()[i][j]->surfaceDetailGenerated) {
+				m_Terrain->getActiveTerrainChunks()[i][j]->generateSurfaceDetail();
+			}
 
-			m_Terrain->getActiveTerrainChunks()[i][j]->generateSurfaceDetail();
 		}
 	}
 }
@@ -75,6 +77,11 @@ void TerrainBehaviour::update()
 	if (InputHandler::keyUpTriggered('y')) {
 		m_Terrain->setTesselation(!m_Terrain->getTesselationState());
 
+	}
+
+	//record average FPS over 15 seconds
+	if (InputHandler::keyUpTriggered('i')) {
+		Clock::startFPSTimer();
 	}
 
 
@@ -115,6 +122,7 @@ void TerrainBehaviour::update()
 
 		m_Terrain->finalizeXGeneration();
 		terrainChanged = false;
+		genSurfaceDetails();
 	}
 	if (m_Terrain->doneGeneratingZ) {
 		m_Terrain->doneGeneratingZ = false;
@@ -122,6 +130,7 @@ void TerrainBehaviour::update()
 		threadZ.join();
 		m_Terrain->finalizeZGeneration();
 		terrainChanged = false;
+		genSurfaceDetails();
 	}
 }
 

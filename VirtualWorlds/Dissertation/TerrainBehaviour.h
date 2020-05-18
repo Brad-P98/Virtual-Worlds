@@ -29,6 +29,9 @@ private:
 	//Generate settlements. Many of these will be eliminated later along in the process.
 	void generateSettlements();
 
+	//remove settlements outside of the chunk render distance.
+	void RemoveSettlementsOutsideTerrainBounds();
+
 private:
 
 	glm::vec3 worldPos;		//Current position in the world

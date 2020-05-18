@@ -20,7 +20,7 @@ class Terrain {
 
 public:
 
-	Terrain();
+	Terrain(NoiseGenerator* myNoise);
 	~Terrain();
 
 	void generateXRow(glm::vec3 currentChunkPos, int rowIndex);

@@ -52,7 +52,7 @@ Object3D::Object3D()
 
 Object3D::~Object3D()
 {
-	delete m_VaoData;
+	//delete m_VaoData;
 }
 
 void Object3D::update()

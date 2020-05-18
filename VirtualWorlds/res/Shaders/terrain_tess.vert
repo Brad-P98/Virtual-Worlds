@@ -5,8 +5,8 @@ layout(location = 2) in vec3 normalIn;
 layout(location = 4) in vec2 texCoordIn;
 
 //Fog settings
-const float density = 0.001;
-const float gradient = 3.0;
+const float density = 0.0007;
+const float gradient = 2.0;
 
 //Texture tiling factor. temp
 float tilingFactor = 7.0;

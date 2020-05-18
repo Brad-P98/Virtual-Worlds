@@ -8,10 +8,15 @@ class InstancedRenderer
 {
 public:
 
-	void render(VAOData* vaaoData, int instanceCount, std::vector<GLuint> textureIDs);
+	void render(VAOData* vaoData, int instanceCount, std::vector<GLuint> textureIDs);
 
 	GLuint shaderProgram;
 
 	GLenum drawMode = GL_TRIANGLES;
+
+private:
+
+	void enableVertexArrays(GLuint vao);
+	void disableVertexArrays(GLuint vao);
 };
 

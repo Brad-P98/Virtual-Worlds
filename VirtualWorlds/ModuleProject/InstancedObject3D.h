@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <map>
+#include <thread>
 #include <glm/glm/gtc/type_ptr.hpp>
 
 
@@ -10,11 +12,8 @@
 
 struct StaticInstance
 {
-
-	glm::vec3 worldPos;
 	glm::mat4 modelMat;
-	float lifetime;
-	float expiryDist;
+	int expiryDist =10000;
 	int id;
 };
 
@@ -29,14 +28,15 @@ public:
 	virtual void draw() override;
 
 	void addInstance(StaticInstance* newModel);
-	void removeInstance(int id);
+	void removeInstance(StaticInstance* instance);
 
 	GLuint getShaderProgram() const { return m_InstancedRenderer.shaderProgram; }
 	VAOData* getVAOData() const { return m_VaoData; }
 
+	void init(VAOData* vaoData, std::vector<GLuint> textureIDs, GLuint shader);
 protected:
 
-	void init(VAOData* vaoData, std::vector<GLuint> textureIDs, GLuint shader);
+
 
 	void setShaderProgram(GLuint shader);
 	void setDrawMode(GLenum drawMode);
@@ -46,10 +46,23 @@ protected:
 	virtual void onUpdate();
 
 private:
-	unsigned const int maxInstances = 10000;
+
+	void initializeInstanceAttributes();
+
+	void rebuildVBOContents();
+
+private:
+	unsigned const int maxInstances = 90000;
 	unsigned int instanceID = 0;
 
-	std::vector<StaticInstance*> models;
+	GLuint VBO;
+	//Number of floats of each instance in the VBO
+	int instanceDataLength = 16;
+
+	std::map<int, StaticInstance*> modelMap;
+
+	std::vector<float> vboContents;
+
 
 private:
 
@@ -57,6 +70,11 @@ private:
 	VAOData* m_VaoData;
 
 	std::vector<GLuint> m_TextureIDs;
+
+	bool rebuildFlag = false;
+	bool VBORebuilt = false;
+	bool building = false;
+	std::thread thread;
 };
 
 

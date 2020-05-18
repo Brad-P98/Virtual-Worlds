@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 #include <map>
+#include <glm/glm/glm.hpp>
 
 #include "Settlement.h"
-
 
 class SettlementManager
 {
@@ -20,21 +20,34 @@ public:
 
 	void addSettlement(Settlement* newSettlement);
 
-	void removeSettlement(Settlement* newSettlement);
+
+
+	void deleteSettlement(Settlement* newSettlement);
+
+	void removeSettlementsOutsideBounds(float minX, float minZ, float maxX, float maxZ);
 
 	//Return every settlement within this circle radius center x and z.
 	std::vector<Settlement*> getSettlementsInArea(float radius, float xPos, float zPos);
 
-	float getNearestSettlementPos(glm::vec3 posIn);
+	std::vector<Settlement*> getSettlementsOnChunk(int gridX, int gridZ);
 
-private:
+	float getNearestSettlementDist(glm::vec3 posIn);
+	Settlement* getNearestSettlement(glm::vec3 posIn);
 
-	//Store all currently generated settlements.
-	static std::vector<Settlement*> activeSettlements;
+	Settlement* getSettlement(int settlementID);
+
 
 public:
 
 	//Minimum score a vertex can have to have a settlement focal point
 	float minSettlementScore = 40.0f;
+
+	NoiseGenerator* terrainNoiseGenerator;
+private:
+
+	//Store all currently generated settlements, including those not being renderer currently.
+	static std::vector<Settlement*> settlements;
+	int settlementIDIndex;
+
 };
 

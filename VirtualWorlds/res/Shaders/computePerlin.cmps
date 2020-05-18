@@ -128,7 +128,7 @@ void main() {
 	for (int f = 0; f < numOctaves; f++, u*=2.0f, v*=2.0f, freq*=2.0f) {
 	
 		// Noise with fractal power spectrum (frequency distribution)
-		pn += pnoise(u, v, 1.0f, dn) * (1.0f / freq);
+		pn += pnoise(u, v, 0.2f, dn) * (1.0f / freq);
 		dnTotal += dn * (1.0f / freq);
 	}
 	

@@ -39,17 +39,17 @@ void WaterPlane::generateVertexData()
 	vertexPositions.push_back(0.0f);
 	vertexPositions.push_back(0.0f);
 
-	vertexPositions.push_back(100.0f);
+	vertexPositions.push_back(chunkSize);
 	vertexPositions.push_back(0.0f);
 	vertexPositions.push_back(0.0f);
 
 	vertexPositions.push_back(0.0f);
 	vertexPositions.push_back(0.0f);
-	vertexPositions.push_back(100.0f);
+	vertexPositions.push_back(chunkSize);
 
-	vertexPositions.push_back(100.0f);
+	vertexPositions.push_back(chunkSize);
 	vertexPositions.push_back(0.0f);
-	vertexPositions.push_back(100.0f);
+	vertexPositions.push_back(chunkSize);
 
 	//normals
 	for (int i = 0; i < 4; i++) {
@@ -100,7 +100,7 @@ void WaterPlane::generateXRow(glm::vec3 currentChunkPos, int row)
 	//Create the new row of chunks
 	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 
-		WaterChunk* newChunk = new WaterChunk(xPos, zStart + i, shader);
+		WaterChunk* newChunk = new WaterChunk(xPos, zStart + i, m_Shader);
 
 		//Add chunk to the correct position in active chunks
 		activeWaterChunks[rowIndexInActiveChunks][i] = newChunk;
@@ -161,21 +161,21 @@ void WaterPlane::adjustXRow(bool direction)
 	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 
 
-		WaterChunk* newChunk = new WaterChunk(xPos, zStart + i, shader);
+		WaterChunk* newChunk = new WaterChunk(xPos, zStart + i, m_Shader);
 
 		tempChunkRow.push_back(newChunk);
 		//Instance::m_scene->addObject(newChunk);
 		chunksToAddX.push_back(newChunk);
 	}
 	//Add the row of chunks to the correct end of the vector
-	if (!direction) {
-		activeWaterChunks.push_back(tempChunkRow);
-	}
-	else {
-		activeWaterChunks.insert(activeWaterChunks.begin(), tempChunkRow);
-	}
-	idleX = true;
-	doneGeneratingX = true;
+if (!direction) {
+	activeWaterChunks.push_back(tempChunkRow);
+}
+else {
+	activeWaterChunks.insert(activeWaterChunks.begin(), tempChunkRow);
+}
+idleX = true;
+doneGeneratingX = true;
 }
 
 void WaterPlane::adjustZRow(bool direction)
@@ -213,7 +213,7 @@ void WaterPlane::adjustZRow(bool direction)
 	//Create all new chunks and push into vector
 	for (int i = 0; i < 2 * renderDistance + 1; i++) {
 
-		WaterChunk* newChunk = new WaterChunk(xStart + i, zPos, shader);
+		WaterChunk* newChunk = new WaterChunk(xStart + i, zPos, m_Shader);
 
 		chunksToAddZ.push_back(newChunk);
 
@@ -263,6 +263,7 @@ void WaterPlane::finalizeZGeneration()
 	chunksToAddZ.clear();
 	chunksToRemoveZ.clear();
 }
+
 #pragma endregion
 
 
@@ -300,6 +301,7 @@ void WaterChunk::generateVAO()
 
 	std::vector<GLuint> texIDs;
 	texIDs.push_back(TextureManager::getTextureID("Assets/water.png"));
+	texIDs.push_back(TextureManager::getTextureID("perlin_noise"));
 
 	init(loader->loadToVAO(positions, normals, indices, texCoords), texIDs, m_shader);
 }

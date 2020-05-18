@@ -1,0 +1,2 @@
+Time taken to initialize: 0.758
+Average FPS: 143.446

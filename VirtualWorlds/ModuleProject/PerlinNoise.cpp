@@ -63,8 +63,6 @@ PerlinNoise::PerlinNoise(const unsigned int domainSize) {
 		N = domainSize;
 		Nmask = N - 1;
 
-		// seed random number generator with current system time
-		srand((unsigned)time(NULL));
 		rand();
 
 		float theta = 0.0f;

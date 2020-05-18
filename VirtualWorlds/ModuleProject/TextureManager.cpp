@@ -35,6 +35,7 @@ void TextureManager::loadTexture(const char* fileName)
 		std::cout << "Failed to load texture" << std::endl;
 	}
 	stbi_image_free(data);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 }
 

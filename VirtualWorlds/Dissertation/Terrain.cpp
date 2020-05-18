@@ -14,8 +14,10 @@ std::vector<float> Terrain::defaultTextureCoords;
 
 
 #pragma region Terrain
-Terrain::Terrain()
+Terrain::Terrain(NoiseGenerator* noise)
 {
+
+	noiseInterface = noise;
 	init();
 
 	generateDefaultVertexPositions();
@@ -29,15 +31,6 @@ Terrain::~Terrain()
 
 void Terrain::init()
 {
-	noiseInterface = new NoiseGenerator();
-	//Initialize TerrainNoise details
-	noiseInterface->noiseGenerator = new PerlinNoise();
-	//Add noise layers to struct.
-	noiseInterface->layers.push_back(new NoiseLayer(90, 0.0006f));
-	noiseInterface->layers.push_back(new NoiseLayer(70, 0.002f));
-	noiseInterface->layers.push_back(new NoiseLayer(10, 0.01f));
-	noiseInterface->layers.push_back(new NoiseLayer(3, 0.02f));
-
 	//Allocate space for all terrain chunks
 	activeTerrainChunks.resize(renderDistance * 2 + 1, std::vector<TerrainChunk*>(renderDistance * 2 + 1, nullptr));
 }

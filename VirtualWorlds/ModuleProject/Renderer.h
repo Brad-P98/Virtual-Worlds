@@ -9,7 +9,7 @@ class Renderer
 
 public:
 
-	void render(VAOData* vaoData, std::vector<GLuint> textureIDs);
+	void render(VAOData* vaoData, std::vector<GLuint>& textureIDs);
 
 	GLuint shaderProgram;
 

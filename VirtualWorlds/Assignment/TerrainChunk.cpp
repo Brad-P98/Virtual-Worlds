@@ -43,6 +43,7 @@ void TerrainChunk::generateVAO()
 	texIDs.push_back(TextureManager::getTextureID("Assets/grass_terrain.jpg"));
 	texIDs.push_back(TextureManager::getTextureID("Assets/snow_terrain.jpg"));
 	texIDs.push_back(TextureManager::getTextureID("Assets/gravel_terrain.jpg"));
+	texIDs.push_back(TextureManager::getTextureID("perlin_noise"));
 
 	//standard
 	init(loader->loadToVAO(positions, normals, indices, texCoords, terrainScores), texIDs, m_shader);
@@ -68,7 +69,7 @@ void TerrainChunk::generateUniqueVertexPositions()
 
 		//VERTEX NORMAL CALCULATION
 		//Calculate normal for this point
-		int h0 = positions[j];	//Height at this point
+		float h0 = positions[j];	//Height at this point
 
 		glm::vec3 p0 = glm::vec3(positions[i], h0, positions[k]);
 
@@ -113,12 +114,6 @@ void TerrainChunk::generateUniqueVertexPositions()
 		normals.push_back(vertexNormal.z);
 
 
-		//VERTEX SCORE CALCULATION
-		//float terrainVertexScore = 0.0f;
-		//terrainVertexScore += calcGradientScore(positions[i], positions[k], vertexNormal);
-		//terrainVertexScore += calcAltitudeScore(positions[i], positions[k]);
-
-		//terrainScores.push_back(terrainVertexScore);
 	}
 }
 
@@ -131,7 +126,7 @@ void TerrainChunk::generateSurfaceDetail()
 		//If altitude is within these bounds
 		if (positions[i] > seaLevel - 1 && positions[i] <= seaLevel + 5) {
 			//Close to sea and/or just in water. fairly high chance of rock spawn
-			tryGenRock(glm::vec3(positions[i-1], positions[i], positions[i+1]), 0.05f);
+			tryGenRock(glm::vec3(positions[i-1], positions[i], positions[i+1]), 0.07f);
 		}
 		else if (positions[i] > seaLevel + 5 && positions[i] < seaLevel + 50) {
 			//Middle height, low chance to generate rock
@@ -140,13 +135,15 @@ void TerrainChunk::generateSurfaceDetail()
 		}
 		else if (positions[i] > seaLevel + 50) {
 			//high height, slightly increased chance to generate rock
-			tryGenRock(glm::vec3(positions[i - 1], positions[i], positions[i + 1]), 0.02f);
+			tryGenRock(glm::vec3(positions[i - 1], positions[i], positions[i + 1]), 0.05f);
 
 		}
 		else {
 			//Lets not generate any rocks below sea level
 		}
 	}
+
+	surfaceDetailGenerated = true;
 
 }
 
@@ -159,11 +156,11 @@ void TerrainChunk::tryGenRock(glm::vec3 pos, float chance)
 	int randNum = rand() % 1001;
 	if (chance == 1000) {
 		//Gen rock always
-		Rock* rock = new Rock(pos, 10000);
+		Rock* rock = new Rock(pos);
 	}
 	else if (randNum < chance) {
 		//Gen rock
-		Rock* rock = new Rock(pos, 10000);
+		Rock* rock = new Rock(pos);
 	}
 	else {
 		//No rock generated

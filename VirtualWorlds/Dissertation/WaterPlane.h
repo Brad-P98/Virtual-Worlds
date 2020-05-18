@@ -34,7 +34,7 @@ private:
 
 public:
 
-	GLuint shader;
+	GLuint m_Shader;
 
 	static std::vector<float> vertexPositions;
 	static std::vector<float> vertexNormals;

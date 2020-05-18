@@ -203,7 +203,8 @@ std::vector<glm::vec3> TerrainChunk::generateSettlementPositionsProxBased(int st
 	for (int i = 0; i < terrainScores.size(); i += stride) {
 		glm::vec3 currPos = glm::vec3(positions[i * 3], positions[(i * 3) + 1], positions[(i * 3) + 2]);
 		//If terrain score is not horrific, and no settlements nearby, make candidate.
-		if (terrainScores[i] > 25 && SettlementManager::getInstance()->getNearestSettlementPos(currPos) < 300) {
+		float nearestSettDist = SettlementManager::getInstance()->getNearestSettlementDist(currPos);
+		if (terrainScores[i] > 25 && (nearestSettDist > 300 || nearestSettDist == -1.0f)) {
 
 			potentialPositions.push_back(currPos);
 		}

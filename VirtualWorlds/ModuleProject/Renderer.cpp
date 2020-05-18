@@ -1,9 +1,8 @@
 #include "Renderer.h"
 
-void Renderer::render(VAOData* vaoData, std::vector<GLuint> textureIDs)
+void Renderer::render(VAOData* vaoData, std::vector<GLuint>& textureIDs)
 {
 	//Bind all textures
-
 	//Max. 5 textures, for now
 	for (int i = 0; i < textureIDs.size() && i < 5; i++) {
 		glActiveTexture(GL_TEXTURE0 + i);
@@ -15,4 +14,9 @@ void Renderer::render(VAOData* vaoData, std::vector<GLuint> textureIDs)
 	glBindVertexArray(vaoData->getVaoID());
 	glDrawElements(drawMode, vaoData->getIndexCount(), GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(0);
+
+	//Unbind textures
+	for (int i = 0; i < textureIDs.size() && i < 5; i++) {
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }

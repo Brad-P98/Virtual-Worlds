@@ -95,6 +95,8 @@ GLuint ProceduralTexture::generateTexture(GLuint w, GLuint h)
 	// Run our compute shader to fill in the texture data
 	glDispatchCompute(numGroupsX, numGroupsY, numGroupsZ);
 
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	//Texture is generated, so return id so it can be added to the texture manager
 	return texture;
 }

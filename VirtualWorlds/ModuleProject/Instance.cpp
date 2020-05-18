@@ -1,5 +1,8 @@
 #include "Instance.h"
 
+#include "TextFileManager.h"
+#include "ctime"
+
 Scene* Instance::m_scene = nullptr;
 
 
@@ -27,12 +30,20 @@ int Instance::init(int argc, char** argv, int winWidth, int winHeight, const cha
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("Virtual World");
 
+	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
+	glutLeaveMainLoop();
 	gl3wInit();
 
 	std::cout << "OpenGL version: " << (char*)(glGetString(GL_VERSION)) << std::endl;
 	std::cout << "GLUT version: " << glutGet(GLUT_VERSION) << std::endl;
 
 	glutDisplayFunc(drawFrame);
+
+	int seed = TextFileManager::extractIntFromFile("seed.txt");
+	if(seed == -1)	srand((unsigned)time(NULL));
+	else srand(seed);
+
+
 
 	glutMouseFunc(InputHandler::mouseFunction);
 	//glutPassiveMotionFunc(mouseMove);
@@ -61,3 +72,4 @@ void drawFrame()
 	glutPostRedisplay();
 	glutSwapBuffers();
 }
+

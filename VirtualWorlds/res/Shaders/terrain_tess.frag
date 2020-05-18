@@ -72,6 +72,7 @@ void main(void) {
 	vec4 grassColour = texture(texSampler0, inputFragment.textureCoord);
 	vec4 snowColour = texture(texSampler1, inputFragment.textureCoord);
 	vec4 gravelColour = texture(texSampler2, inputFragment.textureCoord);
+	vec4 perlinColour = texture(texSampler3, inputFragment.textureCoord);
 
 	float height = inputFragment.worldPos.y;
 	float mixAmount = 0.0;
@@ -84,6 +85,11 @@ void main(void) {
 	//Snowy
 	mixAmount = clamp(pow(height - 30, 1.6) /30, 0, 1);
 	tempFragColour = mix(tempFragColour, texture(texSampler1, inputFragment.textureCoord), mixAmount);
+
+	//Mild effect of perlin across entire terrain.
+	mixAmount = 0.02;
+	tempFragColour = mix(tempFragColour, perlinColour, mixAmount);
+
 
 	//Lighting
 	//Get direction between camera and surface (Used for specular effect)

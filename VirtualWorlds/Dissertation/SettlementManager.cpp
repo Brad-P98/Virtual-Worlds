@@ -1,10 +1,12 @@
 #include "SettlementManager.h"
 
+#include "ChunkSettings.h"
+
 #include <assert.h>
 
 SettlementManager* SettlementManager::instance;
 
-std::vector<Settlement*> SettlementManager::activeSettlements; 
+std::vector<Settlement*> SettlementManager::settlements; 
 
 SettlementManager::SettlementManager()
 {
@@ -18,17 +20,43 @@ SettlementManager::~SettlementManager()
 
 void SettlementManager::addSettlement(Settlement * newSettlement)
 {
-	activeSettlements.push_back(newSettlement);
+	settlements.push_back(newSettlement);
+
+	newSettlement->settlementID = settlementIDIndex;
+	//Build settlement
+	newSettlement->constructSettlement();
+
+	//Unique ID for next settlement.
+	settlementIDIndex++;
 }
 
-void SettlementManager::removeSettlement(Settlement * settlement)
+
+void SettlementManager::deleteSettlement(Settlement * settlement)
 {
-	for (int i = 0; i < activeSettlements.size(); i++) {
-		if (activeSettlements[i] == settlement) {
-			activeSettlements.erase(activeSettlements.begin() + i);
+	for (int i = 0; i < settlements.size(); i++) {
+		if (settlements[i] == settlement) {
+			settlements.erase(settlements.begin() + i);
 
 			delete settlement;
 			break;
+		}
+	}
+}
+
+void SettlementManager::removeSettlementsOutsideBounds(float minX, float minZ, float maxX, float maxZ)
+{
+
+	//Iterate through settlements
+	//If settlement is outside bounds, delete
+	for (int i = 0; i < settlements.size(); i++) {
+
+		glm::vec3 currSettPos = settlements[i]->focalPointPos;
+		if ((currSettPos.x > minX && currSettPos.z > minZ) && (currSettPos.x < maxX && currSettPos.z < maxZ)) {
+			//Inside bounds
+		}
+		else {
+			//Outside Bounds
+			deleteSettlement(settlements[i]);
 		}
 	}
 }
@@ -37,29 +65,43 @@ std::vector<Settlement*> SettlementManager::getSettlementsInArea(float radius, f
 {
 	std::vector<Settlement*> settlementsFound;
 
-	for (int i = 0; i < activeSettlements.size(); i++) {
+	for (int i = 0; i < settlements.size(); i++) {
 
-		float xDist = abs(activeSettlements[i]->focalPointPos.x - xPos);
-		float zDist = abs(activeSettlements[i]->focalPointPos.z - zPos);
+		float xDist = abs(settlements[i]->focalPointPos.x - xPos);
+		float zDist = abs(settlements[i]->focalPointPos.z - zPos);
 
 		float res = sqrt((xDist * xDist) + (zDist * zDist));
-		if (res < radius) {
-			//settlement is within radius, push to settlements found vector.
-			settlementsFound.push_back(activeSettlements[i]);
+		if (res < radius && res > 0) {
+			//settlement is within radius (and not itself), push to settlements found vector.
+			settlementsFound.push_back(settlements[i]);
 		}
 	}
 
 	return settlementsFound;
 }
 
-float SettlementManager::getNearestSettlementPos(glm::vec3 posIn)
+std::vector<Settlement*> SettlementManager::getSettlementsOnChunk(int gridX, int gridZ)
 {
-	float nearestDist = 0.0f;
-	//Retrieve the settlement that is closest to the position input.
-	for (int i = 0; i < activeSettlements.size(); i++) {
+	std::vector<Settlement*> settlementsOnChunk;
 
-		float xDist = abs(activeSettlements[i]->focalPointPos.x - posIn.x);
-		float zDist = abs(activeSettlements[i]->focalPointPos.z - posIn.z);
+	for (int i = 0; i < settlements.size(); i++) {
+
+		if (settlements[i]->homeChunkCoords.x == gridX && settlements[i]->homeChunkCoords.z == gridZ) {
+			settlementsOnChunk.push_back(settlements[i]);
+		}
+	}
+
+	return settlementsOnChunk;
+}
+
+float SettlementManager::getNearestSettlementDist(glm::vec3 posIn)
+{
+	float nearestDist = -1.0f;
+	//Retrieve the settlement that is closest to the position input.
+	for (int i = 0; i < settlements.size(); i++) {
+
+		float xDist = abs(settlements[i]->focalPointPos.x - posIn.x);
+		float zDist = abs(settlements[i]->focalPointPos.z - posIn.z);
 
 		//Dist between two points
 		float res = sqrt((xDist * xDist) + (zDist * zDist));
@@ -67,5 +109,38 @@ float SettlementManager::getNearestSettlementPos(glm::vec3 posIn)
 		if (res < nearestDist) nearestDist = res;
 	}
 
+	//Returns -1 if none found
 	return nearestDist;
+}
+
+Settlement * SettlementManager::getNearestSettlement(glm::vec3 posIn)
+{
+	Settlement* nearestSett = nullptr;
+	float nearestDist = 1000000.0f;
+	//Retrieve the settlement that is closest to the position input.
+	for (int i = 0; i < settlements.size(); i++) {
+
+		float xDist = abs(settlements[i]->focalPointPos.x - posIn.x);
+		float zDist = abs(settlements[i]->focalPointPos.z - posIn.z);
+
+		//Dist between two points
+		float res = sqrt((xDist * xDist) + (zDist * zDist));
+		//If dist is shorter (and not self), replace
+		if (res < nearestDist && res > 0) {
+			nearestDist = res;
+			nearestSett = settlements[i];
+		}
+	}
+	return nearestSett;
+}
+
+Settlement * SettlementManager::getSettlement(int settlementID)
+{
+	for (int i = 0; i < settlements.size(); i++) {
+		if (settlements[i]->settlementID == settlementID) {
+			return settlements[i];
+		}
+	}
+	//None found
+	return nullptr;
 }

@@ -77,9 +77,6 @@
     <ClInclude Include="TerrainChunk.h">
       <Filter>Header Files\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="ChunkSettings.h">
-      <Filter>Header Files\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="NoiseGenerator.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
@@ -94,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Rock.h">
       <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkSettings.h">
+      <Filter>Header Files\Terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

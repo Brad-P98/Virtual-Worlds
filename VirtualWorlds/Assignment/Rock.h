@@ -6,7 +6,7 @@ class Rock : public InstancedObject3D
 {
 
 public:
-	Rock(glm::vec3 pos, float expiryDist);
+	Rock(glm::vec3 pos);
 	~Rock();
 
 	void onInit() override;

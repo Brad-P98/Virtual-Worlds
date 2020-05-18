@@ -1,7 +1,8 @@
 #pragma once
+#include <InstancedObject3D.h>
 #include <Object3D.h>
 
-class Building : public Object3D
+class Building
 {
 public:
 
@@ -9,6 +10,9 @@ public:
 	~Building();
 
 private:
+
+	glm::mat4 transform;
+	StaticInstance* thisInstance;
 
 };
 

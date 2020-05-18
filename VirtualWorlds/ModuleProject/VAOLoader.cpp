@@ -172,6 +172,44 @@ void VAOLoader::updateVBOInVAO(GLuint vaoID, GLuint vboID, int attributeNumber, 
 	unbindVAO();
 }
 
+//Create an empty vbo, ready to be updated frequently.
+GLuint VAOLoader::createEmptyVBO(int floatCount)
+{
+	GLuint vbo;
+	glGenBuffers(1, &vbo);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, floatCount * 4, (void*)0, GL_STREAM_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	return vbo;
+}
+
+//Initialize instance attribute
+void VAOLoader::addInstanceAttribute(GLuint vao, GLuint vbo, int attribute, int dataSize, int instancedDataLength, int offset)
+{
+	glBindVertexArray(vao);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glVertexAttribPointer(attribute, dataSize, GL_FLOAT, false, instancedDataLength * 4, (void*)(offset * 4));
+	glVertexAttribDivisor(attribute, 1);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
+void VAOLoader::updateInstanceVBO(GLuint vbo, std::vector<float> data)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STREAM_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void VAOLoader::updateInstanceVBO(GLuint vbo, int dataSize, float & data)
+{
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, dataSize, &data, GL_STREAM_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+
 void VAOLoader::unbindVAO()
 {
 	glBindVertexArray(0);

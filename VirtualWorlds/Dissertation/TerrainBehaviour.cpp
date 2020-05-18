@@ -1,8 +1,10 @@
 #include "TerrainBehaviour.h"
 #include "ChunkSettings.h"
+#include "RoadNetwork.h"
 
 #define renderDistance ChunkSettings::CHUNK_RENDER_DISTANCE
 #define chunkSize ChunkSettings::CHUNK_SIZE
+#define seaLevel ChunkSettings::SEA_LEVEL
 
 
 TerrainBehaviour::TerrainBehaviour()
@@ -20,9 +22,9 @@ TerrainBehaviour::~TerrainBehaviour()
 //Called after the active terrain has been set
 void TerrainBehaviour::init()
 {
+	SettlementManager::getInstance()->terrainNoiseGenerator = m_Terrain->noiseInterface;
 	initializeChunks();
 	generateSettlements();
-	//m_Terrain->TryGenerateNewSettlements();
 }
 
 void TerrainBehaviour::initializeChunks()
@@ -55,7 +57,11 @@ void TerrainBehaviour::update()
 	chunkPos = glm::vec3(round(worldPos.x / chunkSize + 0.499f) - 1, 0, round(worldPos.z / chunkSize + 0.499f) - 1);
 
 	//Only try to generate settlements if something changed e.g. moved to a new chunk.
-	if(terrainChanged) generateSettlements();
+	if (terrainChanged) {
+
+		generateSettlements();	//Generate settlements on new chunks.
+		RemoveSettlementsOutsideTerrainBounds();	//Remove settlements outside chunks
+	}
 
 
 	if (chunkPos != prevChunkPos && (m_Terrain->idleX && m_Terrain->idleZ)) {
@@ -107,7 +113,7 @@ void TerrainBehaviour::update()
 #pragma region SETTLEMENT GENERATION
 void TerrainBehaviour::generateSettlements()
 {
-
+	terrainChanged = false;
 	std::vector<std::vector<TerrainChunk*>> activeChunks = m_Terrain->getActiveTerrainChunks();
 
 	//Store those that are certain to be there.
@@ -115,11 +121,13 @@ void TerrainBehaviour::generateSettlements()
 
 	//Temp array
 	std::vector<glm::vec3> potentialSettlementPositions;
+
 	//FIRST PASS ----- Generate  temporary settlement positions based on terrain.
 	//Settlements will be generated near coastal areas, with a tendency towards flatter land.
 	for (int i = 0; i < activeChunks.size(); i++) {
 		for (int j = 0; j < activeChunks[i].size(); j++) {
 
+			//First, ensure that this is a chunk that has not had settlements built upon it
 			if (!activeChunks[i][j]->settlementsGenerated) {
 
 				//Generate settlement positions on this chunk based on terrain
@@ -131,18 +139,21 @@ void TerrainBehaviour::generateSettlements()
 			}
 		}
 	}
-	potentialSettlementPositions = eliminatePositions(potentialSettlementPositions, 100);
+	//Reduce these settlements down to 1 settlement at the average position of all settlements within the given radius.
+	potentialSettlementPositions = eliminatePositions(potentialSettlementPositions, 150);
+	
 	//Push these into the final vector.
 	for (int i = 0; i < potentialSettlementPositions.size(); i++) {
 		finalSettlementPositions.push_back(potentialSettlementPositions[i]);
 	}
 
-
 	//Clear temp array
 	potentialSettlementPositions.clear();
+
 	//SECOND PASS ----- Generate based mainly on distance from other settlements. High stride as less accuracy needed.
 	for (int i = 0; i < activeChunks.size(); i++) {
 		for (int j = 0; j < activeChunks[i].size(); j++) {
+
 			if (!activeChunks[i][j]->settlementsGenerated) {
 				//Generate settlement positions on this chunk based on other settlements
 				std::vector<glm::vec3> positions = activeChunks[i][j]->generateSettlementPositionsProxBased(25);
@@ -150,24 +161,48 @@ void TerrainBehaviour::generateSettlements()
 				for (int k = 0; k < positions.size(); k++) {
 					potentialSettlementPositions.push_back(positions[k]);
 				}
+				activeChunks[i][j]->settlementsGenerated = true;
 			}
 		}
 	}
-	potentialSettlementPositions = eliminatePositions(potentialSettlementPositions, 200);
+	potentialSettlementPositions = eliminatePositions(potentialSettlementPositions, 350);
+
 	//Push these into the final vector.
 	for (int i = 0; i < potentialSettlementPositions.size(); i++) {
 		finalSettlementPositions.push_back(potentialSettlementPositions[i]);
 	}
 
+	//Remove groupings for the last time.
+	finalSettlementPositions = eliminatePositions(finalSettlementPositions, 300);
 
+	for (int i = 0; i < finalSettlementPositions.size(); i++) {
+		//Remove if under sea level
+		if (finalSettlementPositions[i].y < seaLevel) {
+			finalSettlementPositions.erase(finalSettlementPositions.begin() + i);
+		}
+	}
 
 	//Generate settlements out of those remaining.
-	for (int i = 0; i < potentialSettlementPositions.size(); i++) {
-		Settlement* newSett = new Settlement(potentialSettlementPositions[i], 150);
+	for (int i = 0; i < finalSettlementPositions.size(); i++) {
+		Settlement* newSett = new Settlement(finalSettlementPositions[i], 140 - finalSettlementPositions[i].y);
 		SettlementManager::getInstance()->addSettlement(newSett);
 	}
 
 }
+
+void TerrainBehaviour::RemoveSettlementsOutsideTerrainBounds()
+{
+	//bounds
+
+	float minXPos = (chunkPos.x * chunkSize) - (renderDistance*chunkSize);
+	float minZPos = (chunkPos.z * chunkSize) - (renderDistance*chunkSize);
+	float maxXPos = (chunkPos.x * chunkSize) + chunkSize + (renderDistance*chunkSize);
+	float maxZPos = (chunkPos.z * chunkSize) + chunkSize + (renderDistance*chunkSize);
+
+	SettlementManager::getInstance()->removeSettlementsOutsideBounds(minXPos, minZPos, maxXPos, maxZPos);
+
+}
+
 
 std::vector<glm::vec3> TerrainBehaviour::eliminatePositions(std::vector<glm::vec3> positions, float radius)
 {
@@ -181,7 +216,7 @@ std::vector<glm::vec3> TerrainBehaviour::eliminatePositions(std::vector<glm::vec
 		nearCurrPos.push_back(currPos);			//Need to take this one into account too
 		positions.erase(positions.begin());		//Erase this element from overall vector
 		int index = 0;
-		//Iterate through every position. The vector size changes, so use .end()
+
 		while (index < positions.size()) {
 
 			float xDist = abs(positions[index].x - currPos.x);
@@ -199,7 +234,7 @@ std::vector<glm::vec3> TerrainBehaviour::eliminatePositions(std::vector<glm::vec
 			}
 
 		}
-		//We now have every position near this vertex, and they have been removed from the original vector.
+		//We now have every position near this original, and they have been removed from the original vector.
 
 		//Calculate average x and z
 		glm::vec3 averagePosition(0,0,0);

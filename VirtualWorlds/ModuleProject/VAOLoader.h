@@ -16,6 +16,9 @@ class VAOLoader
 {
 public:
 
+	static VAOLoader * getInstance();
+
+
 	//Load from .obj file
 	static void LoadOBJ(const std::string&);
 	static void processNode(std::vector<float>&, std::vector<float>&, std::vector<float>&, std::vector<GLuint>&, aiNode*, const aiScene*);
@@ -29,11 +32,21 @@ public:
 	//Re-write a certain VBO of a VAO with this new data.
 	static void updateVBOInVAO(GLuint vaoID, GLuint vboID, int attributeNumber, int numOfComponents, std::vector<float> data);
 
-	static VAOLoader * getInstance();
+
 
 	static VAOData* getModelVAO(const std::string& name) {
 		if (models.count(name) != 0) return models[name];
 	}
+
+
+	//Instancing
+	static GLuint createEmptyVBO(int floatCount);
+
+	static void addInstanceAttribute(GLuint vao, GLuint vbo, int attribute, int dataSize, int instancedDataLength, int offset);
+
+	static void updateInstanceVBO(GLuint vbo, std::vector<float> data);
+	static void updateInstanceVBO(GLuint vbo, int dataSize, float& data);
+
 
 private:
 

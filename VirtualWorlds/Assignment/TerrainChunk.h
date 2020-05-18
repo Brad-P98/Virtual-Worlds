@@ -52,6 +52,7 @@ public:
 	//score of every vertex, based only on terrain factors when pushed into VAO.
 	std::vector<float> terrainScores;
 
+	bool surfaceDetailGenerated = false;
 private:
 
 	std::vector<GLuint> indices;
@@ -69,7 +70,6 @@ private:
 	float x;						//World position
 	float y;						//"
 	float z;						//"
-
 };
 
 #pragma endregion

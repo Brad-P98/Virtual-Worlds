@@ -61,28 +61,29 @@ void Camera::update() {
 
 void Camera::checkMove()
 {
-	if (InputHandler::checkKeyHeld('\\')) {
-		maxSpeed = 0.012f;
+	//Spacebar = 32
+	if (InputHandler::checkKeyHeld(32)) {
+		maxSpeed = 0.12f;		//FAST
 	}
 	else maxSpeed = 0.04f;
 
 	if (InputHandler::checkKeyHeld('w') || InputHandler::checkKeyHeld('W')) {
 		position += maxSpeed * front * (float)Clock::deltaTime;
 	}
-	if (InputHandler::checkKeyHeld('s')) {
+	if (InputHandler::checkKeyHeld('s') || InputHandler::checkKeyHeld('S')) {
 		position -= maxSpeed * front * (float)Clock::deltaTime;
 	}
-	if (InputHandler::checkKeyHeld('a')) {
+	if (InputHandler::checkKeyHeld('a') || InputHandler::checkKeyHeld('A')) {
 		position -= glm::normalize(glm::cross(front, up)) * maxSpeed * (float)Clock::deltaTime;
 	}
-	if (InputHandler::checkKeyHeld('d')) {
+	if (InputHandler::checkKeyHeld('d') || InputHandler::checkKeyHeld('D')) {
 		position += glm::normalize(glm::cross(front, up)) * maxSpeed * (float)Clock::deltaTime;
 	}
 
-	if (InputHandler::checkKeyHeld('r')) {
+	if (InputHandler::checkKeyHeld('r') || InputHandler::checkKeyHeld('R')) {
 		position += maxSpeed * up * (float)Clock::deltaTime;
 	}
-	if (InputHandler::checkKeyHeld('f')) {
+	if (InputHandler::checkKeyHeld('f') || InputHandler::checkKeyHeld('F')) {
 		position -= maxSpeed * up * (float)Clock::deltaTime;
 	}
 	viewMat = glm::translate(viewMat, position - prevPosition);

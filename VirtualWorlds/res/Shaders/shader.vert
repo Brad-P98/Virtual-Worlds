@@ -12,7 +12,7 @@ out float visibility;
 
 //Fog settings
 const float density = 0.001;
-const float gradient = 3.0;
+const float gradient = 2.0;
 
 //Texture tiling factor. temp
 float tilingFactor = 7.0;

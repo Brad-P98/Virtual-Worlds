@@ -34,10 +34,10 @@ void Terrain::init()
 	//Initialize TerrainNoise details
 	noiseInterface->noiseGenerator = new PerlinNoise();
 	//Add noise layers to struct.
-	noiseInterface->layers.push_back(new NoiseLayer(90, 0.0006f));
+	noiseInterface->layers.push_back(new NoiseLayer(90, 0.0006f));	//high amplitude, very low frequency
 	noiseInterface->layers.push_back(new NoiseLayer(70, 0.002f));
 	noiseInterface->layers.push_back(new NoiseLayer(10, 0.01f));
-	noiseInterface->layers.push_back(new NoiseLayer(3, 0.02f));
+	noiseInterface->layers.push_back(new NoiseLayer(3, 0.02f));		//Bumps
 
 	//Allocate space for all terrain chunks
 	activeTerrainChunks.resize(renderDistance * 2 + 1, std::vector<TerrainChunk*>(renderDistance * 2 + 1, nullptr));
@@ -120,6 +120,9 @@ void Terrain::generateXRow(glm::vec3 currentChunkPos, int row)
 		else shader = ShaderManager::getShader("terrain_basic");
 
 		TerrainChunk* newChunk = new TerrainChunk(xPos, zStart + i, noiseInterface, shader);
+
+		newChunk->setWireFrame(wireFrameState);
+		
 		//Add chunk to the correct position in active chunks
 		activeTerrainChunks[rowIndexInActiveChunks][i] = newChunk;
 	}

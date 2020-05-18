@@ -97,6 +97,12 @@
     <OutDir>$(SolutionDir)bin\Assignment\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\Assignment\intermediates\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)bin\Assignment\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\Assignment\intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)ModuleProject;$(SolutionDir)Libs;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Libs\assimp;$(SolutionDir)Libs\Base\x64\$(Configuration);$(SolutionDir)Libs\freeglut 3.0.0\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -104,6 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)Libs\glm-0.9.9.6;$(SolutionDir)Libs\gl3w\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Base.lib;freeglut.lib;assimp-vc141-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -139,10 +146,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Libs\glm-0.9.9.6;$(SolutionDir)Libs\gl3w\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Base.lib;freeglut.lib;assimp-vc141-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

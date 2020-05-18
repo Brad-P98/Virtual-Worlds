@@ -1,9 +1,7 @@
 #version 330 core
 
-//OUT
 out vec4 fragColour;
 
-//IN
 in vec3 vertexPos;
 in vec3 normal;
 in vec4 camPos;
@@ -54,33 +52,15 @@ vec3 applyLight(Light currLight, vec3 vertexPos, vec3 vertexColour, vec3 surface
 	return ambient + attenuation * (diffuse + specular);
 }
 
-
 void main() {
 
 
-
-	//set initial fragment colour
-	vec4 tempFragColour = texture(texSampler2, texCoord);
-
-	//Calculate color at this height.
-	//Sample colour from each texture
-	vec4 grassColour = texture(texSampler0, texCoord);
-	vec4 snowColour = texture(texSampler1, texCoord);
-	vec4 gravelColour = texture(texSampler2, texCoord);
-
-	float height = vertexPos.y;
-	float mixAmount = 0.0;
-
-	//Grassy
-	mixAmount = clamp(pow(height + 21, 2) / 20, 0, 1);
-	tempFragColour = mix(texture(texSampler2, texCoord), texture(texSampler0, texCoord), mixAmount);
-
-	//Snowy
-	mixAmount = clamp(pow(height - 30, 1.6) /30, 0, 1);
-	tempFragColour = mix(tempFragColour, texture(texSampler1, texCoord), mixAmount);
-
-
 	//Lighting
+	//set initial fragment colour
+	vec4 tempFragColour = texture(texSampler0, texCoord);
+
+	tempFragColour = mix(tempFragColour, texture(texSampler1, texCoord), 0.02);
+	
 	//Get direction between camera and surface (Used for specular effect)
 	vec3 surfaceToCam = normalize(camPos.xyz
 	 - vertexPos.xyz);

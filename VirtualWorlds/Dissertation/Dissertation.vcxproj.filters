@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Utility">
       <UniqueIdentifier>{b5936232-4151-40da-bf26-6d3f5e9cb63e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Roads">
+      <UniqueIdentifier>{1db74d22-99bd-4fe0-b1b5-0c3d165a81ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Roads">
+      <UniqueIdentifier>{f2d87d05-7d78-4e4e-a865-45ba13438a58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TerrainBehaviour.h">
@@ -47,9 +53,6 @@
     </ClInclude>
     <ClInclude Include="WaterPlaneBehaviour.h">
       <Filter>Header Files\Behaviours</Filter>
-    </ClInclude>
-    <ClInclude Include="ChunkSettings.h">
-      <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Settlement.h">
       <Filter>Header Files\Settlements</Filter>
@@ -68,6 +71,18 @@
     </ClInclude>
     <ClInclude Include="Building.h">
       <Filter>Header Files\Settlements</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkSettings.h">
+      <Filter>Header Files\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadNetwork.h">
+      <Filter>Header Files\Roads</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadSegment.h">
+      <Filter>Header Files\Roads</Filter>
+    </ClInclude>
+    <ClInclude Include="PathNodes.h">
+      <Filter>Header Files\Roads</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +115,15 @@
     </ClCompile>
     <ClCompile Include="Building.cpp">
       <Filter>Source Files\Settlements</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadNetwork.cpp">
+      <Filter>Source Files\Roads</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadSegment.cpp">
+      <Filter>Source Files\Roads</Filter>
+    </ClCompile>
+    <ClCompile Include="PathNodes.cpp">
+      <Filter>Source Files\Roads</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -17,6 +17,8 @@ static void reportProgramInfoLog(GLuint program);
 static void reportShaderInfoLog(GLuint shader);
 
 
+static std::string filePrefix = "Shaders/";
+
 // Main shader loader function
 
 //Vertex and fragment
@@ -26,7 +28,7 @@ GLuint setupShaders(const string& vsPath, const string& fsPath, GLSL_ERROR *erro
 	const string			*vertexShaderSource = NULL, *fragmentShaderSource = NULL;
 	
 	// create vertex shader object
-	GLSL_ERROR err = createShaderFromFile(GL_VERTEX_SHADER, vsPath, &vertexShader, &vertexShaderSource);
+	GLSL_ERROR err = createShaderFromFile(GL_VERTEX_SHADER, filePrefix + vsPath, &vertexShader, &vertexShaderSource);
 	
 	if (err != GLSL_OK) {
 		
@@ -98,7 +100,7 @@ GLuint setupShaders(const string& vsPath, const string& fsPath, GLSL_ERROR *erro
 	
 	
 	// create fragment shader object
-	err = createShaderFromFile(GL_FRAGMENT_SHADER, fsPath, &fragmentShader, &fragmentShaderSource);
+	err = createShaderFromFile(GL_FRAGMENT_SHADER, filePrefix + fsPath, &fragmentShader, &fragmentShaderSource);
 	
 	if (err != GLSL_OK) {
 		
@@ -272,7 +274,7 @@ GLuint setupShaders(const string& vsPath, const string&
 	const string *vertexShaderSource = NULL, *geometryShaderSource = NULL, *fragmentShaderSource = NULL;
 
 	// create vertex shader object
-	GLSL_ERROR err = createShaderFromFile(GL_VERTEX_SHADER, vsPath, &vertexShader, &vertexShaderSource);
+	GLSL_ERROR err = createShaderFromFile(GL_VERTEX_SHADER, filePrefix + vsPath, &vertexShader, &vertexShaderSource);
 
 	if (err != GLSL_OK) {
 
@@ -344,7 +346,7 @@ GLuint setupShaders(const string& vsPath, const string&
 
 
 	// create fragment shader object
-	err = createShaderFromFile(GL_FRAGMENT_SHADER, fsPath, &fragmentShader, &fragmentShaderSource);
+	err = createShaderFromFile(GL_FRAGMENT_SHADER, filePrefix + fsPath, &fragmentShader, &fragmentShaderSource);
 
 	if (err != GLSL_OK) {
 
@@ -435,7 +437,7 @@ GLuint setupShaders(const string& vsPath, const string&
 	}
 
 	// create fragment shader object
-	err = createShaderFromFile(GL_GEOMETRY_SHADER, gsPath, &geometryShader, &geometryShaderSource);
+	err = createShaderFromFile(GL_GEOMETRY_SHADER, filePrefix + gsPath, &geometryShader, &geometryShaderSource);
 
 	if (err != GLSL_OK) {
 
@@ -623,7 +625,7 @@ GLuint setupShaders(const std::string & vsPath, const std::string & tcsPath, con
 	const string *vertexShaderSource = NULL, *tcsShaderSource = NULL, *tesShaderSource = NULL, *fragmentShaderSource = NULL;
 
 	// create vertex shader object
-	GLSL_ERROR err = createShaderFromFile(GL_VERTEX_SHADER, vsPath, &vertexShader, &vertexShaderSource);
+	GLSL_ERROR err = createShaderFromFile(GL_VERTEX_SHADER, filePrefix + vsPath, &vertexShader, &vertexShaderSource);
 
 	if (err != GLSL_OK) {
 
@@ -695,7 +697,7 @@ GLuint setupShaders(const std::string & vsPath, const std::string & tcsPath, con
 
 
 	// create fragment shader object
-	err = createShaderFromFile(GL_FRAGMENT_SHADER, fsPath, &fragmentShader, &fragmentShaderSource);
+	err = createShaderFromFile(GL_FRAGMENT_SHADER, filePrefix + fsPath, &fragmentShader, &fragmentShaderSource);
 
 	if (err != GLSL_OK) {
 
@@ -786,7 +788,7 @@ GLuint setupShaders(const std::string & vsPath, const std::string & tcsPath, con
 	}
 
 	// create tcs shader object
-	err = createShaderFromFile(GL_TESS_CONTROL_SHADER, tcsPath, &tcsShader, &tcsShaderSource);
+	err = createShaderFromFile(GL_TESS_CONTROL_SHADER, filePrefix + tcsPath, &tcsShader, &tcsShaderSource);
 
 	if (err != GLSL_OK) {
 
@@ -886,7 +888,7 @@ GLuint setupShaders(const std::string & vsPath, const std::string & tcsPath, con
 
 
 	// create tes shader object
-	err = createShaderFromFile(GL_TESS_EVALUATION_SHADER, tesPath, &tesShader, &tesShaderSource);
+	err = createShaderFromFile(GL_TESS_EVALUATION_SHADER, filePrefix + tesPath, &tesShader, &tesShaderSource);
 
 	if (err != GLSL_OK) {
 
@@ -1093,7 +1095,7 @@ GLuint setupShaders(const string& csPath, GLSL_ERROR *error_result)
 	const string			*computeShaderSource = NULL;
 
 	// create vertex shader object
-	GLSL_ERROR err = createShaderFromFile(GL_COMPUTE_SHADER, csPath, &computeShader, &computeShaderSource);
+	GLSL_ERROR err = createShaderFromFile(GL_COMPUTE_SHADER, filePrefix + csPath, &computeShader, &computeShaderSource);
 
 	if (err != GLSL_OK) {
 

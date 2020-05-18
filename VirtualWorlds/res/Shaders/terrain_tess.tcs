@@ -34,7 +34,7 @@ out ControlPoint {
 float linearFactor(float d) {
 
 	float minDist = 0.0f;
-	float maxDist = 2.0f;
+	float maxDist = 1000.0f;
 
 	float scaledDist = clamp((d - minDist) / (maxDist - minDist), 0.0f, 1.0f);
 
@@ -47,10 +47,10 @@ float linearFactor(float d) {
 float exponentialFactor(float d) {
 
 	float d_ = 1.0f / exp(d * 0.03f);
-	d_ *= 100;
+	d_ *= 50;
 
 	float tessFactor = max(d_ * 4.0f, 1.0f);
-	tessFactor = min(tessFactor, 16);
+	tessFactor = min(tessFactor, 64);
 
 	return tessFactor;
 }
@@ -78,5 +78,5 @@ void main() {
 	gl_TessLevelOuter[1] = exponentialFactor(mix(d1, d2, 0.5f));
 	gl_TessLevelOuter[2] = exponentialFactor(mix(d2, d0, 0.5f));
 
-	gl_TessLevelInner[0] = exponentialFactor((d0 + d1 + d2) / 3.0f);
+	gl_TessLevelInner[0] = exponentialFactor((d0 + d1 + d2) / 4.0f);
 }
